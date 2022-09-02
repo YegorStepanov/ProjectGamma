@@ -1,13 +1,10 @@
 ﻿using UnityEngine;
 
-namespace Mirror.Examples.NetworkRoom
+public sealed class LookAtMainCamera : MonoBehaviour
 {
-    public sealed class LookAtMainCamera : MonoBehaviour
+    // LateUpdate so that all camera updates are finished.
+    void LateUpdate()
     {
-        // LateUpdate so that all camera updates are finished.
-        void LateUpdate()
-        {
-            transform.forward = Camera.main.transform.forward;
-        }
+        transform.forward = Camera.main.transform.forward;
     }
 }

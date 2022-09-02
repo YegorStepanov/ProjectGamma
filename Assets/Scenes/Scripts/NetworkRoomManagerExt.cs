@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mirror.SimpleWeb;
+using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -11,114 +10,110 @@ using Random = UnityEngine.Random;
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkManager.html
 */
 
-namespace Mirror.Examples.NetworkRoom
+[AddComponentMenu("")]
+public class NetworkRoomManagerExt : NetworkRoomManager
 {
-    [AddComponentMenu("")]
-    public class NetworkRoomManagerExt : NetworkRoomManager
+    [Header("Spawner Setup")]
+    [Tooltip("Reward Prefab for the Spawner")]
+    public GameObject rewardPrefab;
+
+    private List<Transform> _freeStartPositions;
+
+    /// <summary>
+    /// This is called on the server when a networked scene finishes loading.
+    /// </summary>
+    /// <param name="sceneName">Name of the new scene.</param>
+    public override void OnRoomServerSceneChanged(string sceneName)
     {
-        [Header("Spawner Setup")]
-        [Tooltip("Reward Prefab for the Spawner")]
-        public GameObject rewardPrefab;
+        _freeStartPositions = startPositions.ToList();
 
-        private List<Transform> _freeStartPositions;
+        // spawn the initial batch of Rewards
+        if (sceneName == GameplayScene)
+            Spawner.InitialSpawn();
 
-        /// <summary>
-        /// This is called on the server when a networked scene finishes loading.
-        /// </summary>
-        /// <param name="sceneName">Name of the new scene.</param>
-        public override void OnRoomServerSceneChanged(string sceneName)
+        Debug.Log("OnRoomServerSceneChanged");
+    }
+
+    public void AAA()
+    {
+        base.ServerChangeScene(SceneManager.GetActiveScene().name);
+        // base.ServerChangeScene("GameplayScene");
+    }
+
+    /// <summary>
+    /// Called just after GamePlayer object is instantiated and just before it replaces RoomPlayer object.
+    /// This is the ideal point to pass any data like player name, credentials, tokens, colors, etc.
+    /// into the GamePlayer object as it is about to enter the Online scene.
+    /// </summary>
+    /// <param name="roomPlayer"></param>
+    /// <param name="gamePlayer"></param>
+    /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
+    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
+    {
+        PlayerScore playerScore = gamePlayer.GetComponent<PlayerScore>();
+        playerScore.index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
+        return true;
+    }
+
+    public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
+    {
+        var position = PopRandomFreeStartPosition();
+        GameObject player = Instantiate(playerPrefab, position, default);
+        return player;
+    }
+
+    private Vector2 PopRandomFreeStartPosition()
+    {
+        if (_freeStartPositions.Count <= 0)
         {
-            _freeStartPositions = startPositions.ToList();
-
-            // spawn the initial batch of Rewards
-            if (sceneName == GameplayScene)
-                Spawner.InitialSpawn();
-
-
-            Debug.Log("OnRoomServerSceneChanged");
+            Debug.LogWarning("FreeStartPosition is empty");
+            return Vector2.zero;
         }
 
-        public void AAA()
-        {
-            base.ServerChangeScene(SceneManager.GetActiveScene().name);
-            // base.ServerChangeScene("GameplayScene");
-        }
+        var index = Random.Range(0, _freeStartPositions.Count);
 
-        /// <summary>
-        /// Called just after GamePlayer object is instantiated and just before it replaces RoomPlayer object.
-        /// This is the ideal point to pass any data like player name, credentials, tokens, colors, etc.
-        /// into the GamePlayer object as it is about to enter the Online scene.
-        /// </summary>
-        /// <param name="roomPlayer"></param>
-        /// <param name="gamePlayer"></param>
-        /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
-        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
-        {
-            PlayerScore playerScore = gamePlayer.GetComponent<PlayerScore>();
-            playerScore.index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
-            return true;
-        }
+        var position = _freeStartPositions[index].position;
+        _freeStartPositions.RemoveAt(index);
 
-        public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
-        {
-            var position = PopRandomFreeStartPosition();
-            GameObject player = Instantiate(playerPrefab, position, default);
-            return player;
-        }
+        return position;
+    }
 
-        private Vector2 PopRandomFreeStartPosition()
-        {
-            if (_freeStartPositions.Count <= 0)
-            {
-                Debug.LogWarning("FreeStartPosition is empty");
-                return Vector2.zero;
-            }
+    /*
+        This code below is to demonstrate how to do a Start button that only appears for the Host player
+        showStartButton is a local bool that's needed because OnRoomServerPlayersReady is only fired when
+        all players are ready, but if a player cancels their ready state there's no callback to set it back to false
+        Therefore, allPlayersReady is used in combination with showStartButton to show/hide the Start button correctly.
+        Setting showStartButton false when the button is pressed hides it in the game scene since NetworkRoomManager
+        is set as DontDestroyOnLoad = true.
+    */
 
-            var index = Random.Range(0, _freeStartPositions.Count);
+    bool showStartButton;
 
-            var position = _freeStartPositions[index].position;
-            _freeStartPositions.RemoveAt(index);
-
-            return position;
-        }
-
-        /*
-            This code below is to demonstrate how to do a Start button that only appears for the Host player
-            showStartButton is a local bool that's needed because OnRoomServerPlayersReady is only fired when
-            all players are ready, but if a player cancels their ready state there's no callback to set it back to false
-            Therefore, allPlayersReady is used in combination with showStartButton to show/hide the Start button correctly.
-            Setting showStartButton false when the button is pressed hides it in the game scene since NetworkRoomManager
-            is set as DontDestroyOnLoad = true.
-        */
-
-        bool showStartButton;
-
-        public override void OnRoomServerPlayersReady()
-        {
-            // calling the base method calls ServerChangeScene as soon as all players are in Ready state.
+    public override void OnRoomServerPlayersReady()
+    {
+        // calling the base method calls ServerChangeScene as soon as all players are in Ready state.
 #if UNITY_SERVER
             base.OnRoomServerPlayersReady();
 #else
-            showStartButton = true;
+        showStartButton = true;
 #endif
+    }
+
+    public override void OnGUI()
+    {
+        base.OnGUI();
+
+        if (allPlayersReady && showStartButton && GUI.Button(new Rect(150, 300, 120, 20), "START GAME"))
+        {
+            // set to false to hide it in the game scene
+            showStartButton = false;
+
+            ServerChangeScene(GameplayScene);
         }
 
-        public override void OnGUI()
+        if (GUI.Button(new Rect(300, 300, 120, 20), "START GAME"))
         {
-            base.OnGUI();
-
-            if (allPlayersReady && showStartButton && GUI.Button(new Rect(150, 300, 120, 20), "START GAME"))
-            {
-                // set to false to hide it in the game scene
-                showStartButton = false;
-
-                ServerChangeScene(GameplayScene);
-            }
-
-            if (GUI.Button(new Rect(300, 300, 120, 20), "START GAME"))
-            {
-                ServerChangeScene(GameplayScene);
-            }
+            ServerChangeScene(GameplayScene);
         }
     }
 }

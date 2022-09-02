@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
+using Mirror;
 using TMPro;
 using UnityEngine;
 
-namespace Mirror.Examples.NetworkRoom
-{
     [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(NetworkTransform))]
@@ -165,4 +163,3 @@ namespace Mirror.Examples.NetworkRoom
             _isColorChanged = false;
         }
     }
-}

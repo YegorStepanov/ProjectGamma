@@ -1,4 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Mirror.SimpleWeb;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-manager
@@ -14,15 +20,28 @@ namespace Mirror.Examples.NetworkRoom
         [Tooltip("Reward Prefab for the Spawner")]
         public GameObject rewardPrefab;
 
+        private List<Transform> _freeStartPositions;
+
         /// <summary>
         /// This is called on the server when a networked scene finishes loading.
         /// </summary>
         /// <param name="sceneName">Name of the new scene.</param>
         public override void OnRoomServerSceneChanged(string sceneName)
         {
+            _freeStartPositions = startPositions.ToList();
+
             // spawn the initial batch of Rewards
             if (sceneName == GameplayScene)
                 Spawner.InitialSpawn();
+
+
+            Debug.Log("OnRoomServerSceneChanged");
+        }
+
+        public void AAA()
+        {
+            base.ServerChangeScene(SceneManager.GetActiveScene().name);
+            // base.ServerChangeScene("GameplayScene");
         }
 
         /// <summary>
@@ -40,14 +59,27 @@ namespace Mirror.Examples.NetworkRoom
             return true;
         }
 
-        public override void OnRoomStopClient()
+        public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
         {
-            base.OnRoomStopClient();
+            var position = PopRandomFreeStartPosition();
+            GameObject player = Instantiate(playerPrefab, position, default);
+            return player;
         }
 
-        public override void OnRoomStopServer()
+        private Vector2 PopRandomFreeStartPosition()
         {
-            base.OnRoomStopServer();
+            if (_freeStartPositions.Count <= 0)
+            {
+                Debug.LogWarning("FreeStartPosition is empty");
+                return Vector2.zero;
+            }
+
+            var index = Random.Range(0, _freeStartPositions.Count);
+
+            var position = _freeStartPositions[index].position;
+            _freeStartPositions.RemoveAt(index);
+
+            return position;
         }
 
         /*
@@ -80,6 +112,11 @@ namespace Mirror.Examples.NetworkRoom
                 // set to false to hide it in the game scene
                 showStartButton = false;
 
+                ServerChangeScene(GameplayScene);
+            }
+
+            if (GUI.Button(new Rect(300, 300, 120, 20), "START GAME"))
+            {
                 ServerChangeScene(GameplayScene);
             }
         }

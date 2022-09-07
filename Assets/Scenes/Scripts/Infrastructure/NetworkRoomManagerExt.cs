@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+using System;
+using System.ComponentModel;
 using System.Linq;
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Random = UnityEngine.Random;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-manager
@@ -17,7 +17,10 @@ public class NetworkRoomManagerExt : NetworkRoomManager
     [Tooltip("Reward Prefab for the Spawner")]
     public GameObject rewardPrefab;
 
-    private List<Transform> _freeStartPositions;
+    [SerializeField] private GameFactory _gameFactory;
+
+    // exclude the point after creation so that another player cannot be spawned on the same point
+    private FreeStartPoints _freeStartPoints;
 
     /// <summary>
     /// This is called on the server when a networked scene finishes loading.
@@ -25,7 +28,7 @@ public class NetworkRoomManagerExt : NetworkRoomManager
     /// <param name="sceneName">Name of the new scene.</param>
     public override void OnRoomServerSceneChanged(string sceneName)
     {
-        _freeStartPositions = startPositions.ToList();
+        _freeStartPoints = FreeStartPoints.Create(startPositions);
 
         // spawn the initial batch of Rewards
         if (sceneName == GameplayScene)
@@ -34,7 +37,7 @@ public class NetworkRoomManagerExt : NetworkRoomManager
         Debug.Log("OnRoomServerSceneChanged");
     }
 
-    public void AAA()
+    public void RestartGame()
     {
         base.ServerChangeScene(SceneManager.GetActiveScene().name);
         // base.ServerChangeScene("GameplayScene");
@@ -50,34 +53,18 @@ public class NetworkRoomManagerExt : NetworkRoomManager
     /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        PlayerScore playerScore = gamePlayer.GetComponent<PlayerScore>();
+        var playerScore = gamePlayer.GetComponent<PlayerScore>();
         playerScore.index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
         return true;
     }
 
     public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
     {
-        var position = PopRandomFreeStartPosition();
-        GameObject player = Instantiate(playerPrefab, position, default);
-        return player;
+        Vector3 position = _freeStartPoints.Pop(playerSpawnMethod).position;
+        Debug.Log("CREATE");
+        return _gameFactory.CreateControlledPlayer(playerPrefab, position);
     }
-
-    private Vector2 PopRandomFreeStartPosition()
-    {
-        if (_freeStartPositions.Count <= 0)
-        {
-            Debug.LogWarning("FreeStartPosition is empty");
-            return Vector2.zero;
-        }
-
-        var index = Random.Range(0, _freeStartPositions.Count);
-
-        var position = _freeStartPositions[index].position;
-        _freeStartPositions.RemoveAt(index);
-
-        return position;
-    }
-
+    
     /*
         This code below is to demonstrate how to do a Start button that only appears for the Host player
         showStartButton is a local bool that's needed because OnRoomServerPlayersReady is only fired when
@@ -91,9 +78,10 @@ public class NetworkRoomManagerExt : NetworkRoomManager
 
     public override void OnRoomServerPlayersReady()
     {
+        base.OnRoomServerPlayersReady();
         // calling the base method calls ServerChangeScene as soon as all players are in Ready state.
 #if UNITY_SERVER
-            base.OnRoomServerPlayersReady();
+        base.OnRoomServerPlayersReady();
 #else
         showStartButton = true;
 #endif

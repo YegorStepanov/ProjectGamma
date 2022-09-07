@@ -140,7 +140,7 @@ using UnityEngine;
                 {
                     Debug.Log("CHANGEEE");
                     var aa = (NetworkRoomManagerExt)NetworkManager.singleton;
-                    aa.AAA();
+                    aa.RestartGame();
                     // aa.OnRoomServerSceneChanged(gameObject.scene.name);
                     // aa.OnRoomServerPlayersReady();
                 }

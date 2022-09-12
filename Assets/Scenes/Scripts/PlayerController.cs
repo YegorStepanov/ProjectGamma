@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Mirror;
 using TMPro;
@@ -139,8 +140,11 @@ using UnityEngine;
                 if (_hitCount == 4)
                 {
                     Debug.Log("CHANGEEE");
-                    var aa = (NetworkRoomManagerExt)NetworkManager.singleton;
-                    aa.RestartGame();
+                    var aa = (RoomManager)NetworkManager.singleton;
+                    throw new NotImplementedException("Yegor ahoo"); //todo
+                    // aa.RestartGame();
+                    
+                    
                     // aa.OnRoomServerSceneChanged(gameObject.scene.name);
                     // aa.OnRoomServerPlayersReady();
                 }

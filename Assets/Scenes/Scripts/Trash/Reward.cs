@@ -16,6 +16,7 @@ public class Reward : NetworkBehaviour
     [ServerCallback]
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log("REWARD TRIGGER");
         if (other.gameObject.CompareTag("Player"))
         {
             ClaimPrize(other.gameObject);
@@ -40,13 +41,13 @@ public class Reward : NetworkBehaviour
             //Debug.Log($"Scored {points} points R:{color.r} G:{color.g} B:{color.b}");
 
             // award the points via SyncVar on the PlayerController
-            player.GetComponent<PlayerScore>().score += points;
+            player.GetComponent<Player>().Score += points;
 
             // spawn a replacement
             Spawner.SpawnReward();
 
             // destroy this one
-            NetworkServer.Destroy(gameObject);
+            //NetworkServer.Destroy(gameObject);
         }
     }
 }

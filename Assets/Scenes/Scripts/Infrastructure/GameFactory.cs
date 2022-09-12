@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using Mirror;
+using UnityEngine;
 
-public sealed class GameFactory : MonoBehaviour
+public sealed class GameFactory : NetworkBehaviour
 {
     [SerializeField] private InputManager _inputManager;
-    [SerializeField] private CameraController _cameraController;
+    [SerializeField] private CameraController _playerCameraPrefab;
+    [SerializeField] private HeroCollisionManager _heroCollisionManager;
+    [SerializeField] private PlayerData _playerData;
 
     private FakeInputManager _fakeInputManager;
 
@@ -12,27 +15,25 @@ public sealed class GameFactory : MonoBehaviour
         _fakeInputManager = new FakeInputManager();
     }
 
-    public GameObject CreateEnemyPlayer(GameObject playerPrefab, Vector3 position) => 
-        CreatePlayer(playerPrefab, position, _inputManager, null);
-
-    public GameObject CreateControlledPlayer(GameObject playerPrefab, Vector3 position) => 
-        CreatePlayer(playerPrefab, position, _fakeInputManager, _cameraController.transform);
-
-    private GameObject CreatePlayer(GameObject playerPrefab, Vector3 position, IInputManager inputManager, Transform relativeTo)
+    public Player CreateTestPlayer(Player playerPrefab, Vector3 position, Quaternion rotation)
     {
-        GameObject player = Instantiate(playerPrefab, position, default);
-
-        var dashState = player.GetComponent<DashState>();
-        var walkState = player.GetComponent<WalkState>();
-        var heroMovement = player.GetComponent<HeroMovement>();
-
-        if (relativeTo == null)
-            relativeTo = heroMovement.transform;
-        
-        dashState.Construct(relativeTo, heroMovement);
-        walkState.Construct(inputManager, relativeTo);
-
-        heroMovement.Construct(new IState[] { dashState, walkState });
+        Player player = Instantiate(playerPrefab, position, rotation);
+        player.Construct(_playerData, _fakeInputManager, CreateCamera, _heroCollisionManager.HandleColliderHit);
         return player;
+    }
+
+    public Player CreatePlayer(Player playerPrefab, Vector3 position, Quaternion rotation)
+    {
+        Player player = Instantiate(playerPrefab, position, rotation);
+        player.Construct(_playerData, _inputManager, CreateCamera, _heroCollisionManager.HandleColliderHit);
+        return player;
+    }
+
+    private CameraController CreateCamera(Transform focusOn)
+    {
+        CameraController controller = Instantiate(_playerCameraPrefab);
+        controller.Construct(Camera.main, _inputManager);
+        controller.FocusOn = focusOn;
+        return controller;
     }
 }

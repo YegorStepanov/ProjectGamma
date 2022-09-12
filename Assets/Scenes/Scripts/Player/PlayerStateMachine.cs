@@ -18,7 +18,7 @@ public sealed class PlayerStateMachine : Mirror.NetworkBehaviour, IStateMachine<
             [PlayerState.Walk] = GetComponent<WalkState>()
         };
     }
-
+    
     public void SetState(PlayerState state)
     {
         _states[State].Exit();

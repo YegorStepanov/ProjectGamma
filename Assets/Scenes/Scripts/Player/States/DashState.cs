@@ -14,7 +14,7 @@ public sealed class DashState : BasePlayerState
     {
         if (_remainingDistance <= 0)
         {
-            Player.SetState(PlayerState.Walk);
+            StateMachine.SetState(PlayerState.Walk);
             return;
         }
 

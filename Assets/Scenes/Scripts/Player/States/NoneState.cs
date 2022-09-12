@@ -1,6 +1,6 @@
 ﻿public sealed class NoneState : IState
 {
-    public static NoneState Instance = new NoneState();
+    public static readonly NoneState Instance = new NoneState();
 
     public void Enter() { }
 

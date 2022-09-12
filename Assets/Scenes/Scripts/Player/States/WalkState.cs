@@ -6,7 +6,7 @@ public sealed class WalkState : BasePlayerState
     {
         if (IsDashing())
         {
-            Player.SetState(PlayerState.Dash);
+            StateMachine.SetState(PlayerState.Dash);
             return;
         }
 

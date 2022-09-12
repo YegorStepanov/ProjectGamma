@@ -16,10 +16,6 @@ public sealed class ServerRoomManager : Mirror.NetworkBehaviour //rename?
     {
         _freeStartPositions = new FreeStartPositions(startPositions, playerSpawnMethod);
         _players = new Players(startPositions.Count);
-
-        // // spawn the initial batch of Rewards
-        // if (sceneName == GameplayScene)
-        //     Spawner.InitialSpawn();
     }
 
     public void RestartGame()
@@ -28,42 +24,26 @@ public sealed class ServerRoomManager : Mirror.NetworkBehaviour //rename?
         _players.ResetScores();
         _players.ResetPositions(_freeStartPositions);
 
+        // foreach (IPlayer player in _players)
+        {
+            // GameFactory.LookToSceneCenter()
+        }
+
         // base.ServerChangeScene(SceneManager.GetActiveScene().name);
     }
 
     public Player CreatePlayer(Player playerPrefab)
     {
-        //rotate to the center!
         Vector3 position = _freeStartPositions.Pop();
-        Vector3 lookDirection = LookToSceneCenter(position); //move it too
-        Player player = _gameFactory.CreatePlayer(playerPrefab, position, Quaternion.LookRotation(lookDirection));
-        player.Name = "Bot 1";
-        // player.SetState(PlayerState.Walk);
+        Player player = _gameFactory.CreatePlayer(playerPrefab, position);
         _players.AddPlayer(player);
         return player;
     }
-
     
-    public void CreateTestPlayer(Player playerPrefab)
+    [ClientRpc]
+    public void RpcInitializePlayer(Player player, string playerName)
     {
-        Vector3 position = _freeStartPositions.Pop();
-        Vector3 lookDirection = LookToSceneCenter(position);
-        Player player = _gameFactory.CreateTestPlayer(playerPrefab, position, Quaternion.LookRotation(lookDirection));
-        player.Name = "Player 1";
-        // player.SetState(PlayerState.Walk);
-        _players.AddPlayer(player);
+        _gameFactory.ConstructPlayer(player);
+        player.Name = playerName;
     }
-
-    private static Vector3 LookToSceneCenter(Vector3 position)
-    {
-        Vector3 lookDirection = -position;
-        lookDirection.y = 0;
-        return lookDirection;
-    }
-
-    // public void PreparePlayer(GameObject roomPlayer, GameObject gamePlayer)
-    // {
-    //     // var playerScore = gamePlayer.GetComponent<Player>();
-    //     // playerScore.Name = "Player " + roomPlayer.GetComponent<NetworkRoomPlayer>().index;
-    // }
 }

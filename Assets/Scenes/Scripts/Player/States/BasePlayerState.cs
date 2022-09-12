@@ -4,15 +4,19 @@ using UnityEngine;
 public abstract class BasePlayerState : NetworkBehaviour, IState
 {
     protected IPlayer Player { get; private set; }
+    protected IStateMachine<PlayerState> StateMachine { get; private set; }
 
     protected virtual void Awake()
     {
         Player = GetComponent<IPlayer>();
+        StateMachine = GetComponent<IStateMachine<PlayerState>>();
         Exit();
     }
 
-    public virtual void Enter() =>
+    public virtual void Enter()
+    {
         enabled = true;
+    }
 
     public virtual void Exit() =>
         enabled = false;
@@ -41,7 +45,7 @@ public abstract class BasePlayerState : NetworkBehaviour, IState
     protected Vector3 GetMovementDirection()
     {
         Vector3 input = ReadMovementInput();
-        Vector3 direction = Player.TransformDirection(input);
+        Vector3 direction = Player.RelativeMovementTo.TransformDirection(input);
         return direction;
     }
 

@@ -20,11 +20,11 @@ public sealed class GameOverManager : NetworkBehaviour
     private IEnumerator GameOverRoutine(IPlayer winner)
     {
         Debug.Log($"GG name {winner}");
-        _guiManager.ShowGameOverPanel(winner.Name, 5f);
+        _guiManager.RpcShowGameOverPanel(winner.Name, 5f);
         _serverRoomManager.Players.SetStatesToNone();
 
         yield return new WaitForSecondsRealtime(5f);
-        _guiManager.HideGameOverPanel();
+        _guiManager.RpcHideGameOverPanel();
 
         Debug.Log("Restarting...");
         _serverRoomManager.RestartGame();

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public sealed class RoomManager : NetworkRoomManager
 {
+    [Header("Dependencies")]
     [SerializeField] private ServerRoomManager _server;
     [SerializeField] private GUIManager _guiManager;
 
@@ -19,24 +20,37 @@ public sealed class RoomManager : NetworkRoomManager
     // into the GamePlayer object as it is about to enter the Online scene.
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        _server.PreparePlayer(roomPlayer, gamePlayer);
+        // _server.PreparePlayer(roomPlayer, gamePlayer);
+        
+        // var player = gamePlayer.GetComponent<Player>();
+        // player.Construct(_playerData, _inputManager, CreateCamera, _heroCollisionManager.HandleColliderHit);
+        // player.SetState(PlayerState.Walk);
+
         Debug.Log("OnSceneLoadedForPlayer");
         return true;
     }
-
+    
+    
     public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
     {
-        _server.CreateTestPlayer(playerPrefab.GetComponent<Player>());
+        //_server.CreateTestPlayer(playerPrefab.GetComponent<Player>());
 
         Player player = _server.CreatePlayer(playerPrefab.GetComponent<Player>());
-        return player.gameObject;
+        GameObject go = player.gameObject;
+        NetworkServer.Spawn(go, conn);
+        return go;
+    }
+    
+    public override void OnRoomServerDisconnect(NetworkConnectionToClient conn)
+    {
+        Debug.Log("Disconnect");
     }
 
     public override void OnRoomServerPlayersReady()
     {
-// #if UNITY_SERVER
-        // ServerChangeScene(GameplayScene);
-// #else
+#if UNITY_SERVER
+        base.OnRoomServerPlayersReady();
+#else
         _guiManager.ShowStartGameButton(onClick: () =>
         {
             _guiManager.HideStartGameButton();
@@ -44,7 +58,7 @@ public sealed class RoomManager : NetworkRoomManager
 
             base.OnRoomServerPlayersReady();
         });
-// #endif  
+#endif
     }
 
     public override void OnRoomServerPlayersNotReady()

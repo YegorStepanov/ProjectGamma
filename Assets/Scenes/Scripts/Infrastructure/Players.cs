@@ -2,51 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class Players : IEnumerable<Player>
+public sealed class Players : IEnumerable<IPlayer>
 {
-    private readonly List<Player> _players;
+    private readonly List<IPlayer> _players;
 
     public Players(int maxPlayers)
     {
-        _players = new List<Player>(maxPlayers);
+        _players = new List<IPlayer>(maxPlayers);
     }
 
-    public void AddPlayer(Player player) =>
+    public void AddPlayer(IPlayer player) =>
         _players.Add(player);
 
-    public void RemovePlayer(Player player) => //onDisconnect
+    public void RemovePlayer(IPlayer player) => //onDisconnect
         _players.Remove(player);
 
     public void ResetScores()
     {
-        foreach (Player player in _players)
+        foreach (IPlayer player in _players)
             player.Score = 0;
     }
 
     public void SetStatesToNone()
     {
-        foreach (Player player in _players)
+        foreach (IPlayer player in _players)
             player.SetState(PlayerState.None);
     }
 
     public void SetStatesToWalk()
     {
-        foreach (Player player in _players)
+        foreach (IPlayer player in _players)
             player.SetState(PlayerState.Walk);
     }
 
-    public IEnumerator<Player> GetEnumerator() =>
+    public IEnumerator<IPlayer> GetEnumerator() =>
         _players.GetEnumerator();
-
-    IEnumerator IEnumerable.GetEnumerator() =>
-        GetEnumerator();
 
     public void ResetPositions(FreeStartPositions freeStartPositions)
     {
-        foreach (Player player in _players)
+        foreach (IPlayer player in _players)
         {
             Vector3 position = freeStartPositions.Pop();
             player.SetPosition(position);
         }
     }
+
+    IEnumerator IEnumerable.GetEnumerator() =>
+        GetEnumerator();
 }

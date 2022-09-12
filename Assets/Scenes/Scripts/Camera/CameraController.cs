@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public sealed class CameraController : Mirror.NetworkBehaviour, ICameraController
+public sealed class CameraController : MonoBehaviour, ICameraController
 {
     [SerializeField] private float _maxDistance = 5;
     [SerializeField] private float _rotationSpeed = 90f;

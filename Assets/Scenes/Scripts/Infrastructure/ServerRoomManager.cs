@@ -2,7 +2,7 @@
 using Mirror;
 using UnityEngine;
 
-public sealed class ServerRoomManager : MonoBehaviour //rename?
+public sealed class ServerRoomManager : Mirror.NetworkBehaviour //rename?
 {
     [SerializeField] private GameFactory _gameFactory;
 
@@ -35,21 +35,22 @@ public sealed class ServerRoomManager : MonoBehaviour //rename?
     {
         //rotate to the center!
         Vector3 position = _freeStartPositions.Pop();
-        Vector3 lookDirection = LookToSceneCenter(position);
+        Vector3 lookDirection = LookToSceneCenter(position); //move it too
         Player player = _gameFactory.CreatePlayer(playerPrefab, position, Quaternion.LookRotation(lookDirection));
         player.Name = "Bot 1";
-        player.SetState(PlayerState.Walk);
+        // player.SetState(PlayerState.Walk);
         _players.AddPlayer(player);
         return player;
     }
 
+    
     public void CreateTestPlayer(Player playerPrefab)
     {
         Vector3 position = _freeStartPositions.Pop();
         Vector3 lookDirection = LookToSceneCenter(position);
         Player player = _gameFactory.CreateTestPlayer(playerPrefab, position, Quaternion.LookRotation(lookDirection));
         player.Name = "Player 1";
-        player.SetState(PlayerState.Walk);
+        // player.SetState(PlayerState.Walk);
         _players.AddPlayer(player);
     }
 
@@ -60,9 +61,9 @@ public sealed class ServerRoomManager : MonoBehaviour //rename?
         return lookDirection;
     }
 
-    public void PreparePlayer(GameObject roomPlayer, GameObject gamePlayer)
-    {
-        // var playerScore = gamePlayer.GetComponent<Player>();
-        // playerScore.Name = "Player " + roomPlayer.GetComponent<NetworkRoomPlayer>().index;
-    }
+    // public void PreparePlayer(GameObject roomPlayer, GameObject gamePlayer)
+    // {
+    //     // var playerScore = gamePlayer.GetComponent<Player>();
+    //     // playerScore.Name = "Player " + roomPlayer.GetComponent<NetworkRoomPlayer>().index;
+    // }
 }

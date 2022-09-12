@@ -9,7 +9,7 @@ public sealed class GameOverManager : NetworkBehaviour
 
     private IEnumerator _gameOverRoutine;
 
-    public void EndGame(Player winner)
+    public void EndGame(IPlayer winner)
     {
         if (_gameOverRoutine != null) return;
 
@@ -17,7 +17,7 @@ public sealed class GameOverManager : NetworkBehaviour
         StartCoroutine(_gameOverRoutine);
     }
 
-    private IEnumerator GameOverRoutine(Player winner)
+    private IEnumerator GameOverRoutine(IPlayer winner)
     {
         Debug.Log($"GG name {winner}");
         _guiManager.ShowGameOverPanel(winner.Name, 5f);

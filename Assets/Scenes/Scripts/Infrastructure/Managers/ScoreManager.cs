@@ -1,10 +1,8 @@
-﻿using UnityEngine;
-
-public sealed class ScoreManager : MonoBehaviour
+﻿public sealed class ScoreManager : Mirror.NetworkBehaviour
 {
-    public bool IsPlayerWon(Player player) =>
-        player.Score > 3;
+    public bool IsPlayerWon(IPlayer player) =>
+        player.Score > 2;
 
-    public void IncreaseScore(Player player) =>
+    public void IncreaseScore(IPlayer player) =>
         player.Score++;
 }

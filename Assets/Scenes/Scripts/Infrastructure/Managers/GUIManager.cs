@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public sealed class GUIManager : MonoBehaviour
+public sealed class GUIManager : Mirror.NetworkBehaviour
 {
     [SerializeField]
     private ServerRoomManager _serverRoomManager;

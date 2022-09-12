@@ -1,10 +1,17 @@
 ﻿using UnityEngine;
 
-public sealed class LookAtMainCamera : MonoBehaviour
+public sealed class LookAtMainCamera : Mirror.NetworkBehaviour
 {
-    // LateUpdate so that all camera updates are finished.
-    void LateUpdate()
+    private Camera _camera;
+
+    private void LateUpdate()
     {
-        transform.forward = Camera.main.transform.forward;
+        if (_camera == null)
+        {
+            _camera = Camera.main;
+            return;
+        }
+
+        transform.forward = _camera.transform.forward;
     }
 }

@@ -242,8 +242,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 1480027675339556, guid: 96265ee63a7e2ca428bfc8414fdd9f0c, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs:
-  - {fileID: 1139254171913846, guid: 52f1c9ea06cfd154cb68ff9d1b66fc13, type: 3}
+  spawnPrefabs: []
   showRoomGUI: 1
   minPlayers: 1
   roomPlayerPrefab: {fileID: 2951412564670690806, guid: deae2134a1d77704b9c595efe69767dd, type: 3}
@@ -402,6 +401,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60d36979dfa64c2e890e0e79b05859de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   duration: 3
   color: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1716700346
@@ -416,6 +417,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f2d20b79997448b8778797d82b9dcd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!114 &1716700347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -487,6 +490,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c754429deecf475d824974a8d8a0ab6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   _serverRoomManager: {fileID: 1716700352}
   _roomManager: {fileID: 1188827954}
   width: 160
@@ -503,6 +508,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2583f8ad5f83408db226667a2e9135a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   _gameFactory: {fileID: 1587623850}
 --- !u!1 &2021090291
 GameObject:

@@ -7,13 +7,13 @@ public sealed class HeroCollisionManager : NetworkBehaviour
     [SerializeField] private ScoreManager _scoreManager;
     [SerializeField] private PlayerBlockingManager _playerBlockingManager;
 
-    public void HandleColliderHit(Player player, ControllerColliderHit hit)
+    public void HandleColliderHit(IPlayer player, ControllerColliderHit hit)
     {
         GameObject go = hit.gameObject;
         if (!go.CompareTag(Player.Tag))
             return;
 
-        if (go.TryGetComponent(out Player anotherPlayer))
+        if (go.TryGetComponent(out IPlayer anotherPlayer))
         {
             if (player.State == PlayerState.Dash)
             {
@@ -22,7 +22,7 @@ public sealed class HeroCollisionManager : NetworkBehaviour
         }
     }
 
-    private void HandlePlayersHit(Player winner, Player loser)
+    private void HandlePlayersHit(IPlayer winner, IPlayer loser)
     {
         if (_playerBlockingManager.IsBlocked(loser))
             return;

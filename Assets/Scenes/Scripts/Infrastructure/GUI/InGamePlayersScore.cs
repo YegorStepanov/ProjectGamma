@@ -10,7 +10,7 @@ public sealed class InGamePlayersScore
     public void Draw()
     {
         int index = 0;
-        foreach (Player player in _players)
+        foreach (IPlayer player in _players)
         {
             DrawScore(player, index);
             index++;

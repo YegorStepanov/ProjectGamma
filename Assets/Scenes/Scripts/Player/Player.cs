@@ -9,22 +9,26 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public const string Tag = "Player";
 
     [SerializeField] private Transform _pivot; //camera focus
+    [SerializeField] private Renderer _renderer;
+
+    [field: SyncVar]
+    public string Name { get; set; }
+    [field: SyncVar]
+    public uint Score { get; set; }
+    [field: SyncVar(hook = nameof(SetColor))]
+    public Color32 Color { get; set; }
 
     private PlayerStateMachine _stateMachine;
-    public CharacterController _controller;
+    private CharacterController _controller;
 
     private Func<Transform, ICameraController> _createCamera;
-    private Action<Player, ControllerColliderHit> _onColliderHit;
+    private Action<IPlayer, ControllerColliderHit> _onColliderHit;
 
     private Vector3 _moveDirection;
+    private Material _material;
 
     public PlayerData Data { get; private set; }
     public PlayerState State => _stateMachine.State;
-
-    [field: SyncVar]
-    public uint Score { get; set; }
-    [field: SyncVar]
-    public string Name { get; set; }
 
     public IInputManager InputManager { get; private set; }
     private ICameraController Camera { get; set; }
@@ -36,6 +40,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
     private void Awake()
     {
+        _material = _renderer.material;
         _stateMachine = GetComponent<PlayerStateMachine>();
         _controller = GetComponent<CharacterController>();
         Camera = new MockCameraController(transform); //!!
@@ -45,16 +50,40 @@ public sealed class Player : NetworkBehaviour, IPlayer
         PlayerData data,
         IInputManager inputManager,
         Func<Transform, ICameraController> createCamera,
-        Action<Player, ControllerColliderHit> onColliderHit)
+        Action<IPlayer, ControllerColliderHit> onColliderHit)
     {
         Data = data;
         InputManager = inputManager;
         _createCamera = createCamera;
         _onColliderHit = onColliderHit;
+        Debug.Log("1Player.Construct");
     }
 
-    public Vector3 TransformDirection(Vector3 direction) =>
-        Camera != null ? Camera.TransformDirection(direction) : transform.position;
+    public override void OnStartLocalPlayer()
+    {
+        Debug.Log("2Player.Construct");
+        GameFactory.Instance.Construct(this);
+
+        Camera = _createCamera(_pivot); //!!!
+        SetState(PlayerState.Walk);
+        // Camera = GameFactory.Instance.CreateCamera(_pivot);
+        Debug.Log("OnStartLocalPlayer");
+    }
+
+    private void OnDestroy() =>
+        Destroy(_material);
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        _onColliderHit(this, hit);
+        _moveDirection = hit.moveDirection * hit.moveLength;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = UnityEngine.Color.blue;
+        Gizmos.DrawRay(transform.position, _moveDirection);
+    }
 
     public void SetState(PlayerState state) =>
         _stateMachine.SetState(state);
@@ -66,28 +95,12 @@ public sealed class Player : NetworkBehaviour, IPlayer
         _controller.enabled = true;
     }
 
-    public void Move(Vector3 motion)
-    {
+    public void Move(Vector3 motion) =>
         _controller.Move(motion);
-    }
 
-    public override void OnStartLocalPlayer()
-    {
-        Camera = _createCamera(_pivot); //!!!
-        Debug.Log("OnStartLocalPlayer");
-    }
+    public Vector3 TransformDirection(Vector3 direction) =>
+        Camera != null ? Camera.TransformDirection(direction) : direction; //or transform.TransformDirection(sa)
 
-    private void Start() { } //or here setstate should be?
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        _onColliderHit(this, hit);
-        _moveDirection = hit.moveDirection * hit.moveLength;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawRay(transform.position, _moveDirection);
-    }
+    private void SetColor(Color32 _, Color32 newColor) =>
+        _material.color = newColor;
 }

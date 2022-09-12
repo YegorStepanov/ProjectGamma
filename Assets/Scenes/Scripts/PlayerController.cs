@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using Mirror;
 using TMPro;
 using UnityEngine;
@@ -110,60 +108,5 @@ using UnityEngine;
 
             isGrounded = characterController.isGrounded;
             velocity = characterController.velocity;
-        }
-
-        [ServerCallback]
-        private void OnCollisionEnter(Collision collision)
-        {
-            return; //tood:
-            Debug.Log("SERRRRVER");
-            if (collision.gameObject.TryGetComponent(out PlayerController another)) //reaplce to TAG
-            {
-                if (another._isDash)
-                {
-                    characterController.Move(collision.impulse * 10);
-                    StartCoroutine(R());
-                }
-            }
-        }
-
-        [ServerCallback]
-        private void OnTriggerEnter(Collider other)
-        {
-            StopAllCoroutines();
-            Debug.Log("AAAA");
-
-            // if (_isDash)
-            {
-                _hitCountText.SetText((++_hitCount).ToString());
-
-                if (_hitCount == 4)
-                {
-                    Debug.Log("CHANGEEE");
-                    var aa = (RoomManager)NetworkManager.singleton;
-                    throw new NotImplementedException("Yegor ahoo"); //todo
-                    // aa.RestartGame();
-                    
-                    
-                    // aa.OnRoomServerSceneChanged(gameObject.scene.name);
-                    // aa.OnRoomServerPlayersReady();
-                }
-                
-                // characterController.Move(-velocity);
-                StartCoroutine(R());
-            }
-        }
-
-        [ServerCallback]
-        IEnumerator R()
-        {
-            _isColorChanged = true;
-            var rc = GetComponent<RandomColor>();
-            var originalColor = rc.color;
-            rc.color = Color.green;
-            yield return new WaitForSeconds(_waitColorChangedSeconds);
-            rc.color = originalColor;
-            Debug.Log("SERRRRVER");
-            _isColorChanged = false;
         }
     }

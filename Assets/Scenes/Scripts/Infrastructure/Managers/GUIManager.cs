@@ -37,7 +37,7 @@ public sealed class GUIManager : Mirror.NetworkBehaviour
 
     [ClientRpc]
     public void RpcShowInGamePlayersScore() =>
-        _inGamePlayersScore = new InGamePlayersScore(_serverRoomManager.Players);
+        _inGamePlayersScore = new InGamePlayersScore(_serverRoomManager.RoomPlayers);
 
     [ClientRpc]
     public void RpcHideInGamePlayersScore() =>

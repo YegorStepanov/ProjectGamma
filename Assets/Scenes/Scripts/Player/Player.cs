@@ -20,9 +20,6 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
     public Transform RelativeMovementTo { get; private set; }
 
-    
-    public bool IsLocalPlayer => isLocalPlayer;
-
     private PlayerStateMachine _stateMachine;
     private CharacterController _controller;
 
@@ -37,6 +34,20 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
     public IInputManager InputManager { get; private set; }
 
+    [ShowInInspector]
+    public bool isNonNull;
+
+    #region Unity
+    private void Update()
+    {
+        if (isNonNull == false && Data == null)
+        {
+            Debug.Log($"Getting null {name}");
+        }
+
+        isNonNull = Data != null;
+    }
+
     private void Awake()
     {
         transform.tag = Tag;
@@ -46,6 +57,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
         _stateMachine = GetComponent<PlayerStateMachine>();
         _controller = GetComponent<CharacterController>();
         RelativeMovementTo = transform; //mb pivot?
+        _controller.enabled = false;
     }
 
     public void Construct(
@@ -54,6 +66,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
         Func<Transform, CameraController> createCamera,
         Action<IPlayer, ControllerColliderHit> onColliderHit)
     {
+        Debug.Log($"isData null {data == null}");
         Data = data;
         _createInputManager = createInputManager;
         _createCamera = createCamera;
@@ -62,14 +75,14 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
     public override void OnStartLocalPlayer()
     {
+        if (_createCamera == null) return;
+
         RelativeMovementTo = _createCamera(_pivot).transform;
         InputManager = _createInputManager();
+        _controller.enabled = true;
 
         SetState(PlayerState.Walk);
     }
-
-    public void SetState(PlayerState state) => 
-        _stateMachine.SetState(state);
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -79,6 +92,15 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
     private void OnDestroy() =>
         Destroy(_material);
+    #endregion
+
+    public void SetRotation(Quaternion rotation)
+    {
+        transform.localRotation = rotation;
+    }
+
+    public void SetState(PlayerState state) =>
+        _stateMachine.SetState(state);
 
     public void SetPosition(Vector3 position)
     {

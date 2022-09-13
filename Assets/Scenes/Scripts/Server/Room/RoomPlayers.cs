@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class Players : IEnumerable<IPlayer>
+public sealed class RoomPlayers : IEnumerable<IPlayer>
 {
-    private readonly List<IPlayer> _players;
+    private readonly List<IPlayer> _players; //Player, not IPlayer
 
-    public Players(int maxPlayers)
+    public RoomPlayers(int maxPlayers)
     {
         _players = new List<IPlayer>(maxPlayers);
     }

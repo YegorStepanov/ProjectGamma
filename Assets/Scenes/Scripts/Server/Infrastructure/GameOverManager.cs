@@ -21,15 +21,13 @@ public sealed class GameOverManager : NetworkBehaviour
     {
         Debug.Log($"GG name {winner}");
         _guiManager.RpcShowGameOverPanel(winner.Name, 5f);
-        _serverRoomManager.Players.SetStatesToNone();
+        _serverRoomManager.RoomPlayers.SetStatesToNone();
 
         yield return new WaitForSecondsRealtime(5f);
         _guiManager.RpcHideGameOverPanel();
 
         Debug.Log("Restarting...");
         _serverRoomManager.RestartGame();
-
-        _serverRoomManager.Players.SetStatesToWalk();
         _gameOverRoutine = null;
     }
 }

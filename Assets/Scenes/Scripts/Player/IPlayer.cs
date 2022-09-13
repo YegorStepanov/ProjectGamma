@@ -2,8 +2,6 @@
 
 public interface IPlayer
 {
-    bool IsLocalPlayer { get; }
-
     Transform RelativeMovementTo { get; }
 
     string Name { get; set; }
@@ -17,5 +15,6 @@ public interface IPlayer
 
     void Move(Vector3 motion);
     void SetPosition(Vector3 position);
+    void SetRotation(Quaternion rotation);
     void SetState(PlayerState none);
 }

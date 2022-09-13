@@ -251,7 +251,7 @@ MonoBehaviour:
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
-  _server: {fileID: 1716700352}
+  _serverRoomManager: {fileID: 1716700352}
   _guiManager: {fileID: 1716700351}
 --- !u!4 &1188827955
 Transform:
@@ -511,6 +511,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _gameFactory: {fileID: 1587623850}
+  _roomManager: {fileID: 1188827954}
 --- !u!1 &2021090291
 GameObject:
   m_ObjectHideFlags: 0

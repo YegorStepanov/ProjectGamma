@@ -2,15 +2,15 @@
 
 public sealed class InGamePlayersScore
 {
-    private readonly Players _players;
+    private readonly RoomPlayers _roomPlayers;
 
-    public InGamePlayersScore(Players players) =>
-        _players = players;
+    public InGamePlayersScore(RoomPlayers roomPlayers) =>
+        _roomPlayers = roomPlayers;
 
     public void Draw()
     {
         int index = 0;
-        foreach (IPlayer player in _players)
+        foreach (IPlayer player in _roomPlayers)
         {
             DrawScore(player, index);
             index++;

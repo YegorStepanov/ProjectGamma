@@ -1,7 +1,6 @@
-﻿using Mirror;
-using UnityEngine;
+﻿using UnityEngine;
 
-public abstract class BasePlayerState : NetworkBehaviour, IState
+public abstract class BasePlayerState : MonoBehaviour, IState
 {
     protected IPlayer Player { get; private set; }
     protected IStateMachine<PlayerState> StateMachine { get; private set; }
@@ -13,10 +12,8 @@ public abstract class BasePlayerState : NetworkBehaviour, IState
         Exit();
     }
 
-    public virtual void Enter()
-    {
+    public virtual void Enter() =>
         enabled = true;
-    }
 
     public virtual void Exit() =>
         enabled = false;
@@ -64,7 +61,7 @@ public abstract class BasePlayerState : NetworkBehaviour, IState
         if (normal == Vector3.zero)
             return direction;
 
-        return Vector3.ProjectOnPlane(direction, normal); //should we normalize it?
+        return Vector3.ProjectOnPlane(direction, normal);
     }
 
     private Vector3 ReadMovementInput()

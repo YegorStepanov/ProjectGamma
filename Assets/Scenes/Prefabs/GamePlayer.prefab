@@ -170,8 +170,8 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
-  showGizmos: 0
-  showOverlay: 0
+  showGizmos: 1
+  showOverlay: 1
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
 --- !u!143 &4759071931352172105
 CharacterController:
@@ -207,6 +207,7 @@ MonoBehaviour:
   syncInterval: 0.1
   _pivot: {fileID: 4822224316094678}
   _renderer: {fileID: 4008900414740136170}
+  isNonNull: 0
 --- !u!114 &2095132442368574971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,6 +220,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580fc6ec4d80495f8f7f773121efc9dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!114 &7212517243993307427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,6 +433,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb531c7e41b84dc1a89eaf1e4e55e9b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1 &3214332416847954768
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,6 +618,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb531c7e41b84dc1a89eaf1e4e55e9b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1 &4926068573968176962
 GameObject:
   m_ObjectHideFlags: 0

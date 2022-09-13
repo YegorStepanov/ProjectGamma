@@ -4,16 +4,24 @@ using UnityEngine;
 public sealed class RoomManager : NetworkRoomManager
 {
     [Header("Dependencies")]
-    [SerializeField] private ServerRoomManager _server;
+    [SerializeField] private ServerRoomManager _serverRoomManager;
     [SerializeField] private GUIManager _guiManager;
 
     public override void OnRoomServerSceneChanged(string sceneName)
     {
         if (sceneName == GameplayScene)
         {
-            _server.InitRoom(startPositions, playerSpawnMethod);
+            _serverRoomManager.InitRoom(startPositions, playerSpawnMethod);
             _guiManager.RpcShowInGamePlayersScore();
+
+            _serverRoomManager.CreateBot(playerPrefab.GetComponent<Player>());
         }
+    }
+
+    public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
+    {
+        GameObject player = _serverRoomManager.CreatePlayer(conn, playerPrefab.GetComponent<Player>());
+        return player;
     }
 
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
@@ -21,19 +29,9 @@ public sealed class RoomManager : NetworkRoomManager
         int index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
         string playerName = $"Player{index}";
 
-        var player = gamePlayer.GetComponent<Player>();
-        _server.RpcInitializePlayer(player, playerName);
-
-        Debug.Log("OnSceneLoadedForPlayer");
+        gamePlayer.GetComponent<Player>().name = playerName + "228";
+        gamePlayer.GetComponent<Player>().Name = playerName + "322";
         return true;
-    }
-
-    public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
-    {
-        Player player = _server.CreatePlayer(playerPrefab.GetComponent<Player>());
-        GameObject go = player.gameObject;
-        NetworkServer.Spawn(go, conn);
-        return go;
     }
 
     public override void OnRoomServerDisconnect(NetworkConnectionToClient conn)

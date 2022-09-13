@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public sealed class LookAtMainCamera : Mirror.NetworkBehaviour
+public sealed class LookAtMainCamera : MonoBehaviour
 {
     private Camera _camera;
 

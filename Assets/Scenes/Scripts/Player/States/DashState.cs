@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public sealed class DashState : BasePlayerState
 {
@@ -19,18 +20,35 @@ public sealed class DashState : BasePlayerState
         }
 
         Vector3 moveDirection = transform.forward;
+        // _moveD = moveDirection;
 
         float speed = GetSpeed();
         speed = ConstrainSpeed(speed);
 
-        Vector3 normal = GetGroundNormal();
-        moveDirection = ProjectOnGround(moveDirection, normal);
+        bool onGround = TryGetGroundNormal(out Vector3 normal);
+        if (onGround)
+        {
+            moveDirection= ProjectOnGround(moveDirection, normal);
+            // _moveD2 = moveDirection;
+            LookAt(moveDirection, normal);
+            // moveDirection = transform.rotation * moveDirection;
+        }
 
-        Move(moveDirection, speed);
-        LookAt(moveDirection, normal);
+        Move(moveDirection, speed, Vector3.zero);
 
         _remainingDistance -= speed * Time.deltaTime;
     }
+
+    // private Vector3 _moveD;
+    // private Vector3 _moveD2;
+    //
+    // private void OnDrawGizmos()
+    // {
+    //     Gizmos.color=Color.red;
+    //     Gizmos.DrawRay(transform.position, _moveD);
+    //     Gizmos.color=Color.green;
+    //     Gizmos.DrawRay(transform.position, _moveD2);
+    // }
 
     private float GetSpeed()
     {

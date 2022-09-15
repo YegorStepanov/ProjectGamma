@@ -18,20 +18,29 @@ public abstract class BasePlayerState : MonoBehaviour, IState
     public virtual void Exit() =>
         enabled = false;
 
-    protected void Move(Vector3 direction, float speed)
+    protected void Move(Vector3 direction, float speed, Vector3 gravity)
     {
-        Vector3 motion = (direction * speed + Physics.gravity) * Time.deltaTime;
+        Vector3 motion = direction * speed * Time.deltaTime;
+        motion += gravity * Time.deltaTime;
+
+        // Vector3 motion = (direction * speed + Physics.gravity) * Time.deltaTime;
         Player.Move(motion);
     }
 
     protected void LookAt(Vector3 direction, Vector3 upwards)
     {
-        if (direction == Vector3.zero) return;
+        if (direction == Vector3.zero)
+            return;
 
-        Quaternion lookRotation = Quaternion.LookRotation(direction, upwards);
-        lookRotation.Normalize();
+        if (direction.magnitude < Player.Data.MinMoveDistance)
+            return;
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Player.Data.RotationSpeed * Time.deltaTime);
+        var d = direction.normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(d, upwards); //mb smth with parent?
+
+        Debug.Log($"{d.ToString("f4")} {direction.ToString("f4")} {direction.magnitude} {upwards.ToString("f4")} {upwards.magnitude}");
+
+        transform.rotation = lookRotation; //Quaternion.Slerp(transform.rotation, lookRotation, Player.Data.RotationSpeed * Time.deltaTime);
     }
 
     protected bool IsDashing()
@@ -41,32 +50,42 @@ public abstract class BasePlayerState : MonoBehaviour, IState
 
     protected Vector3 GetMovementDirection()
     {
-        Vector3 input = ReadMovementInput();
-        Vector3 direction = Player.RelativeMovementTo.TransformDirection(input);
-        return direction;
+        Vector3 moveDirection = Player.InputManager.ReadMoveAction();
+
+        if (moveDirection.magnitude < Player.Data.MinMoveDistance)
+            return Vector3.zero;
+
+        // Debug.Log(moveDirection);
+        // if (moveDirection.x < Player.Data.MinMoveDistance)
+        //     moveDirection.x = 0;
+        //
+        // if (moveDirection.y < Player.Data.MinMoveDistance)
+        //     moveDirection.y = 0;
+        //
+        // if (moveDirection.z < Player.Data.MinMoveDistance)
+        //     moveDirection.z = 0;
+
+        return moveDirection;
     }
 
-    protected Vector3 GetGroundNormal()
+    protected bool TryGetGroundNormal(out Vector3 normal)
     {
-        Vector3 heroDown = transform.TransformDirection(Vector3.down);
+        Vector3 down = -transform.up;
 
-        if (Physics.Raycast(transform.position, heroDown, out RaycastHit hit))
-            return hit.normal;
+        if (Physics.Raycast(transform.position, down, out RaycastHit hit, 1.5f, ~(1 << global::Player.Layer)))
+        {
+            Debug.Log($"{hit.transform.name} down={down.ToString("f4")} {hit.normal.ToString("f4")}");
 
-        return Vector3.zero;
+            normal = hit.normal;
+            return true;
+        }
+
+        normal = Vector3.zero;
+        return false;
     }
 
     protected static Vector3 ProjectOnGround(Vector3 direction, Vector3 normal)
     {
-        if (normal == Vector3.zero)
-            return direction;
-
         return Vector3.ProjectOnPlane(direction, normal);
-    }
-
-    private Vector3 ReadMovementInput()
-    {
-        Vector2 input = Player.InputManager.ReadMoveAction();
-        return new Vector3(input.x, 0, input.y);
     }
 }

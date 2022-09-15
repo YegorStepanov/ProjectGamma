@@ -1,8 +1,17 @@
-﻿public sealed class ScoreManager : Mirror.NetworkBehaviour
-{
-    public bool IsPlayerWon(IPlayer player) =>
-        player.Score >= 1;
+﻿using Mirror;
+using UnityEngine;
 
-    public void IncreaseScore(IPlayer player) =>
+public sealed class ScoreManager : Mirror.NetworkBehaviour
+{
+    [SerializeField] private RoomData _data;
+
+    public bool IsPlayerWon(IPlayer player)
+    {
+        return player.Score >= _data.PointsToWin;
+    }
+
+    public void IncreaseScore(IPlayer player)
+    {
         player.Score++;
+    }
 }

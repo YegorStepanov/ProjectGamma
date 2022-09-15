@@ -251,7 +251,7 @@ MonoBehaviour:
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
-  _serverRoomManager: {fileID: 1716700352}
+  _roomManager: {fileID: 1716700352}
   _guiManager: {fileID: 1716700351}
 --- !u!4 &1188827955
 Transform:
@@ -327,7 +327,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _inputManager: {fileID: 1716700349}
   _playerCameraPrefab: {fileID: 4008113573551312901, guid: 62fa9862b68aad94bac1cb3b1f67e4bb, type: 3}
   _heroCollisionManager: {fileID: 1716700344}
   _playerData: {fileID: 11400000, guid: d89cf2d56bfe28b42829957018a3974c, type: 2}
@@ -344,7 +343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 3269029909
-  serverOnly: 0
+  serverOnly: 1
   visible: 0
   m_AssetId: 
   hasSpawned: 0
@@ -359,7 +358,6 @@ GameObject:
   - component: {fileID: 1716700350}
   - component: {fileID: 1716700348}
   - component: {fileID: 1716700352}
-  - component: {fileID: 1716700349}
   - component: {fileID: 1716700344}
   - component: {fileID: 1716700347}
   - component: {fileID: 1716700346}
@@ -403,8 +401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  duration: 3
-  color: {r: 1, g: 0, b: 0, a: 1}
+  _data: {fileID: 11400000, guid: 189f6c31068167c47882e9a67662aca3, type: 2}
 --- !u!114 &1716700346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,6 +416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  _data: {fileID: 11400000, guid: 189f6c31068167c47882e9a67662aca3, type: 2}
 --- !u!114 &1716700347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,8 +431,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _serverRoomManager: {fileID: 1716700352}
+  _roomManager: {fileID: 1716700352}
   _guiManager: {fileID: 1716700351}
+  _roomData: {fileID: 11400000, guid: 189f6c31068167c47882e9a67662aca3, type: 2}
 --- !u!114 &1716700348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -448,22 +447,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 2122480755
-  serverOnly: 0
+  serverOnly: 1
   visible: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &1716700349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1716700343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8176eacebefc43bc86d015afd6ee41cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1716700350
 Transform:
   m_ObjectHideFlags: 0
@@ -492,10 +479,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _serverRoomManager: {fileID: 1716700352}
-  _roomManager: {fileID: 1188827954}
-  width: 160
-  height: 100
+  _roomManager: {fileID: 1716700352}
+  _data: {fileID: 11400000, guid: a19e99940fe6b654eaa60672a351ed6d, type: 2}
 --- !u!114 &1716700352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -511,7 +496,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _gameFactory: {fileID: 1587623850}
-  _roomManager: {fileID: 1188827954}
 --- !u!1 &2021090291
 GameObject:
   m_ObjectHideFlags: 0

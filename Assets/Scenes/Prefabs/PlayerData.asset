@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b903646f004e9bbf412bb1963ff01d, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  _rotationSpeed: 30
-  _walkSpeed: 10
+  _rotationSpeed: 3
+  _minMoveDistance: 0.01
+  _walkSpeed: 30
   _dashDistance: 5
   _dashMaxSpeed: 30
   _dashSpeed:

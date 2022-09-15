@@ -4,10 +4,8 @@ using UnityEngine;
 
 public sealed class GUIManager : Mirror.NetworkBehaviour
 {
-    [SerializeField] private ServerRoomManager _serverRoomManager;
     [SerializeField] private RoomManager _roomManager;
-    [SerializeField] private int width = 160;
-    [SerializeField] private int height = 100;
+    [SerializeField] private GUIData _data;
 
     private InGamePlayersScore _inGamePlayersScore;
     private GameOverPanel _gameOverPanel;
@@ -29,7 +27,7 @@ public sealed class GUIManager : Mirror.NetworkBehaviour
 
     [ClientRpc]
     public void RpcShowGameOverPanel(string winningPlayerName, float durationSeconds) =>
-        _gameOverPanel = new GameOverPanel(winningPlayerName, width, height, durationSeconds);
+        _gameOverPanel = new GameOverPanel(winningPlayerName, _data.GameOverPanelWidth, _data.GameOverPanelHeight, durationSeconds);
 
     [ClientRpc]
     public void RpcHideGameOverPanel() =>
@@ -37,19 +35,11 @@ public sealed class GUIManager : Mirror.NetworkBehaviour
 
     [ClientRpc]
     public void RpcShowInGamePlayersScore() =>
-        _inGamePlayersScore = new InGamePlayersScore(_serverRoomManager.RoomPlayers);
+        _inGamePlayersScore = new InGamePlayersScore(_roomManager.RoomPlayers);
 
     [ClientRpc]
     public void RpcHideInGamePlayersScore() =>
         _inGamePlayersScore = null;
-
-    [ClientRpc]
-    public void RpcShowRoomGUI() =>
-        _roomManager.showRoomGUI = true;
-
-    [ClientRpc]
-    public void RpcHideRoomGUI() =>
-        _roomManager.showRoomGUI = false; //mb we don't need it?
 
     [Server]
     public void ShowStartGameButton(Action onClick) =>

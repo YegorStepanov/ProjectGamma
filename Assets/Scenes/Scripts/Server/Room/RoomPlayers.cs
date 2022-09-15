@@ -1,52 +1,65 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class RoomPlayers : IEnumerable<IPlayer>
+public sealed class RoomPlayers
 {
-    private readonly List<IPlayer> _players; //Player, not IPlayer
+    private readonly List<IPlayer> _players;
+
+    public IEnumerable<IPlayer> Players => _players;
+    public int Count => _players.Count;
 
     public RoomPlayers(int maxPlayers)
     {
         _players = new List<IPlayer>(maxPlayers);
     }
 
-    public void AddPlayer(IPlayer player) =>
+    public void AddPlayer(IPlayer player)
+    {
+        player.Destroying += OnDestroying;
         _players.Add(player);
-
-    public void RemovePlayer(IPlayer player) => //onDisconnect
-        _players.Remove(player);
-
-    public void ResetScores()
-    {
-        foreach (IPlayer player in _players)
-            player.Score = 0;
     }
 
-    public void SetStatesToNone()
-    {
-        foreach (IPlayer player in _players)
-            player.SetState(PlayerState.None);
-    }
-
-    public void SetStatesToWalk()
+    public void EnableMovingForAll()
     {
         foreach (IPlayer player in _players)
             player.SetState(PlayerState.Walk);
     }
 
-    public IEnumerator<IPlayer> GetEnumerator() =>
-        _players.GetEnumerator();
+    public void DisableMovingForAll()
+    {
+        foreach (IPlayer player in _players)
+            player.SetState(PlayerState.None);
+    }
 
-    public void ResetPositions(FreeStartPositions freeStartPositions)
+    public void PreparePlayersForGame(FreeStartPositions positions)
     {
         foreach (IPlayer player in _players)
         {
-            Vector3 position = freeStartPositions.Pop();
-            player.SetPosition(position);
+            PreparePlayerForGame(player, positions);
         }
     }
 
-    IEnumerator IEnumerable.GetEnumerator() =>
-        GetEnumerator();
+    public void PreparePlayerForGame(IPlayer player, FreeStartPositions positions)
+    {
+        Vector3 position = positions.Pop();
+        Quaternion rotation = RotationToSceneCenter(position); //?
+
+        // player.SetState(PlayerState.None); //?
+        player.SetPosition(position);
+        player.SetRotation(rotation);
+        player.Score = 0;
+        player.SetState(PlayerState.Walk);
+    }
+
+    private static Quaternion RotationToSceneCenter(Vector3 position)
+    {
+        Vector3 lookDirection = -position;
+        lookDirection.y = 0;
+        return Quaternion.LookRotation(lookDirection);
+    }
+
+    private void OnDestroying(Player player)
+    {
+        _players.Remove(player);
+    }
 }

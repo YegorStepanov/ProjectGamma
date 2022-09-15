@@ -3,36 +3,41 @@ using UnityEngine;
 
 public sealed class GameFactory : NetworkBehaviour
 {
-    [SerializeField] private InputManager _inputManager;
     [SerializeField] private CameraController _playerCameraPrefab;
     [SerializeField] private HeroCollisionManager _heroCollisionManager;
     [SerializeField] private PlayerData _playerData;
 
-    public Player CreatePlayer(Player playerPrefab, Vector3 position)
+    [Server]
+    public Player CreatePlayer(Player playerPrefab)
     {
-        Vector3 lookDirection = LookToSceneCenter(position);
-        return Instantiate(playerPrefab, position, Quaternion.LookRotation(lookDirection));
+        Player player = Instantiate(playerPrefab);
+        player.Construct(_playerData, EmptyInputManager.Instance);
+
+        player.Hit += OnPlayerOnHit;
+        player.LocalPlayerStarted += RpcOnLocalPlayerStarted;
+        return player;
     }
 
-    public void ConstructPlayer(Player player, string playerName)
+    [Server]
+    private void OnPlayerOnHit(Player player, ControllerColliderHit hit)
     {
-        player.Construct(_playerData, () => _inputManager, CreateCamera, _heroCollisionManager.HandleColliderHit);
-
-        player.gameObject.name = playerName;
-        player.Name = playerName;
+        _heroCollisionManager.HandleColliderHit(player, hit);
     }
 
-    public static Vector3 LookToSceneCenter(Vector3 position)
+    private void RpcOnLocalPlayerStarted(Player player)
     {
-        Vector3 lookDirection = -position;
-        lookDirection.y = 0;
-        return lookDirection;
+        CameraController cam = CreateCamera(player.CameraFocusPoint);
+
+        var inputManager = new PointRelativeInputManager(cam.transform);
+        player.Construct(player.Data, inputManager);
+        player.SetState(PlayerState.Walk);
     }
 
+    [Client]
     private CameraController CreateCamera(Transform focusOn)
     {
         CameraController controller = Instantiate(_playerCameraPrefab);
-        controller.Construct(Camera.main, _inputManager);
+        controller.Construct(Camera.main, new InputManager());
         controller.FocusOn = focusOn;
         return controller;
     }

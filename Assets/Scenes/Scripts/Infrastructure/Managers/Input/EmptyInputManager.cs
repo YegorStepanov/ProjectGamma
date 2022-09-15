@@ -2,7 +2,11 @@
 
 public sealed class EmptyInputManager : IInputManager
 {
-    public Vector2 ReadMoveAction() => default;
+    public static readonly EmptyInputManager Instance = new EmptyInputManager();
+
+    private EmptyInputManager() { }
+
+    public Vector3 ReadMoveAction() => default;
     public Vector2 ReadRotateAction() => default;
     public bool ReadDashAction() => default;
-}
+ }

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public sealed class InputManager : MonoBehaviour, IInputManager
+public sealed class InputManager : IInputManager
 {
-    public Vector2 ReadMoveAction()
+    public Vector3 ReadMoveAction()
     {
         Vector2 input;
         input.x = Input.GetAxis("Horizontal");

@@ -4,30 +4,31 @@ using UnityEngine;
 
 public sealed class GameOverManager : NetworkBehaviour
 {
-    [SerializeField] private ServerRoomManager _serverRoomManager;
+    [SerializeField] private RoomManager _roomManager;
     [SerializeField] private GUIManager _guiManager;
+    [SerializeField] private RoomData _roomData;
 
-    private IEnumerator _gameOverRoutine;
+    private bool _isOnGameOver;
 
     public void EndGame(IPlayer winner)
     {
-        if (_gameOverRoutine != null) return;
+        if (_isOnGameOver) return;
 
-        _gameOverRoutine = GameOverRoutine(winner);
-        StartCoroutine(_gameOverRoutine);
+        StartCoroutine(GameOverRoutine(winner));
     }
 
     private IEnumerator GameOverRoutine(IPlayer winner)
     {
-        Debug.Log($"GG name {winner}");
-        _guiManager.RpcShowGameOverPanel(winner.Name, 5f);
-        _serverRoomManager.RoomPlayers.SetStatesToNone();
+        _isOnGameOver = true;
 
-        yield return new WaitForSecondsRealtime(5f);
+        _roomManager.RoomPlayers.DisableMovingForAll();
+        _guiManager.RpcShowGameOverPanel(winner.Name, _roomData.RestartTimeSeconds);
+
+        yield return new WaitForSecondsRealtime(_roomData.RestartTimeSeconds);
+
         _guiManager.RpcHideGameOverPanel();
+        _roomManager.RestartGame();
 
-        Debug.Log("Restarting...");
-        _serverRoomManager.RestartGame();
-        _gameOverRoutine = null;
+        _isOnGameOver = false;
     }
 }

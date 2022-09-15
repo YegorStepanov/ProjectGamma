@@ -1,40 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public sealed class PlayerBlockingManager : Mirror.NetworkBehaviour
+public sealed class PlayerBlockingManager : NetworkBehaviour
 {
-    [SerializeField] private float duration = 3f;
-    [SerializeField] private Color color = Color.red;
-
+    [SerializeField] private RoomData _data;
+    
     private HashSet<IPlayer> _blockedPlayers;
 
     private void Awake()
     {
+        Debug.Log("awake");
         _blockedPlayers = new HashSet<IPlayer>();
     }
 
-    public bool IsBlocked(IPlayer player) =>
-        _blockedPlayers.Contains(player);
+    public bool IsBlocked(IPlayer player)
+    {
+        return _blockedPlayers.Contains(player);
+    }
 
     public void Block(IPlayer player)
     {
         _blockedPlayers.Add(player);
-        StartCoroutine(BlockRoutine(player, duration, color));
+        StartCoroutine(SetColorRoutine(player));
     }
 
-    private IEnumerator BlockRoutine(IPlayer player, float duration, Color color)
-    {
-        yield return StartCoroutine(SetColorRoutine(player, duration, color));
-
-        _blockedPlayers.Remove(player);
-    }
-
-    private static IEnumerator SetColorRoutine(IPlayer player, float duration, Color color)
+    private IEnumerator SetColorRoutine(IPlayer player)
     {
         Color oldColor = player.Color;
-        player.Color = color;
-        yield return new WaitForSeconds(duration);
+
+        player.Color = _data.BlockingColor;
+        yield return new WaitForSeconds(_data.BlockingTime);
         player.Color = oldColor;
+
+        _blockedPlayers.Remove(player);
     }
 }

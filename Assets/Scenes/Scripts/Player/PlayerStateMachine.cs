@@ -34,6 +34,6 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
         _states[State].Enter();
     }
 
-    private void SetState(PlayerState _, PlayerState newState) =>
-        SetState(newState);
+    private void SetState(PlayerState _, PlayerState state) =>
+        SetState(state);
 }

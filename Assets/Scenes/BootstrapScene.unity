@@ -329,7 +329,7 @@ MonoBehaviour:
   syncInterval: 0.1
   _playerCameraPrefab: {fileID: 4008113573551312901, guid: 62fa9862b68aad94bac1cb3b1f67e4bb, type: 3}
   _heroCollisionManager: {fileID: 1716700344}
-  _playerData: {fileID: 11400000, guid: d89cf2d56bfe28b42829957018a3974c, type: 2}
+  _playerSettings: {fileID: 11400000, guid: d89cf2d56bfe28b42829957018a3974c, type: 2}
 --- !u!114 &1587623851
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,9 +25,13 @@ public sealed class Player : NetworkBehaviour, IPlayer
         get => transform.position;
         set
         {
-            _controller.enabled = false;
+            if (_controller.enabled)
+                _controller.enabled = false;
+
             transform.position = value;
-            _controller.enabled = true;
+
+            if (!_controller.enabled)
+                _controller.enabled = true;
         }
     }
 
@@ -53,6 +57,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
     public void Construct(PlayerSettings settings, IInputManager inputManager)
     {
+        Debug.Log($"Construct {inputManager.GetType().Name}");
         Settings = settings.NotNull();
         InputManager = inputManager.NotNull();
     }

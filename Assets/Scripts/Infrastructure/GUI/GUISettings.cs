@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/GUI", fileName = "GUIData")]
-public sealed class GUIData : ScriptableObject
+[CreateAssetMenu(menuName = "Settings/GUI", fileName = "GUI Settings")]
+public sealed class GUISettings : ScriptableObject
 {
     [SerializeField] private int _gameOverPanelWidth = 160;
     [SerializeField] private int _gameOverPanelHeight = 100;

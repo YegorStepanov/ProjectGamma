@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
 using UnityEngine;
 
 public sealed class GameFactory : NetworkBehaviour
@@ -6,26 +7,44 @@ public sealed class GameFactory : NetworkBehaviour
     [SerializeField] private CameraController _playerCameraPrefab;
     [SerializeField] private HeroCollisionManager _heroCollisionManager;
     [SerializeField] private PlayerSettings _playerSettings;
-    
-    [Server]
-    public Player CreatePlayer(Player playerPrefab)
+
+    public Player CreatePlayer(Player playerPrefab) //?
     {
         Player player = Instantiate(playerPrefab);
         player.Construct(_playerSettings, EmptyInputManager.Instance);
 
         player.Hit += OnPlayerOnHit;
-        player.LocalPlayerStarted += RpcOnLocalPlayerStarted;
+        player.LocalPlayerStarted += OnLocalPlayerStarted;
+
         return player;
     }
 
-    [Server]
-    private void OnPlayerOnHit(Player player, ControllerColliderHit hit)
+    [ClientRpc]
+    public void RpcInitializePlayer(Player player)
+    {
+        Debug.Log("INIT RPC PLAYER");
+        InitializePlayer(player);
+    }
+
+    public void InitializePlayer(Player player)
+    {
+        Debug.Log("INIT PLAYER");
+        PlayerSettings playerSettings = player.Settings;
+        player.Construct(playerSettings, EmptyInputManager.Instance);
+
+        player.Hit += OnPlayerOnHit;
+        player.LocalPlayerStarted += OnLocalPlayerStarted;
+    }
+
+    public void OnPlayerOnHit(Player player, ControllerColliderHit hit)
     {
         _heroCollisionManager.HandleColliderHit(player, hit);
     }
 
-    private void RpcOnLocalPlayerStarted(Player player)
+    public void OnLocalPlayerStarted(Player player)
     {
+        Console.WriteLine("+OnLocalPlayerStarted");
+
         CameraController cam = CreateCamera(player.CameraFocusPoint);
 
         var inputManager = new PointRelativeInputManager(cam.transform);
@@ -33,7 +52,6 @@ public sealed class GameFactory : NetworkBehaviour
         player.StateMachine.SetState(PlayerState.Walk);
     }
 
-    [Client]
     private CameraController CreateCamera(Transform focusOn)
     {
         CameraController controller = Instantiate(_playerCameraPrefab);

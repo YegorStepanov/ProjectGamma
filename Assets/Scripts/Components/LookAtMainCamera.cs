@@ -12,6 +12,7 @@ public sealed class LookAtMainCamera : MonoBehaviour
             return;
         }
 
-        transform.forward = _camera.transform.forward;
+        if (_camera != null)
+            transform.forward = _camera.transform.forward;
     }
 }

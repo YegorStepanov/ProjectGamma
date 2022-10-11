@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/Player", fileName = "PlayerData")]
+[CreateAssetMenu(menuName = "Settings/Player", fileName = "Player Settings")]
 public sealed class PlayerSettings : ScriptableObject
 {
-    [Min(0.1f)]
-    [SerializeField] private float _rotationSpeed = 30f;
+    [Range(0.01f, 30f)]
+    [SerializeField] private float _horizontalRotationSpeedRadians = 1f;
+
+    [Range(0.01f, 30f)]
+    [SerializeField] private float _verticalRotationSpeedRadians = 5f;
 
     [Min(0f)]
     [SerializeField] private float _minMoveDistance = 0.01f;
@@ -20,7 +23,8 @@ public sealed class PlayerSettings : ScriptableObject
     [SerializeField] private float _dashMaxSpeed = 30f;
     [SerializeField] private AnimationCurve _dashSpeed;
 
-    public float RotationSpeed => _rotationSpeed;
+    public float HorizontalRotationSpeedRadians => _horizontalRotationSpeedRadians;
+    public float VerticalRotationSpeedRadians => _verticalRotationSpeedRadians;
     public float MinMoveDistance => _minMoveDistance;
     public float WalkSpeed => _walkSpeed;
     public float DashDistance => _dashDistance;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public sealed class PlayerColor : MonoBehaviour //can be renamed
+public sealed class PlayerColor : MonoBehaviour
 {
     [SerializeField] private Renderer _renderer;
 
@@ -25,6 +25,6 @@ public sealed class PlayerColor : MonoBehaviour //can be renamed
     private static Material CloneMaterial(Renderer renderer) =>
         renderer.material;
 
-    private void OnColorChanged(IPlayer player) => 
+    private void OnColorChanged(IPlayer player) =>
         _material.color = player.Data.Color;
 }

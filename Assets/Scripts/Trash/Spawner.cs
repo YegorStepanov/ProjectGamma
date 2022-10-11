@@ -3,7 +3,7 @@ using UnityEngine;
 
 internal class Spawner
 {
-    internal static void InitialSpawn()
+    private static void InitialSpawn()
     {
         if (!NetworkServer.active) return;
 
@@ -11,7 +11,7 @@ internal class Spawner
             SpawnReward();
     }
 
-    internal static void SpawnReward()
+    private static void SpawnReward()
     {
         if (!NetworkServer.active) return;
 

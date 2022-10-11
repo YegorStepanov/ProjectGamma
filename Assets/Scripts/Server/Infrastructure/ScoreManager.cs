@@ -2,11 +2,11 @@
 
 public sealed class ScoreManager : Mirror.NetworkBehaviour
 {
-    [SerializeField] private RoomData _data;
+    [SerializeField] private RoomSettings _settings;
 
     public bool IsPlayerWon(IPlayer player)
     {
-        return player.Data.Score >= _data.PointsToWin;
+        return player.Data.Score >= _settings.PointsToWin;
     }
 
     public void IncreaseScore(IPlayer player)

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/Room", fileName = "RoomData")]
-public sealed class RoomData : ScriptableObject
+[CreateAssetMenu(menuName = "Settings/Room", fileName = "Room Settings")]
+public sealed class RoomSettings : ScriptableObject
 {
     [SerializeField] private int _pointsToWin = 3;
     [SerializeField] private float _blockingTimeSeconds = 3f;
@@ -15,5 +15,4 @@ public sealed class RoomData : ScriptableObject
     public Color32 BlockingColor => _blockingColor;
     public float RestartTimeSeconds => _restartTimeSeconds;
     public IReadOnlyList<Color32> PlayerColors => _playerColors;
-
 }

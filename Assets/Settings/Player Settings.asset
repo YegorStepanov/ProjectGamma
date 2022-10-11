@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b903646f004e9bbf412bb1963ff01d, type: 3}
   m_Name: Player Settings
   m_EditorClassIdentifier: 
-  _rotationSpeed: 3
+  _horizontalRotationSpeedRadians: 25
+  _verticalRotationSpeedRadians: 1
   _minMoveDistance: 0.01
-  _walkSpeed: 30
-  _dashDistance: 5
-  _dashMaxSpeed: 30
+  _walkSpeed: 10
+  _dashDistance: 10
+  _dashMaxSpeed: 80
   _dashSpeed:
     serializedVersion: 2
     m_Curve:

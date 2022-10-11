@@ -6,7 +6,7 @@ public sealed class GameOverManager : NetworkBehaviour
 {
     [SerializeField] private RoomManager _roomManager;
     [SerializeField] private GUIManager _guiManager;
-    [SerializeField] private RoomData _roomData;
+    [SerializeField] private RoomSettings _roomSettings;
 
     private bool _isOnGameOver;
 
@@ -22,9 +22,9 @@ public sealed class GameOverManager : NetworkBehaviour
         _isOnGameOver = true;
 
         _roomManager.RoomPlayers.DisableMovingForAll();
-        _guiManager.RpcShowGameOverPanel(winner.Data.Name, _roomData.RestartTimeSeconds);
+        _guiManager.RpcShowGameOverPanel(winner.Data.Name, _roomSettings.RestartTimeSeconds);
 
-        yield return new WaitForSecondsRealtime(_roomData.RestartTimeSeconds);
+        yield return new WaitForSecondsRealtime(_roomSettings.RestartTimeSeconds);
 
         _guiManager.RpcHideGameOverPanel();
         _roomManager.RestartGame();

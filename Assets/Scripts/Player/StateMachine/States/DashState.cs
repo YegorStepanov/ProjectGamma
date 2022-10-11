@@ -2,6 +2,8 @@
 
 public sealed class DashState : IPlayerState
 {
+    private const float ZeroPrecision = 0.01f;
+
     private readonly IPlayer _player;
     private readonly PlayerStateFunctions _functions;
 
@@ -22,8 +24,11 @@ public sealed class DashState : IPlayerState
 
     public void Update()
     {
-        if (_remainingDistance <= 0)
+        Debug.Log($"{_remainingDistance:f8}");
+        if (_remainingDistance <= ZeroPrecision)
         {
+            MoveRemaining();
+
             _player.StateMachine.SetState(PlayerState.Walk);
             return;
         }
@@ -31,9 +36,19 @@ public sealed class DashState : IPlayerState
         float speed = GetSpeed();
         speed = ClampSpeed(speed);
 
-        _functions.Move(_player.Forward, speed, Vector3.zero);
+        Move(speed);
+    }
 
+    private void Move(float speed)
+    {
+        _functions.Move(_player.Forward, speed, Vector3.zero);
         _remainingDistance -= speed * Time.deltaTime;
+    }
+
+    private void MoveRemaining()
+    {
+        _functions.Move(_player.Forward, _remainingDistance / Time.deltaTime, Vector3.zero);
+        _remainingDistance = 0f;
     }
 
     private float GetSpeed()

@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60efa998e4734344b49b07c81607b1a3, type: 3}
-  m_Name: RoomData
+  m_Name: Room Settings
   m_EditorClassIdentifier: 
-  _pointsToWin: 1
+  _pointsToWin: 3
   _blockingTimeSeconds: 3
   _blockingColor:
     serializedVersion: 2
     rgba: 4294901989
-  _restartTimeSeconds: 1
+  _restartTimeSeconds: 5
   _playerColors:
   - serializedVersion: 2
     rgba: 24831

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public sealed class PlayerBlockingManager : NetworkBehaviour
 {
-    [SerializeField] private RoomData _data;
+    [SerializeField] private RoomSettings _settings;
 
     private HashSet<IPlayer> _blockedPlayers;
 
@@ -30,8 +30,8 @@ public sealed class PlayerBlockingManager : NetworkBehaviour
     {
         Color oldColor = player.Data.Color;
 
-        player.Data.Color = _data.BlockingColor;
-        yield return new WaitForSeconds(_data.BlockingTime);
+        player.Data.Color = _settings.BlockingColor;
+        yield return new WaitForSeconds(_settings.BlockingTime);
         player.Data.Color = oldColor;
 
         _blockedPlayers.Remove(player);

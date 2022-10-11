@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 431710504}
   - component: {fileID: 431710505}
+  - component: {fileID: 431710506}
   m_Layer: 0
   m_Name: Infrastructure
   m_TagString: Untagged
@@ -151,11 +152,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1188827955}
   - {fileID: 1716700350}
   - {fileID: 1587623849}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &431710505
 MonoBehaviour:
@@ -167,6 +167,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 934b4dc05fd14dc29c37bae890b0f20e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &431710506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431710503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f622a3e6604f4ca3f5badf570671d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1188827952
@@ -232,12 +244,12 @@ MonoBehaviour:
   dontDestroyOnLoad: 1
   runInBackground: 1
   autoStartServerBuild: 1
-  serverTickRate: 30
-  offlineScene: Assets/Scenes/BootstrapScene.unity
-  onlineScene: Assets/Scenes/RoomScene.unity
+  serverTickRate: 120
+  offlineScene: Assets/Scenes/Bootstrap Scene.unity
+  onlineScene: Assets/Scenes/Room Scene.unity
   transport: {fileID: 1188827953}
   networkAddress: localhost
-  maxConnections: 5
+  maxConnections: 4
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 1480027675339556, guid: 96265ee63a7e2ca428bfc8414fdd9f0c, type: 3}
   autoCreatePlayer: 1
@@ -246,8 +258,8 @@ MonoBehaviour:
   showRoomGUI: 1
   minPlayers: 1
   roomPlayerPrefab: {fileID: 2951412564670690806, guid: deae2134a1d77704b9c595efe69767dd, type: 3}
-  RoomScene: Assets/Scenes/RoomScene.unity
-  GameplayScene: Assets/Scenes/GameplayScene.unity
+  RoomScene: Assets/Scenes/Room Scene.unity
+  GameplayScene: Assets/Scenes/Game Scene.unity
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
@@ -264,8 +276,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 431710504}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1188827956
 MonoBehaviour:
@@ -311,7 +323,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 431710504}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1587623850
 MonoBehaviour:
@@ -343,7 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 3269029909
-  serverOnly: 1
+  serverOnly: 0
   visible: 0
   m_AssetId: 
   hasSpawned: 0
@@ -401,7 +413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _data: {fileID: 11400000, guid: 189f6c31068167c47882e9a67662aca3, type: 2}
+  _settings: {fileID: 11400000, guid: 189f6c31068167c47882e9a67662aca3, type: 2}
 --- !u!114 &1716700346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,7 +428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _data: {fileID: 11400000, guid: 189f6c31068167c47882e9a67662aca3, type: 2}
+  _settings: {fileID: 11400000, guid: 189f6c31068167c47882e9a67662aca3, type: 2}
 --- !u!114 &1716700347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,7 +445,7 @@ MonoBehaviour:
   syncInterval: 0.1
   _roomManager: {fileID: 1716700352}
   _guiManager: {fileID: 1716700351}
-  _roomData: {fileID: 11400000, guid: 189f6c31068167c47882e9a67662aca3, type: 2}
+  _roomSettings: {fileID: 11400000, guid: 189f6c31068167c47882e9a67662aca3, type: 2}
 --- !u!114 &1716700348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,7 +459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 2122480755
-  serverOnly: 1
+  serverOnly: 0
   visible: 0
   m_AssetId: 
   hasSpawned: 0
@@ -463,7 +475,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 431710504}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1716700351
 MonoBehaviour:
@@ -480,7 +492,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _roomManager: {fileID: 1716700352}
-  _data: {fileID: 11400000, guid: a19e99940fe6b654eaa60672a351ed6d, type: 2}
+  _settings: {fileID: 11400000, guid: fd09fa404f3b5b14eb9a237b618b3feb, type: 2}
 --- !u!114 &1716700352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,7 +535,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.3900304, g: 0.36930403, b: 0.4056604, a: 0}
+  m_BackGroundColor: {r: 0.374999, g: 0.40392157, b: 0.36862746, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

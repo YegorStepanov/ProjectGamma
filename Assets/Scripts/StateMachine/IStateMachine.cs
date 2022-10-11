@@ -1,5 +1,5 @@
 ﻿// ReSharper disable once TypeParameterCanBeVariant
-// contravariance is slow
+// reason: contravariance is slow
 
 public interface IStateMachine<TState> where TState : System.Enum
 {

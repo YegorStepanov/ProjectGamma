@@ -5,7 +5,7 @@ using UnityEngine;
 public sealed class GUIManager : Mirror.NetworkBehaviour
 {
     [SerializeField] private RoomManager _roomManager;
-    [SerializeField] private GUIData _data;
+    [SerializeField] private GUISettings _settings;
 
     private InGamePlayersScore _inGamePlayersScore;
     private GameOverPanel _gameOverPanel;
@@ -27,7 +27,7 @@ public sealed class GUIManager : Mirror.NetworkBehaviour
 
     [ClientRpc]
     public void RpcShowGameOverPanel(string winningPlayerName, float durationSeconds) =>
-        _gameOverPanel = new GameOverPanel(winningPlayerName, _data.GameOverPanelWidth, _data.GameOverPanelHeight, durationSeconds);
+        _gameOverPanel = new GameOverPanel(winningPlayerName, _settings.GameOverPanelWidth, _settings.GameOverPanelHeight, durationSeconds);
 
     [ClientRpc]
     public void RpcHideGameOverPanel() =>

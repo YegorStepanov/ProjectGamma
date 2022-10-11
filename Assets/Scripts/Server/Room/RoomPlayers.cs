@@ -19,6 +19,12 @@ public sealed class RoomPlayers
         _players.Add(player);
     }
 
+    public void RemovePlayer(Player player)
+    {
+        player.Destroying -= OnDestroying;
+        _players.Remove(player);
+    }
+
     public void EnableMovingForAll()
     {
         foreach (IPlayer player in _players)

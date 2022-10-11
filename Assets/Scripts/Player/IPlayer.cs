@@ -15,6 +15,7 @@ public interface IPlayer
 
     Vector3 Up { get; }
     Vector3 Forward { get; }
+    Vector3 Right { get; }
 
     PlayerSettings Settings { get; }
     IInputManager InputManager { get; }

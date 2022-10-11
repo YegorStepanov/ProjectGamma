@@ -5,7 +5,7 @@ using UnityEngine;
 
 public sealed class RoomManager : NetworkBehaviour
 {
-    [SerializeField] private GameFactory _gameFactory;
+    [SerializeField] public GameFactory _gameFactory;
 
     private FreeStartPositions _freeStartPositions;
     private int _botCounts;
@@ -22,8 +22,8 @@ public sealed class RoomManager : NetworkBehaviour
     #region TODO
     //private IEnumerator Start()
     //{
-        //yield return new WaitForSeconds(10f);
-        //RestartGame();
+    //yield return new WaitForSeconds(10f);
+    //RestartGame();
     //}
     #endregion
 
@@ -45,19 +45,23 @@ public sealed class RoomManager : NetworkBehaviour
 
     public GameObject CreatePlayer(NetworkConnectionToClient conn, Player playerPrefab)
     {
+        return CreatePlayer(playerPrefab).gameObject;
+
         Player player = CreatePlayer(playerPrefab);
 
         GameObject go = player.gameObject;
         NetworkServer.Spawn(go, conn);
-        RpcInitializePlayer(player);
+        // RpcInitializePlayer(player);
 
         PreparePlayerForGame(player);
 
         return go;
     }
 
+    #region TODO
     public void CreateBot(Player botPrefab)
     {
+        return; //todo
         Player player = CreatePlayer(botPrefab);
         var botName = $"Bot{_botCounts}";
         player.Data.Name = botName;
@@ -67,7 +71,7 @@ public sealed class RoomManager : NetworkBehaviour
         player.GetComponent<NetworkTransform>().clientAuthority = false;
 
         NetworkServer.Spawn(go);
-        RpcInitializePlayer(player);
+        // RpcInitializePlayer(player);
 
         PreparePlayerForGame(player);
 
@@ -84,6 +88,12 @@ public sealed class RoomManager : NetworkBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
+    #endregion
+
+    public void RemovePlayer(Player player)
+    {
+        RoomPlayers.RemovePlayer(player);
+    }
 
     private Player CreatePlayer(Player playerPrefab)
     {
@@ -91,13 +101,7 @@ public sealed class RoomManager : NetworkBehaviour
         RoomPlayers.AddPlayer(player);
         return player;
     }
-
-    [ClientRpc]
-    public void RpcInitializePlayer(Player player)
-    {
-        player.Construct(player.Settings, EmptyInputManager.Instance);
-    }
-
+    
     [Server]
     private void InitializePlayer(Player player)
     {

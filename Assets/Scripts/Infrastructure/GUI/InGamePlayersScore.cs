@@ -1,24 +1,28 @@
-﻿using UnityEngine;
+﻿using Room;
+using UnityEngine;
 
-public sealed class InGamePlayersScore
+namespace Infrastructure.GUI
 {
-    private readonly RoomPlayers _roomPlayers;
-
-    public InGamePlayersScore(RoomPlayers roomPlayers) =>
-        _roomPlayers = roomPlayers;
-
-    public void Draw()
+    public sealed class InGamePlayersScore
     {
-        int index = 0;
-        foreach (IPlayer player in _roomPlayers.Players)
+        private readonly RoomPlayers _roomPlayers;
+
+        public InGamePlayersScore(RoomPlayers roomPlayers) =>
+            _roomPlayers = roomPlayers;
+
+        public void Draw()
         {
-            DrawScore(player, index);
-            index++;
+            int index = 0;
+            foreach (IPlayer player in _roomPlayers.Players)
+            {
+                DrawScore(player, index);
+                index++;
+            }
         }
-    }
 
-    private static void DrawScore(IPlayer player, int index)
-    {
-        GUI.Box(new Rect(10f + index * 90, 10f, 80f, 25f), $"{player.Data.Name}: {player.Data.Score:0}");
+        private static void DrawScore(IPlayer player, int index)
+        {
+            UnityEngine.GUI.Box(new Rect(10f + index * 90, 10f, 80f, 25f), $"{player.Data.Name}: {player.Data.Score:0}");
+        }
     }
 }

@@ -2,36 +2,39 @@
 using Mirror;
 using UnityEngine;
 
-[UsedImplicitly(ImplicitUseTargetFlags.Members)]
-public static class AnimationCurveSerializer
+namespace Serializers
 {
-    public static void WriteAnimationCurve(this NetworkWriter writer, AnimationCurve curve)
+    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+    public static class AnimationCurveSerializer
     {
-        writer.Write((int)curve.preWrapMode);
-        writer.Write((int)curve.postWrapMode);
-        writer.Write(curve.keys.Length);
-        foreach (Keyframe key in curve.keys)
+        public static void WriteAnimationCurve(this NetworkWriter writer, AnimationCurve curve)
         {
-            writer.Write(key);
-        }
-    }
-
-    public static AnimationCurve ReadAnimationCurve(this NetworkReader reader)
-    {
-        var preWrapMode = (WrapMode)reader.Read<int>();
-        var postWrapMode = (WrapMode)reader.Read<int>();
-        int length = reader.Read<int>();
-        var keys = new Keyframe[length];
-        for (int i = 0; i < length; i++)
-        {
-            keys[i] = reader.Read<Keyframe>();
+            writer.Write((int)curve.preWrapMode);
+            writer.Write((int)curve.postWrapMode);
+            writer.Write(curve.keys.Length);
+            foreach (Keyframe key in curve.keys)
+            {
+                writer.Write(key);
+            }
         }
 
-        var curve = new AnimationCurve(keys)
+        public static AnimationCurve ReadAnimationCurve(this NetworkReader reader)
         {
-            preWrapMode = preWrapMode,
-            postWrapMode = postWrapMode,
-        };
-        return curve;
+            var preWrapMode = (WrapMode)reader.Read<int>();
+            var postWrapMode = (WrapMode)reader.Read<int>();
+            int length = reader.Read<int>();
+            var keys = new Keyframe[length];
+            for (int i = 0; i < length; i++)
+            {
+                keys[i] = reader.Read<Keyframe>();
+            }
+
+            var curve = new AnimationCurve(keys)
+            {
+                preWrapMode = preWrapMode,
+                postWrapMode = postWrapMode,
+            };
+            return curve;
+        }
     }
 }

@@ -7,15 +7,15 @@ public sealed class DestroyOnRestart : MonoBehaviour
     // Mirror loads the bootstrap scene on each host disconnect so remove the old Managers to preserve component links
     private void Awake()
     {
-        foreach (var singleton in FindObjectsOfType<DestroyOnRestart>(true))
+        foreach (var duplicate in FindObjectsOfType<DestroyOnRestart>(true))
         {
-            if (singleton.name != name) //todo
+            if (duplicate.name != name)
                 continue;
 
-            if (singleton._created)
+            if (duplicate._created)
             {
                 Debug.Log($"Destroying {name}");
-                Destroy(singleton.gameObject);
+                Destroy(duplicate.gameObject);
             }
         }
 

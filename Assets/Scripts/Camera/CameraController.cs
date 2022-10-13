@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using InputManagers;
+using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 public sealed class CameraController : MonoBehaviour, ICameraController

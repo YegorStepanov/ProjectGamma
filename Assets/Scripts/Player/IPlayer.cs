@@ -1,4 +1,5 @@
 ﻿using System;
+using InputManagers;
 using UnityEngine;
 
 public interface IPlayer

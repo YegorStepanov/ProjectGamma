@@ -2,7 +2,7 @@
 using Mirror;
 using UnityEngine;
 
-public sealed class GUIManager : Mirror.NetworkBehaviour
+public sealed class GUIManager : NetworkBehaviour
 {
     [SerializeField] private ServerRoomManager _serverRoomManager;
     [SerializeField] private GUISettings _settings;

@@ -12,7 +12,6 @@ public sealed class ServerRoomManager : NetworkBehaviour
 
     public RoomPlayers RoomPlayers { get; private set; }
 
-    //[Server]
     public void InitRoom(List<Transform> startPositions, PlayerSpawnMethod playerSpawnMethod)
     {
         _freeStartPositions = new FreeStartPositions(startPositions, playerSpawnMethod);
@@ -20,7 +19,6 @@ public sealed class ServerRoomManager : NetworkBehaviour
         _botCounts = 0;
     }
 
-    //[Server]
     public void ReplaceAndConstructPlayer(NetworkConnectionToClient conn, GameObject gamePlayer, int playerIndex)
     {
         IPlayer player = gamePlayer.GetComponent<IPlayer>().NotNull();
@@ -31,13 +29,11 @@ public sealed class ServerRoomManager : NetworkBehaviour
         _clientRoomManager.TargetConstructPlayer(conn, gamePlayer, _playerSettings);
     }
 
-    //[Server]
     public void RestartGame()
     {
         PreparePlayersForGame();
     }
 
-    //[Server]
     private void PreparePlayersForGame()
     {
         _freeStartPositions.Reset();
@@ -48,7 +44,6 @@ public sealed class ServerRoomManager : NetworkBehaviour
         }
     }
 
-    //[Server]
     private void PreparePlayerForGame(IPlayer player, int playerIndex)
     {
         Vector3 position = _freeStartPositions.Pop();
@@ -56,7 +51,6 @@ public sealed class ServerRoomManager : NetworkBehaviour
         RoomPlayers.PreparePlayerToPlay(player, position, playerName);
     }
 
-    //[Server]
     public Player CreatePlayer(Player playerPrefab)
     {
         Player player = Instantiate(playerPrefab);
@@ -64,7 +58,6 @@ public sealed class ServerRoomManager : NetworkBehaviour
         return player;
     }
 
-    //[Server]
     public void RemovePlayer(Player player)
     {
         RoomPlayers.RemovePlayer(player);

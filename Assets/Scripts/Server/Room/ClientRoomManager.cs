@@ -8,7 +8,6 @@ public sealed class ClientRoomManager : NetworkBehaviour
     [SerializeField] private HeroCollisionManager _heroCollisionManager;
 
     [TargetRpc]
-    // [Client] ???
     public void TargetConstructPlayer([UsedImplicitly] NetworkConnection conn, GameObject gamePlayer, PlayerSettings settings)
     {
         IPlayer player = gamePlayer.GetComponent<IPlayer>().NotNull();

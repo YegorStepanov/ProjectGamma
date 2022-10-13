@@ -9,7 +9,11 @@ public sealed class NetworkRoomManagerExtension : NetworkRoomManager
     [SerializeField] private GUIManager _guiManager;
 
     private Player PlayerPrefab => playerPrefab.GetComponent<Player>();
-    private bool IsServerOnly => _serverRoomManager == null ? _clientRoomManager.isServerOnly : _serverRoomManager.isServerOnly; //or isServer?
+
+    // on the client _serverRoomManager is null and vice versa
+    private bool IsServerOnly => _serverRoomManager == null
+        ? _clientRoomManager.isServerOnly
+        : _serverRoomManager.isServerOnly; //or isServer?
 
     public override void OnRoomServerSceneChanged(string sceneName)
     {

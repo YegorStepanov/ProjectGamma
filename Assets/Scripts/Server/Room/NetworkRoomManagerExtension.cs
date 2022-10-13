@@ -4,77 +4,64 @@ using UnityEngine;
 public sealed class NetworkRoomManagerExtension : NetworkRoomManager
 {
     [Header("Dependencies")]
-    [SerializeField] private RoomManager _roomManager;
+    [SerializeField] private ServerRoomManager _serverRoomManager;
+    [SerializeField] private ClientRoomManager _clientRoomManager;
     [SerializeField] private GUIManager _guiManager;
 
     private Player PlayerPrefab => playerPrefab.GetComponent<Player>();
+    private bool IsServerOnly => _serverRoomManager == null ? _clientRoomManager.isServerOnly : _serverRoomManager.isServerOnly; //or isServer?
 
     public override void OnRoomServerSceneChanged(string sceneName)
     {
         if (sceneName == GameplayScene)
         {
-            _roomManager.InitRoom(startPositions, playerSpawnMethod);
+            _serverRoomManager.InitRoom(startPositions, playerSpawnMethod);
             _guiManager.RpcShowInGamePlayersScore();
-
-            _roomManager.CreateBot(PlayerPrefab);
+            // button: create bot
+            // _roomManager.CreateBot(PlayerPrefab);
         }
-    }
-
-    public override void OnRoomClientAddPlayerFailed()
-    {
-        base.OnRoomClientAddPlayerFailed();
     }
 
     public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
     {
-        GameObject player = _roomManager.CreatePlayer(conn, PlayerPrefab);
-        return player;
+        return _serverRoomManager.CreatePlayer(PlayerPrefab).gameObject;
     }
 
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        Player playerComp = gamePlayer.GetComponent<Player>().NotNull();
-        // _roomManager._gameFactory.TargetInitializePlayer(conn, gamePlayer); //mb pass gameObject?
-        _roomManager.PreparePlayerForGame(playerComp);
+        int playerIndex = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
 
-        int index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
-        IPlayer player = gamePlayer.GetComponent<IPlayer>().NotNull();
-        player.Data.Name = $"Player {index + 1}";
-
-        NetworkServer.ReplacePlayerForConnection(conn, gamePlayer, true);
-
-        var settings = _roomManager._gameFactory.Settings;
-        _roomManager.TargetConstructPlayer(conn, gamePlayer, settings);
-        return false; //did ReplacePlayerForConnection manually
+        _serverRoomManager.ReplaceAndConstructPlayer(conn, gamePlayer, playerIndex);
+        return false; // ReplacePlayerForConnection already called
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
-        Debug.Log("Disconnecting1");
         foreach (NetworkIdentity id in conn.clientOwnedObjects)
         {
             if (id.TryGetComponent(out Player player))
             {
-                _roomManager.RemovePlayer(player);
+                _serverRoomManager.RemovePlayer(player);
             }
         }
 
-        Debug.Log("Disconnecting2");
         base.OnServerDisconnect(conn);
-        Debug.Log("Disconnected");
     }
 
     public override void OnRoomServerPlayersReady()
     {
-#if UNITY_SERVER
-        ServerChangeScene(GameplayScene);
-#else
-        _guiManager.ShowStartGameButton(onClick: () =>
+        if (IsServerOnly)
         {
-            _guiManager.HideStartGameButton();
             ServerChangeScene(GameplayScene);
-        });
-#endif
+        }
+        else
+        {
+            _guiManager.ShowStartGameButton(onClick: () =>
+            {
+                _guiManager.HideStartGameButton();
+                ServerChangeScene(GameplayScene);
+            });
+        }
     }
 
     public override void OnRoomServerPlayersNotReady()

@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 4822224316094678}
   - component: {fileID: 114402732107420660}
   - component: {fileID: 114265392388239132}
+  - component: {fileID: 4344239332351732891}
   - component: {fileID: 4759071931352172105}
   - component: {fileID: 5919835114867334501}
   - component: {fileID: 2095132442368574971}
@@ -171,6 +172,41 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+--- !u!114 &4344239332351732891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1480027675339556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 734b48bea0b204338958ee3d885e11f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 1
+  sendInterval: 0.05
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 0
+  bufferTimeMultiplier: 1
+  bufferSizeLimit: 64
+  catchupThreshold: 4
+  catchupMultiplier: 0.1
+  onlySyncOnChange: 1
+  bufferResetMultiplier: 5
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  target: {fileID: 226264461157951547}
 --- !u!143 &4759071931352172105
 CharacterController:
   m_ObjectHideFlags: 0
@@ -205,7 +241,6 @@ MonoBehaviour:
   syncInterval: 0.1
   _cameraFocusPoint: {fileID: 1642474920809662753}
   Pivot: {fileID: 226264461157951547}
-  isNonNull: 0
 --- !u!114 &2095132442368574971
 MonoBehaviour:
   m_ObjectHideFlags: 0

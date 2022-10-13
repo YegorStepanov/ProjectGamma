@@ -4,7 +4,7 @@ using UnityEngine;
 
 public sealed class GameOverManager : NetworkBehaviour
 {
-    [SerializeField] private RoomManager _roomManager;
+    [SerializeField] private ServerRoomManager _serverRoomManager;
     [SerializeField] private GUIManager _guiManager;
     [SerializeField] private RoomSettings _roomSettings;
 
@@ -21,13 +21,13 @@ public sealed class GameOverManager : NetworkBehaviour
     {
         _isOnGameOver = true;
 
-        _roomManager.RoomPlayers.DisableMovingForAll();
+        _serverRoomManager.RoomPlayers.DisableMovingForAll();
         _guiManager.RpcShowGameOverPanel(winner.Data.Name, _roomSettings.RestartTimeSeconds);
 
         yield return new WaitForSecondsRealtime(_roomSettings.RestartTimeSeconds);
 
         _guiManager.RpcHideGameOverPanel();
-        _roomManager.RestartGame();
+        _serverRoomManager.RestartGame();
 
         _isOnGameOver = false;
     }

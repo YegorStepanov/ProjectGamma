@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 
-public sealed class PointRelativeInputManager : IInputManager
+public sealed class TransformRelativeInputManager : IInputManager
 {
     private readonly IInputManager _inputManager = new InputManager();
-    private readonly Transform _relativePoint;
+    private readonly Transform _relativeTo;
 
-    public PointRelativeInputManager(Transform relativePoint)
+    public TransformRelativeInputManager(Transform relativeTo)
     {
-        _relativePoint = relativePoint;
+        _relativeTo = relativeTo;
     }
 
     public Vector3 ReadMoveAction()
     {
         Vector3 input = _inputManager.ReadMoveAction();
         input = new Vector3(input.x, 0, input.y);
-        input = _relativePoint.TransformDirection(input);
+        input = _relativeTo.TransformDirection(input);
         return input;
     }
 

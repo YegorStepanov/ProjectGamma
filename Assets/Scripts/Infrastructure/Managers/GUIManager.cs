@@ -4,7 +4,7 @@ using UnityEngine;
 
 public sealed class GUIManager : Mirror.NetworkBehaviour
 {
-    [SerializeField] private RoomManager _roomManager;
+    [SerializeField] private ServerRoomManager _serverRoomManager;
     [SerializeField] private GUISettings _settings;
 
     private InGamePlayersScore _inGamePlayersScore;
@@ -35,7 +35,7 @@ public sealed class GUIManager : Mirror.NetworkBehaviour
 
     [ClientRpc]
     public void RpcShowInGamePlayersScore() =>
-        _inGamePlayersScore = new InGamePlayersScore(_roomManager.RoomPlayers);
+        _inGamePlayersScore = new InGamePlayersScore(_serverRoomManager.RoomPlayers);
 
     [ClientRpc]
     public void RpcHideInGamePlayersScore() =>

@@ -9,6 +9,9 @@ public sealed class DestroyOnRestart : MonoBehaviour
     {
         foreach (var singleton in FindObjectsOfType<DestroyOnRestart>(true))
         {
+            if (singleton.name != name) //todo
+                continue;
+
             if (singleton._created)
             {
                 Debug.Log($"Destroying {name}");

@@ -5,8 +5,7 @@ public sealed class RoomPlayers
 {
     private readonly List<IPlayer> _players;
 
-    public IEnumerable<IPlayer> Players => _players;
-    public int Count => _players.Count;
+    public IReadOnlyCollection<IPlayer> Players => _players;
 
     public RoomPlayers(int maxPlayers)
     {
@@ -37,27 +36,16 @@ public sealed class RoomPlayers
             player.StateMachine.SetState(PlayerState.None);
     }
 
-    public void PreparePlayersForGame(FreeStartPositions positions)
+    public void PreparePlayerToPlay(IPlayer player, Vector3 position, string playerName)
     {
-        foreach (IPlayer player in _players)
-        {
-            PreparePlayerForGame(player, positions);
-        }
-    }
-
-    public void PreparePlayerForGame(IPlayer player, FreeStartPositions positions)
-    {
-        Vector3 position = positions.Pop();
-        Quaternion rotation = RotationToSceneCenter(position); //?
-
-        // player.SetState(PlayerState.None); //?
         player.Position = position;
-        player.Rotation = rotation;
+        player.Rotation = RotateToSceneCenter(position);
         player.Data.Score = 0;
+        player.Data.Name = playerName;
         player.StateMachine.SetState(PlayerState.Walk);
     }
 
-    private static Quaternion RotationToSceneCenter(Vector3 position)
+    private static Quaternion RotateToSceneCenter(Vector3 position)
     {
         Vector3 lookDirection = -position;
         lookDirection.y = 0;

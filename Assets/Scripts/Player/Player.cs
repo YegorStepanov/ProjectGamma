@@ -8,7 +8,6 @@ using UnityEngine;
 public sealed class Player : NetworkBehaviour, IPlayer
 {
     public event Action<Player, ControllerColliderHit> Hit;
-    public event Action<Player> LocalPlayerStarted;
     public event Action<Player> Destroying;
 
     public IPlayerData Data { get; set; }
@@ -50,15 +49,8 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public IInputManager InputManager { get; private set; }
     public Transform CameraFocusPoint => _cameraFocusPoint.NotNull();
 
-    #region TODO
-    [ShowInInspector] public float RotSpeed;
-    [ShowInInspector] public bool isNonNull;
-    private void Update() => isNonNull = Settings != null;
-    #endregion
-
     public void Construct(PlayerSettings settings, IInputManager inputManager)
     {
-        Debug.Log($"Construct {inputManager.GetType().Name}");
         InputManager = inputManager.NotNull();
         Settings = settings.NotNull();
     }
@@ -73,23 +65,9 @@ public sealed class Player : NetworkBehaviour, IPlayer
         _controller.enabled = false;
     }
 
-    public override void OnStartClient()
-    {
-        // RotSpeed = Settings.HorizontalRotationSpeedRadians;
-
-        GameFactory gameFactory = GameObject.FindObjectOfType<GameFactory>();
-
-
-        Hit += gameFactory.OnHit;
-        LocalPlayerStarted += gameFactory.OnLocalPlayerStarted;
-
-        OnStopClient();
-    }
-
     public override void OnStartLocalPlayer()
     {
         _controller.enabled = true;
-        LocalPlayerStarted?.Invoke(this);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -100,9 +78,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
     private void OnDestroy()
     {
         Destroying?.Invoke(this);
-
         Hit = null;
-        LocalPlayerStarted = null;
         Destroying = null;
     }
 

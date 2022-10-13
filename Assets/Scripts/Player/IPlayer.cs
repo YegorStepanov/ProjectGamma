@@ -4,7 +4,6 @@ using UnityEngine;
 public interface IPlayer
 {
     event Action<Player, ControllerColliderHit> Hit;
-    event Action<Player> LocalPlayerStarted;
     event Action<Player> Destroying;
 
     IPlayerData Data { get; set; }
@@ -21,5 +20,6 @@ public interface IPlayer
     IInputManager InputManager { get; }
     Transform CameraFocusPoint { get; }
 
+    void Construct(PlayerSettings settings, IInputManager inputManager);
     void Move(Vector3 motion);
 }

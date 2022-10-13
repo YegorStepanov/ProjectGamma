@@ -30,8 +30,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
             transform.position = value;
 
-            if (!_controller.enabled)
-                _controller.enabled = true;
+            _controller.enabled = true;
         }
     }
 
@@ -62,13 +61,6 @@ public sealed class Player : NetworkBehaviour, IPlayer
         StateMachine = GetComponent<PlayerStateMachine>().NotNull();
         _controller = GetComponent<CharacterController>().NotNull();
         Data = GetComponent<PlayerData>().NotNull();
-
-        _controller.enabled = false;
-    }
-
-    public override void OnStartLocalPlayer()
-    {
-        _controller.enabled = true;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)

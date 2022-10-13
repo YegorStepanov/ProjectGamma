@@ -51,6 +51,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public Transform CameraFocusPoint => _cameraFocusPoint.NotNull();
 
     #region TODO
+    [ShowInInspector] public float RotSpeed;
     [ShowInInspector] public bool isNonNull;
     private void Update() => isNonNull = Settings != null;
     #endregion
@@ -58,17 +59,31 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public void Construct(PlayerSettings settings, IInputManager inputManager)
     {
         Debug.Log($"Construct {inputManager.GetType().Name}");
-        Settings = settings.NotNull();
         InputManager = inputManager.NotNull();
+        Settings = settings.NotNull();
     }
 
     private void Awake()
     {
+        InputManager = EmptyInputManager.Instance;
         StateMachine = GetComponent<PlayerStateMachine>().NotNull();
         _controller = GetComponent<CharacterController>().NotNull();
         Data = GetComponent<PlayerData>().NotNull();
 
         _controller.enabled = false;
+    }
+
+    public override void OnStartClient()
+    {
+        // RotSpeed = Settings.HorizontalRotationSpeedRadians;
+
+        GameFactory gameFactory = GameObject.FindObjectOfType<GameFactory>();
+
+
+        Hit += gameFactory.OnHit;
+        LocalPlayerStarted += gameFactory.OnLocalPlayerStarted;
+
+        OnStopClient();
     }
 
     public override void OnStartLocalPlayer()

@@ -11,7 +11,7 @@ public sealed class PlayerBlockingManager : NetworkBehaviour
 
     private void Awake()
     {
-        Debug.Log("awake");
+        // Debug.Log("awake");
         _blockedPlayers = new HashSet<IPlayer>();
     }
 

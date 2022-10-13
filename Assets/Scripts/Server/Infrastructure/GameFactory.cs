@@ -1,5 +1,4 @@
-﻿using System;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
 public sealed class GameFactory : NetworkBehaviour
@@ -8,51 +7,43 @@ public sealed class GameFactory : NetworkBehaviour
     [SerializeField] private HeroCollisionManager _heroCollisionManager;
     [SerializeField] private PlayerSettings _playerSettings;
 
+    public PlayerSettings Settings
+    {
+        get => _playerSettings;
+        set => _playerSettings = value;
+    }
+
     public Player CreatePlayer(Player playerPrefab) //?
     {
         Player player = Instantiate(playerPrefab);
-        player.Construct(_playerSettings, EmptyInputManager.Instance);
+        //it doesn't required?
+        // player.SetSettings(_playerSettings);
 
-        player.Hit += OnPlayerOnHit;
-        player.LocalPlayerStarted += OnLocalPlayerStarted;
+        // player.Construct(_playerSettings, EmptyInputManager.Instance);
+
+        //todo
+        //player.Hit += OnHit;
+        //player.LocalPlayerStarted += OnLocalPlayerStarted;
 
         return player;
     }
 
-    [ClientRpc]
-    public void RpcInitializePlayer(Player player)
-    {
-        Debug.Log("INIT RPC PLAYER");
-        InitializePlayer(player);
-    }
-
-    public void InitializePlayer(Player player)
-    {
-        Debug.Log("INIT PLAYER");
-        PlayerSettings playerSettings = player.Settings;
-        player.Construct(playerSettings, EmptyInputManager.Instance);
-
-        player.Hit += OnPlayerOnHit;
-        player.LocalPlayerStarted += OnLocalPlayerStarted;
-    }
-
-    public void OnPlayerOnHit(Player player, ControllerColliderHit hit)
+    public void OnHit(Player player, ControllerColliderHit hit)
     {
         _heroCollisionManager.HandleColliderHit(player, hit);
     }
 
     public void OnLocalPlayerStarted(Player player)
     {
-        Console.WriteLine("+OnLocalPlayerStarted");
+        // Debug.Log($"+OnLocalPlayerStarted {isLocalPlayer} {isClient} {isServer} Settings={player.Settings != null}");
+        // CameraController cam = CreateCamera(player.CameraFocusPoint);
 
-        CameraController cam = CreateCamera(player.CameraFocusPoint);
-
-        var inputManager = new PointRelativeInputManager(cam.transform);
-        player.Construct(player.Settings, inputManager);
+        // var inputManager = new PointRelativeInputManager(cam.transform);
+        // player.Construct(inputManager);
         player.StateMachine.SetState(PlayerState.Walk);
     }
 
-    private CameraController CreateCamera(Transform focusOn)
+    public CameraController CreateCamera(Transform focusOn)
     {
         CameraController controller = Instantiate(_playerCameraPrefab);
         controller.Construct(Camera.main, new InputManager());

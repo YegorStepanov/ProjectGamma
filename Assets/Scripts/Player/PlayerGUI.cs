@@ -20,14 +20,14 @@ public sealed class PlayerGUI : MonoBehaviour
     {
         if (player.Data.Name != _currentName)
         {
-            Debug.Log($"Changing Name {_nameText.text}");
+            // Debug.Log($"Changing Name {_nameText.text}");
             _currentName = player.Data.Name;
             _nameText.text = _currentName;
         }
 
         if (player.Data.Score != _currentScore)
         {
-            Debug.Log($"Changing Score {_scoreText.text}");
+            // Debug.Log($"Changing Score {_scoreText.text}");
             _currentScore = player.Data.Score;
             _scoreText.text = _currentScore.ToString();
         }

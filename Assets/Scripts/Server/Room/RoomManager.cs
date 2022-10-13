@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 
@@ -101,10 +102,24 @@ public sealed class RoomManager : NetworkBehaviour
         RoomPlayers.AddPlayer(player);
         return player;
     }
-    
-    [Server]
-    private void InitializePlayer(Player player)
+
+    [TargetRpc, UsedImplicitly]
+    public void TargetConstructPlayer(NetworkConnection conn, GameObject gamePlayer, PlayerSettings settings)
     {
-        player.Construct(player.Settings, EmptyInputManager.Instance);
+        Player player = gamePlayer.GetComponent<Player>().NotNull();
+
+        CameraController cameraController = _gameFactory.CreateCamera(player.CameraFocusPoint);
+        var inputManager = new PointRelativeInputManager(cameraController.transform);
+
+        player.Construct(settings, inputManager);
+
+        Debug.Log($"Target settings {player.Settings != null}");
+        ServerSettings(player);
+    }
+
+    [Command(requiresAuthority = false)]
+    private void ServerSettings(Player player)
+    {
+        Debug.Log($"Server Target settings {player.Settings != null}");
     }
 }

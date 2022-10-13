@@ -24,7 +24,7 @@ public sealed class DashState : IPlayerState
 
     public void Update()
     {
-        Debug.Log($"{_remainingDistance:f8}");
+        // Debug.Log($"{_remainingDistance:f8}");
         if (_remainingDistance <= ZeroPrecision)
         {
             MoveRemaining();

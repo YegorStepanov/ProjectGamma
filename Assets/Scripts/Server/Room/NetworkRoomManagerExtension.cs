@@ -20,27 +20,37 @@ public sealed class NetworkRoomManagerExtension : NetworkRoomManager
         }
     }
 
+    public override void OnRoomClientAddPlayerFailed()
+    {
+        base.OnRoomClientAddPlayerFailed();
+    }
+
     public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
     {
         GameObject player = _roomManager.CreatePlayer(conn, PlayerPrefab);
         return player;
     }
-    
+
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        _roomManager._gameFactory.RpcInitializePlayer(gamePlayer.GetComponent<Player>().NotNull());
-        _roomManager._gameFactory.InitializePlayer(gamePlayer.GetComponent<Player>().NotNull());
-        _roomManager.PreparePlayerForGame(gamePlayer.GetComponent<Player>().NotNull());
+        Player playerComp = gamePlayer.GetComponent<Player>().NotNull();
+        // _roomManager._gameFactory.TargetInitializePlayer(conn, gamePlayer); //mb pass gameObject?
+        _roomManager.PreparePlayerForGame(playerComp);
 
         int index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
         IPlayer player = gamePlayer.GetComponent<IPlayer>().NotNull();
         player.Data.Name = $"Player {index + 1}";
-        return true;
+
+        NetworkServer.ReplacePlayerForConnection(conn, gamePlayer, true);
+
+        var settings = _roomManager._gameFactory.Settings;
+        _roomManager.TargetConstructPlayer(conn, gamePlayer, settings);
+        return false; //did ReplacePlayerForConnection manually
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
-        Debug.Log("Disconnecting");
+        Debug.Log("Disconnecting1");
         foreach (NetworkIdentity id in conn.clientOwnedObjects)
         {
             if (id.TryGetComponent(out Player player))
@@ -48,13 +58,12 @@ public sealed class NetworkRoomManagerExtension : NetworkRoomManager
                 _roomManager.RemovePlayer(player);
             }
         }
-        // NetworkServer.DestroyPlayerForConnection(conn);
-        Debug.Log("Disconnect");
-        
+
+        Debug.Log("Disconnecting2");
         base.OnServerDisconnect(conn);
         Debug.Log("Disconnected");
     }
-    
+
     public override void OnRoomServerPlayersReady()
     {
 #if UNITY_SERVER

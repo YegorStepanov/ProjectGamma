@@ -1,28 +1,28 @@
-﻿using Room;
+﻿using Mirror;
 using UnityEngine;
 
 namespace Infrastructure.GUI
 {
-    public sealed class InGamePlayersScore
+    public sealed class InGamePlayersScore // -> InGamePlayerData
     {
-        private readonly RoomPlayers _roomPlayers;
+        private readonly SyncList<PlayerScoreData> _playerDatas;
 
-        public InGamePlayersScore(RoomPlayers roomPlayers) =>
-            _roomPlayers = roomPlayers;
+        public InGamePlayersScore(SyncList<PlayerScoreData> playerDatas) =>
+            _playerDatas = playerDatas;
 
         public void Draw()
         {
             int index = 0;
-            foreach (IPlayer player in _roomPlayers.Players)
+            foreach (PlayerScoreData data in _playerDatas)
             {
-                DrawScore(player, index);
+                DrawScore(index, data);
                 index++;
             }
         }
 
-        private static void DrawScore(IPlayer player, int index)
+        private static void DrawScore(int index, PlayerScoreData data)
         {
-            UnityEngine.GUI.Box(new Rect(10f + index * 90, 10f, 80f, 25f), $"{player.Data.Name}: {player.Data.Score:0}");
+            UnityEngine.GUI.Box(new Rect(10f + index * 90, 10f, 80f, 25f), $"{data.Name}: {data.Score:0}");
         }
     }
 }

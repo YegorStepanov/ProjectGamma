@@ -18,17 +18,17 @@ public sealed class PlayerGUI : MonoBehaviour
 
     private void OnInfoChanged(IPlayer player)
     {
-        if (player.Data.Name != _currentName)
+        if (player.Data.ScoreData.Name != _currentName)
         {
             // Debug.Log($"Changing Name {_nameText.text}");
-            _currentName = player.Data.Name;
+            _currentName = player.Data.ScoreData.Name;
             _nameText.text = _currentName;
         }
 
-        if (player.Data.Score != _currentScore)
+        if (player.Data.ScoreData.Score != _currentScore)
         {
             // Debug.Log($"Changing Score {_scoreText.text}");
-            _currentScore = player.Data.Score;
+            _currentScore = player.Data.ScoreData.Score;
             _scoreText.text = _currentScore.ToString();
         }
     }

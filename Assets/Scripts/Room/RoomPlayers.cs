@@ -42,8 +42,8 @@ namespace Room
         {
             player.Position = position;
             player.Rotation = RotateToSceneCenter(position);
-            player.Data.Score = 0;
-            player.Data.Name = playerName;
+            player.Data.ScoreData.Score = 0;
+            player.Data.ScoreData.Name = playerName;
             player.StateMachine.SetState(PlayerState.Walk);
         }
 

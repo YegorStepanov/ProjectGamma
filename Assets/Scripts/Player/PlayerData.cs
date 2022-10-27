@@ -7,9 +7,7 @@ public sealed class PlayerData : NetworkBehaviour, IPlayerData
     public event Action<IPlayer> Changed;
 
     [SyncVar(hook = nameof(RaiseChanged))]
-    private string _name;
-    [SyncVar(hook = nameof(RaiseChanged))]
-    private uint _score;
+    private PlayerScoreData _scoreData;
     [SyncVar(hook = nameof(RaiseChanged))]
     private Color32 _color;
 
@@ -18,22 +16,12 @@ public sealed class PlayerData : NetworkBehaviour, IPlayerData
     public string Tag => gameObject.tag;
     public int Layer => gameObject.layer;
 
-    public string Name
+    public PlayerScoreData ScoreData
     {
-        get => _name;
+        get => _scoreData;
         set
         {
-            _name = value;
-            Changed?.Invoke(_player);
-        }
-    }
-
-    public uint Score
-    {
-        get => _score;
-        set
-        {
-            _score = value;
+            _scoreData = value;
             Changed?.Invoke(_player);
         }
     }
@@ -50,6 +38,7 @@ public sealed class PlayerData : NetworkBehaviour, IPlayerData
 
     private void Awake()
     {
+        _scoreData = new PlayerScoreData();
         _player = GetComponent<IPlayer>().NotNull();
         Debug.Assert(gameObject.CompareTag(Tag));
         Debug.Assert(gameObject.layer == Layer);
@@ -58,12 +47,17 @@ public sealed class PlayerData : NetworkBehaviour, IPlayerData
     private void OnDestroy() =>
         Changed = null;
 
+    private void RaiseChanged(PlayerScoreData _, PlayerScoreData newData) =>
+        Changed?.Invoke(_player);
+
     private void RaiseChanged(Color32 _, Color32 newColor) =>
         Changed?.Invoke(_player);
+}
 
-    private void RaiseChanged(uint _, uint newUint) =>
-        Changed?.Invoke(_player);
-
-    private void RaiseChanged(string _, string newStr) =>
-        Changed?.Invoke(_player);
+public class PlayerScoreData
+{
+    [SyncVar]
+    public string Name;
+    [SyncVar]
+    public uint Score;
 }

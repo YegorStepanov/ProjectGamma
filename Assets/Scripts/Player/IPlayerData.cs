@@ -7,7 +7,6 @@ public interface IPlayerData
 
     public string Tag { get; }
     public int Layer { get; }
-    public string Name { get; set; }
-    public uint Score { get; set; }
+    public PlayerScoreData ScoreData { get; set; }
     public Color32 Color { get; set; }
 }

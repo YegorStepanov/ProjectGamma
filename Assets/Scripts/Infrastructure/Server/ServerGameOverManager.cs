@@ -25,7 +25,7 @@ namespace Infrastructure.Server
             _isOnGameOver = true;
 
             _serverRoomManager.RoomPlayers.DisableMovingForAll();
-            _guiManager.RpcShowGameOverPanel(winner.Data.Name, _roomSettings.RestartTimeSeconds);
+            _guiManager.RpcShowGameOverPanel(winner.Data.ScoreData.Name, _roomSettings.RestartTimeSeconds);
 
             yield return new WaitForSecondsRealtime(_roomSettings.RestartTimeSeconds);
 

@@ -561,6 +561,7 @@ MonoBehaviour:
   syncInterval: 0.1
   _clientRoomManager: {fileID: 431710619}
   _playerSettings: {fileID: 11400000, guid: d89cf2d56bfe28b42829957018a3974c, type: 2}
+  _serverHeroCollisionManager: {fileID: 1716700353}
 --- !u!4 &1716700350
 Transform:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ namespace Infrastructure.Server
     {
         [SerializeField] private ClientRoomManager _clientRoomManager;
         [SerializeField] private PlayerSettings _playerSettings;
+        [SerializeField] private ServerHeroCollisionManager _serverHeroCollisionManager;
 
         private FreeStartPositions _freeStartPositions;
         private int _botCounts;
@@ -25,8 +26,9 @@ namespace Infrastructure.Server
         public void ReplaceAndConstructPlayer(NetworkConnectionToClient conn, GameObject gamePlayer, int playerIndex)
         {
             IPlayer player = gamePlayer.GetComponent<IPlayer>().NotNull();
-            PreparePlayerForGame(player, playerIndex);
+            player.Hit += _serverHeroCollisionManager.HandleColliderHit;
 
+            PreparePlayerForGame(player, playerIndex);
             NetworkServer.ReplacePlayerForConnection(conn, gamePlayer, true);
 
             _clientRoomManager.TargetConstructPlayer(conn, gamePlayer, _playerSettings);
@@ -43,7 +45,7 @@ namespace Infrastructure.Server
             foreach (IPlayer player in RoomPlayers.Players)
             {
                 Vector3 position = _freeStartPositions.Pop();
-                RoomPlayers.PreparePlayerToPlay(player, position, player.Data.Name);
+                RoomPlayers.PreparePlayerToPlay(player, position, player.Data.ScoreData.Name);
             }
         }
 
@@ -58,12 +60,14 @@ namespace Infrastructure.Server
         {
             Player player = Instantiate(playerPrefab);
             RoomPlayers.AddPlayer(player);
+            _clientRoomManager.AddPlayer(player);
             return player;
         }
 
         public void RemovePlayer(Player player)
         {
             RoomPlayers.RemovePlayer(player);
+            _clientRoomManager.RemovePlayer(player);
         }
     }
 }

@@ -1,20 +1,27 @@
-﻿using Room;
+﻿using Mirror;
+using Room;
 using UnityEngine;
 
 namespace Infrastructure
 {
-    public sealed class ServerScoreManager : Mirror.NetworkBehaviour
+    // public sealed class ClientScoreManager : NetworkBehaviour
+    // {
+    //     public
+    // }
+
+    public sealed class ServerScoreManager : NetworkBehaviour
     {
         [SerializeField] private RoomSettings _settings;
+        // [SerializeField] private ClientScoreManager _clientScoreManager;
 
         public bool IsPlayerWon(IPlayer player)
         {
-            return player.Data.Score >= _settings.PointsToWin;
+            return player.Data.ScoreData.Score >= _settings.PointsToWin;
         }
 
         public void IncreaseScore(IPlayer player)
         {
-            player.Data.Score++;
+            player.Data.ScoreData.Score++;
         }
     }
 }

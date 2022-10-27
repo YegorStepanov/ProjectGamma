@@ -1,6 +1,5 @@
 ﻿using System;
 using Infrastructure.GUI;
-using Infrastructure.Server;
 using Mirror;
 using UnityEngine;
 using GUISettings = Infrastructure.GUI.GUISettings;
@@ -9,7 +8,7 @@ namespace Infrastructure
 {
     public sealed class GUIManager : NetworkBehaviour
     {
-        [SerializeField] private ServerRoomManager _serverRoomManager;
+        [SerializeField] private ClientRoomManager _clientRoomManager;
         [SerializeField] private GUISettings _settings;
 
         private InGamePlayersScore _inGamePlayersScore;
@@ -40,7 +39,7 @@ namespace Infrastructure
 
         [ClientRpc]
         public void RpcShowInGamePlayersScore() =>
-            _inGamePlayersScore = new InGamePlayersScore(_serverRoomManager.RoomPlayers);
+            _inGamePlayersScore = new InGamePlayersScore(_clientRoomManager.PlayerDatas);
 
         [ClientRpc]
         public void RpcHideInGamePlayersScore() =>

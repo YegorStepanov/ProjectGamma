@@ -10,20 +10,20 @@ namespace Infrastructure.Server
     {
         [SerializeField] private RoomSettings _settings;
 
-        private HashSet<IPlayer> _blockedPlayers;
+        private HashSet<Player> _blockedPlayers;
 
         private void Awake()
         {
             // Debug.Log("awake");
-            _blockedPlayers = new HashSet<IPlayer>();
+            _blockedPlayers = new HashSet<Player>();
         }
 
-        private bool IsBlocked(IPlayer player)
+        private bool IsBlocked(Player player)
         {
             return _blockedPlayers.Contains(player);
         }
 
-        public bool TryBlock(IPlayer player)
+        public bool TryBlock(Player player)
         {
             if (IsBlocked(player))
                 return false;
@@ -33,7 +33,7 @@ namespace Infrastructure.Server
             return true;
         }
 
-        private IEnumerator SetColorRoutine(IPlayer player)
+        private IEnumerator SetColorRoutine(Player player)
         {
             Color oldColor = player.Data.Color;
 

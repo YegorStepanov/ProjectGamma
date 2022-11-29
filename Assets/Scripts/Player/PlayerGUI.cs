@@ -11,24 +11,27 @@ public sealed class PlayerGUI : MonoBehaviour
 
     private void Start()
     {
-        var player = GetComponent<IPlayer>().NotNull();
+        var player = GetComponent<Player>().NotNull();
         player.Data.Changed += OnInfoChanged;
         OnInfoChanged(player);
+        // Debug.Log($"PlayerGUI {player.Data.Name}");
     }
 
-    private void OnInfoChanged(IPlayer player)
+    private void OnInfoChanged(Player player)
     {
-        if (player.Data.ScoreData.Name != _currentName)
+        // Debug.Log($"OnInfoChanged {player.Data.Name}");
+
+        if (player.Data.Name != _currentName)
         {
             // Debug.Log($"Changing Name {_nameText.text}");
-            _currentName = player.Data.ScoreData.Name;
+            _currentName = player.Data.Name;
             _nameText.text = _currentName;
         }
 
-        if (player.Data.ScoreData.Score != _currentScore)
+        if (player.Data.Score != _currentScore)
         {
             // Debug.Log($"Changing Score {_scoreText.text}");
-            _currentScore = player.Data.ScoreData.Score;
+            _currentScore = player.Data.Score;
             _scoreText.text = _currentScore.ToString();
         }
     }

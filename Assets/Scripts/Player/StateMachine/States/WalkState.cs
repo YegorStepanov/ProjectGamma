@@ -2,12 +2,12 @@
 
 public class WalkState : IPlayerState
 {
-    private readonly IPlayer _player;
+    private readonly Player _player;
     private readonly PlayerStateFunctions _functions;
 
     private Vector3 _gravityAcceleration = Vector3.zero;
 
-    public WalkState(IPlayer player, PlayerStateFunctions functions)
+    public WalkState(Player player, PlayerStateFunctions functions)
     {
         _player = player;
         _functions = functions;

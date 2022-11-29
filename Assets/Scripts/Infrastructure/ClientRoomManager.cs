@@ -9,32 +9,32 @@ namespace Infrastructure
     {
         [SerializeField] public GameFactory _gameFactory;
 
-        public readonly SyncList<PlayerScoreData> PlayerDatas = new SyncList<PlayerScoreData>();
+        public readonly SyncList<PlayerData> PlayerDatas = new SyncList<PlayerData>();
 
         [Server]
-        public void AddPlayer(IPlayer player)
+        public void AddPlayer(Player player)
         {
-            PlayerDatas.Add(player.Data.ScoreData);
+            PlayerDatas.Add(player.Data);
         }
 
         [Server]
-        public void RemovePlayer(IPlayer player)
+        public void RemovePlayer(Player player)
         {
-            PlayerDatas.Remove(player.Data.ScoreData);
+            PlayerDatas.Remove(player.Data);
         }
 
         [TargetRpc]
         public void TargetConstructPlayer([UsedImplicitly] NetworkConnection conn, GameObject gamePlayer, PlayerSettings settings)
         {
-            IPlayer player = gamePlayer.GetComponent<IPlayer>().NotNull();
+            Player player = gamePlayer.GetComponent<Player>().NotNull();
 
             CameraController cameraController = _gameFactory.CreateCamera(player.CameraFocusPoint);
             var inputManager = new TransformRelativeInputManager(cameraController.transform);
             player.Construct(settings, inputManager);
 
             //todo: the state should be synced
-            if (isLocalPlayer)
-                player.StateMachine.SetState(PlayerState.Walk);
+            //if (isLocalPlayer) //?
+            //    player.StateMachine.SetState(PlayerState.Walk);
         }
     }
 }

@@ -3,10 +3,11 @@ using UnityEngine;
 
 public interface IPlayerData
 {
-    public event Action<IPlayer> Changed;
+    public event Action<Player> Changed;
 
     public string Tag { get; }
     public int Layer { get; }
-    public PlayerScoreData ScoreData { get; set; }
+    public string Name { get; set; }
+    public uint Score { get; set; }
     public Color32 Color { get; set; }
 }

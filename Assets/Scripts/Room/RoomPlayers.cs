@@ -5,16 +5,16 @@ namespace Room
 {
     public sealed class RoomPlayers
     {
-        private readonly List<IPlayer> _players;
+        private readonly List<Player> _players;
 
-        public IReadOnlyCollection<IPlayer> Players => _players;
+        public IReadOnlyList<Player> Players => _players;
 
         public RoomPlayers(int maxPlayers)
         {
-            _players = new List<IPlayer>(maxPlayers);
+            _players = new List<Player>(maxPlayers);
         }
 
-        public void AddPlayer(IPlayer player)
+        public void AddPlayer(Player player)
         {
             player.Destroying += OnDestroying;
             _players.Add(player);
@@ -28,22 +28,24 @@ namespace Room
 
         public void EnableMovingForAll()
         {
-            foreach (IPlayer player in _players)
+            foreach (Player player in _players)
                 player.StateMachine.SetState(PlayerState.Walk);
         }
 
         public void DisableMovingForAll()
         {
-            foreach (IPlayer player in _players)
+            //todo: call rpc! here
+            foreach (Player player in _players)
                 player.StateMachine.SetState(PlayerState.None);
         }
 
-        public void PreparePlayerToPlay(IPlayer player, Vector3 position, string playerName)
+        public void PreparePlayerToPlay(Player player, Vector3 position, string playerName)
         {
+            player.transform.name = playerName;
             player.Position = position;
             player.Rotation = RotateToSceneCenter(position);
-            player.Data.ScoreData.Score = 0;
-            player.Data.ScoreData.Name = playerName;
+            player.Data.Score = 0;
+            player.Data.Name = playerName;
             player.StateMachine.SetState(PlayerState.Walk);
         }
 

@@ -4,11 +4,11 @@ public sealed class PlayerStateFunctions
 {
     private const float RaycastDistance = 1.5f;
 
-    private readonly IPlayer _player;
+    private readonly Player _player;
 
     private int ExcludePlayerMask => ~(1 << _player.Data.Layer);
 
-    public PlayerStateFunctions(IPlayer player)
+    public PlayerStateFunctions(Player player)
     {
         _player = player;
     }
@@ -50,6 +50,7 @@ public sealed class PlayerStateFunctions
 
     private bool IsMovementZero(Vector3 moveDirection)
     {
+        //settings null!?
         return moveDirection.sqrMagnitude < _player.Settings.MinMoveDistance * _player.Settings.MinMoveDistance;
     }
 

@@ -4,12 +4,12 @@ public sealed class DashState : IPlayerState
 {
     private const float ZeroPrecision = 0.01f;
 
-    private readonly IPlayer _player;
+    private readonly Player _player;
     private readonly PlayerStateFunctions _functions;
 
     private float _remainingDistance;
 
-    public DashState(IPlayer player, PlayerStateFunctions functions)
+    public DashState(Player player, PlayerStateFunctions functions)
     {
         _player = player;
         _functions = functions;
@@ -18,9 +18,13 @@ public sealed class DashState : IPlayerState
     public void Enter()
     {
         _remainingDistance = _player.Settings.DashDistance;
+        Debug.Log("enter Dash");
     }
 
-    public void Exit() { }
+    public void Exit()
+    {
+        Debug.Log("exit Dash");
+    }
 
     public void Update()
     {

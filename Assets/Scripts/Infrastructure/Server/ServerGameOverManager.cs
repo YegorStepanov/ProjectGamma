@@ -13,19 +13,19 @@ namespace Infrastructure.Server
 
         private bool _isOnGameOver;
 
-        public void EndGame(IPlayer winner)
+        public void EndGame(Player winner)
         {
             if (_isOnGameOver) return;
 
             StartCoroutine(GameOverRoutine(winner));
         }
 
-        private IEnumerator GameOverRoutine(IPlayer winner)
+        private IEnumerator GameOverRoutine(Player winner)
         {
             _isOnGameOver = true;
 
             _serverRoomManager.RoomPlayers.DisableMovingForAll();
-            _guiManager.RpcShowGameOverPanel(winner.Data.ScoreData.Name, _roomSettings.RestartTimeSeconds);
+            _guiManager.RpcShowGameOverPanel(winner.Data.Name, _roomSettings.RestartTimeSeconds);
 
             yield return new WaitForSecondsRealtime(_roomSettings.RestartTimeSeconds);
 

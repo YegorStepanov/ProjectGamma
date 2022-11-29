@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mirror;
+using UnityEngine;
 
 public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerState>
 {
-    [field: SyncVar(hook = nameof(SetState))]
     public PlayerState State { get; private set; }
 
     private Dictionary<PlayerState, IPlayerState> _states;
 
     private void Awake()
     {
-        var player = GetComponent<IPlayer>();
+        var player = GetComponent<Player>();
 
         var functions = new PlayerStateFunctions(player);
 
@@ -20,12 +21,20 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
             [PlayerState.Dash] = new DashState(player, functions),
             [PlayerState.Walk] = new WalkState(player, functions)
         };
+    }
 
-        State = PlayerState.None;
+    private void Start()
+    {
+        //set it on the server
+        if (isLocalPlayer)
+            State = PlayerState.Walk;
     }
 
     private void Update()
     {
+        // !hasAuthority
+        // if (!isServer) return;
+        // if (!isLocalPlayer || !isServer) return;
         if (!isLocalPlayer) return;
 
         _states[State].Update();
@@ -33,20 +42,21 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
 
     public void SetState(PlayerState state)
     {
-        if (!isLocalPlayer)
-        {
-            State = state;
-            return;
-        }
+        if (!isLocalPlayer) return;
 
         _states[State].Exit();
 
         State = state;
-        _states[State] = _states[State];
+        CmdSetState(state);
+        //_states[State] = _states[State];
 
         _states[State].Enter();
     }
 
-    private void SetState(PlayerState _, PlayerState state) =>
-        SetState(state);
+    [Command]
+    private void CmdSetState(PlayerState state)
+    {
+        Debug.Log($"update_state_on_server: old={State} new={state}");
+        State = state;
+    }
 }

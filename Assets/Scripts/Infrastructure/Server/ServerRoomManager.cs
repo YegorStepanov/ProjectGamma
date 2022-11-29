@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mirror;
+using Mirror.SimpleWeb;
 using Room;
 using UnityEngine;
 
@@ -16,6 +18,13 @@ namespace Infrastructure.Server
 
         public RoomPlayers RoomPlayers { get; private set; }
 
+        private void Update()
+        {
+            if (RoomPlayers?.Players?.Count != 2)
+                return;
+            // Debug.Log($"{RoomPlayers.Players.Count} ; {RoomPlayers.Players[1].Position}");
+        }
+
         public void InitRoom(List<Transform> startPositions, PlayerSpawnMethod playerSpawnMethod)
         {
             _freeStartPositions = new FreeStartPositions(startPositions, playerSpawnMethod);
@@ -25,13 +34,40 @@ namespace Infrastructure.Server
 
         public void ReplaceAndConstructPlayer(NetworkConnectionToClient conn, GameObject gamePlayer, int playerIndex)
         {
-            IPlayer player = gamePlayer.GetComponent<IPlayer>().NotNull();
-            player.Hit += _serverHeroCollisionManager.HandleColliderHit;
+            if (!isServer)
+            {
+                Debug.LogWarning("NOT SERVER!!!");
+            }
+
+            Player player = gamePlayer.GetComponent<Player>().NotNull();
+            // player.Hit += PlayerOnHit;
+            if(isServer)
+                player.Collider.CollisionEntered += HandlePlayersCollision;
+
+            Debug.Log($"subscribe to Hit: {player.Data.Name} {isServer} {isClient}");
 
             PreparePlayerForGame(player, playerIndex);
             NetworkServer.ReplacePlayerForConnection(conn, gamePlayer, true);
 
             _clientRoomManager.TargetConstructPlayer(conn, gamePlayer, _playerSettings);
+        }
+
+        // Players
+        private void HandlePlayersCollision(Player player, Collider collidedBody)
+        {
+            // Debug.Log($"wtf collided {player.name} -> {collidedBody.name}");
+
+            if (!collidedBody.CompareTag(PlayerCollider.Tag)) //.transform?
+                return;
+
+            // Debug.Log($"CompareTag {player.name}");
+
+            if (collidedBody.TryGetComponent(out PlayerCollider collidedCollider))
+            {
+                // Debug.Log($"TryGetComponent {player.name}");
+                Player collidedPlayer = collidedCollider.Player;
+                _serverHeroCollisionManager.HandleColliderHit(player, collidedPlayer);
+            }
         }
 
         public void RestartGame()
@@ -42,15 +78,16 @@ namespace Infrastructure.Server
         private void PreparePlayersForGame()
         {
             _freeStartPositions.Reset();
-            foreach (IPlayer player in RoomPlayers.Players)
+            foreach (Player player in RoomPlayers.Players)
             {
                 Vector3 position = _freeStartPositions.Pop();
-                RoomPlayers.PreparePlayerToPlay(player, position, player.Data.ScoreData.Name);
+                RoomPlayers.PreparePlayerToPlay(player, position, player.Data.Name);
             }
         }
 
-        private void PreparePlayerForGame(IPlayer player, int playerIndex)
+        private void PreparePlayerForGame(Player player, int playerIndex)
         {
+            //it works!
             Vector3 position = _freeStartPositions.Pop();
             string playerName = $"Player {playerIndex + 1}";
             RoomPlayers.PreparePlayerToPlay(player, position, playerName);

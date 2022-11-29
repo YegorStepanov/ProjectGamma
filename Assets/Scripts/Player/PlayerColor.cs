@@ -5,11 +5,11 @@ public sealed class PlayerColor : MonoBehaviour
     [SerializeField] private Renderer _renderer;
 
     private Material _material;
-    private IPlayer _player;
+    private Player _player;
 
     private void Start()
     {
-        _player = GetComponent<IPlayer>().NotNull();
+        _player = GetComponent<Player>().NotNull();
         _player.Data.Changed += OnColorChanged;
 
         _material = CloneMaterial(_renderer);
@@ -25,6 +25,9 @@ public sealed class PlayerColor : MonoBehaviour
     private static Material CloneMaterial(Renderer renderer) =>
         renderer.material;
 
-    private void OnColorChanged(IPlayer player) =>
+    private void OnColorChanged(Player player)
+    {
+        Debug.Log($"change color {player.Data.Color}");
         _material.color = player.Data.Color;
+    }
 }

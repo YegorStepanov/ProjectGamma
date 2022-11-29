@@ -1,27 +1,37 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 
-public sealed class PlayerData : NetworkBehaviour, IPlayerData
+public sealed class PlayerData : NetworkBehaviour//, IPlayerData
 {
-    public event Action<IPlayer> Changed;
+    public event Action<Player> Changed;
 
-    [SyncVar(hook = nameof(RaiseChanged))]
-    private PlayerScoreData _scoreData;
-    [SyncVar(hook = nameof(RaiseChanged))]
-    private Color32 _color;
+    [SyncVar(hook = nameof(RaiseChanged))] private string _name;
+    [SyncVar(hook = nameof(RaiseChanged))] private uint _score;
+    [SyncVar(hook = nameof(RaiseChanged))] private Color32 _color;
 
-    private IPlayer _player;
+    private Player _player;
 
-    public string Tag => gameObject.tag;
     public int Layer => gameObject.layer;
 
-    public PlayerScoreData ScoreData
+    [NotNull]
+    public string Name
     {
-        get => _scoreData;
+        get => _name;
         set
         {
-            _scoreData = value;
+            _name = value;
+            Changed?.Invoke(_player);
+        }
+    }
+
+    public uint Score
+    {
+        get => _score;
+        set
+        {
+            _score = value;
             Changed?.Invoke(_player);
         }
     }
@@ -38,26 +48,31 @@ public sealed class PlayerData : NetworkBehaviour, IPlayerData
 
     private void Awake()
     {
-        _scoreData = new PlayerScoreData();
-        _player = GetComponent<IPlayer>().NotNull();
-        Debug.Assert(gameObject.CompareTag(Tag));
-        Debug.Assert(gameObject.layer == Layer);
+        _name = "";
+        _player = GetComponent<Player>().NotNull();
     }
 
     private void OnDestroy() =>
         Changed = null;
 
-    private void RaiseChanged(PlayerScoreData _, PlayerScoreData newData) =>
-        Changed?.Invoke(_player);
+    private void RaiseChanged(string _, string __)
+    {
+        Debug.Log($"Changed Name {__}");
+        RaiseChanged();
+    }
 
-    private void RaiseChanged(Color32 _, Color32 newColor) =>
-        Changed?.Invoke(_player);
-}
+    private void RaiseChanged(uint _, uint __)
+    {
+        Debug.Log($"Changed Score {__}");
+        RaiseChanged();
+    }
 
-public class PlayerScoreData
-{
-    [SyncVar]
-    public string Name;
-    [SyncVar]
-    public uint Score;
+    private void RaiseChanged(Color32 _, Color32 __)
+    {
+        Debug.Log($"Changed Color {__}");
+        RaiseChanged();
+    }
+
+    private void RaiseChanged() =>
+        Changed?.Invoke(_player);
 }

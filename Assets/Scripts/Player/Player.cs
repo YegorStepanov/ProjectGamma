@@ -8,15 +8,15 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerData))]
 public sealed class Player : NetworkBehaviour, IPlayer
 {
-    public event Action<Player, ControllerColliderHit> Hit;
     public event Action<Player> Destroying;
 
-    public IPlayerData Data { get; set; }
-    public IStateMachine<PlayerState> StateMachine { get; private set; }
+    public PlayerData Data { get; set; }
+    public PlayerStateMachine StateMachine { get; private set; }
 
     [SerializeField] private Transform _cameraFocusPoint;
     [Tooltip("Child transform without CharacterController because it doesn't support Y rotation")]
     [SerializeField] private Transform Pivot;
+    [SerializeField] private PlayerCollider _playerCollider;
 
     private CharacterController _controller;
 
@@ -44,6 +44,8 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public Vector3 Up => Pivot.up;
     public Vector3 Forward => Pivot.forward;
     public Vector3 Right => Pivot.right;
+    public Vector3 Velocity => _controller.velocity; //is ok?
+    public PlayerCollider Collider => _playerCollider.NotNull();
 
     public PlayerSettings Settings { get; private set; }
     public IInputManager InputManager { get; private set; }
@@ -61,17 +63,12 @@ public sealed class Player : NetworkBehaviour, IPlayer
         StateMachine = GetComponent<PlayerStateMachine>().NotNull();
         _controller = GetComponent<CharacterController>().NotNull();
         Data = GetComponent<PlayerData>().NotNull();
-    }
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        Hit?.Invoke(this, hit);
+        Debug.Assert(gameObject.layer == Data.Layer);
     }
 
     private void OnDestroy()
     {
         Destroying?.Invoke(this);
-        Hit = null;
         Destroying = null;
     }
 

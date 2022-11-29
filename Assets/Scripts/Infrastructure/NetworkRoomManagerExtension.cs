@@ -36,6 +36,7 @@ namespace Infrastructure
 
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
         {
+            Debug.Log("OnRoomServerSceneLoadedForPlayer");
             int playerIndex = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
 
             _serverRoomManager.ReplaceAndConstructPlayer(conn, gamePlayer, playerIndex);

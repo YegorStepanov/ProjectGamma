@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using JetBrains.Annotations;
+using Mirror;
 using Room;
 using UnityEngine;
 
@@ -14,14 +15,15 @@ namespace Infrastructure
         [SerializeField] private RoomSettings _settings;
         // [SerializeField] private ClientScoreManager _clientScoreManager;
 
-        public bool IsPlayerWon(IPlayer player)
+        public bool IsPlayerWon(Player player)
         {
-            return player.Data.ScoreData.Score >= _settings.PointsToWin;
+            return player.Data.Score >= _settings.PointsToWin;
         }
 
-        public void IncreaseScore(IPlayer player)
+        [UsedImplicitly]
+        public void IncreaseScore(Player player)
         {
-            player.Data.ScoreData.Score++;
+            player.Data.Score++;
         }
     }
 }

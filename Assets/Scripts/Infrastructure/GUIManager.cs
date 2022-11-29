@@ -11,14 +11,14 @@ namespace Infrastructure
         [SerializeField] private ClientRoomManager _clientRoomManager;
         [SerializeField] private GUISettings _settings;
 
-        private InGamePlayersScore _inGamePlayersScore;
+        private InGamePlayersData _inGamePlayersData;
         private GameOverPanel _gameOverPanel;
         private StartGameButton _startGameButton;
 
         [ServerCallback]
         private void OnGUI()
         {
-            _inGamePlayersScore?.Draw();
+            _inGamePlayersData?.Draw();
             _gameOverPanel?.Draw();
             _startGameButton?.Draw();
         }
@@ -39,11 +39,11 @@ namespace Infrastructure
 
         [ClientRpc]
         public void RpcShowInGamePlayersScore() =>
-            _inGamePlayersScore = new InGamePlayersScore(_clientRoomManager.PlayerDatas);
+            _inGamePlayersData = new InGamePlayersData(_clientRoomManager.PlayerDatas);
 
         [ClientRpc]
         public void RpcHideInGamePlayersScore() =>
-            _inGamePlayersScore = null;
+            _inGamePlayersData = null;
 
         [Server]
         public void ShowStartGameButton(Action onClick) =>

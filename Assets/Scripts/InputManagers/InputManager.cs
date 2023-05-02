@@ -23,7 +23,7 @@ namespace InputManagers
 
         public bool ReadDashAction()
         {
-            return Input.GetKeyDown(KeyCode.LeftControl) || Input.GetMouseButton(0);
+            return Input.GetKeyDown(KeyCode.LeftControl);
         }
     }
 }

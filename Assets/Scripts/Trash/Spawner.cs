@@ -1,21 +1,21 @@
-using Mirror;
 using UnityEngine;
 
-internal class Spawner
+namespace Mirror.Examples.NetworkRoom
 {
-    private static void InitialSpawn()
+    internal class Spawner
     {
-        if (!NetworkServer.active) return;
+        [ServerCallback]
+        internal static void InitialSpawn()
+        {
+            for (int i = 0; i < 10; i++)
+                SpawnReward();
+        }
 
-        for (int i = 0; i < 10; i++)
-            SpawnReward();
-    }
-
-    private static void SpawnReward()
-    {
-        if (!NetworkServer.active) return;
-
-        Vector3 spawnPosition = new Vector3(Random.Range(-19, 20), 1, Random.Range(-19, 20));
-        // NetworkServer.Spawn(Object.Instantiate(((RoomManager)NetworkManager.singleton).rewardPrefab, spawnPosition, Quaternion.identity));
+        [ServerCallback]
+        internal static void SpawnReward()
+        {
+            Vector3 spawnPosition = new Vector3(Random.Range(-19, 20), 1, Random.Range(-19, 20));
+            NetworkServer.Spawn(Object.Instantiate(NetworkRoomManagerExt.singleton.rewardPrefab, spawnPosition, Quaternion.identity));
+        }
     }
 }

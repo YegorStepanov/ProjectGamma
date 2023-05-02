@@ -24,9 +24,6 @@ public sealed class PlayerColor : MonoBehaviour
     private static Material CloneMaterial(Renderer renderer) =>
         renderer.material;
 
-    private void OnColorChanged(Player player)
-    {
-        Debug.Log($"change color {player.Data.Color}"); //todo
+    private void OnColorChanged(Player player) =>
         _material.color = player.Data.Color;
-    }
 }

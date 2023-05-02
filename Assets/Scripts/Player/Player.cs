@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerStateMachine))]
 [RequireComponent(typeof(PlayerData))]
-public sealed class Player : NetworkBehaviour, IPlayer
+public sealed class Player : NetworkBehaviour
 {
     public event Action<Player> Destroying;
 

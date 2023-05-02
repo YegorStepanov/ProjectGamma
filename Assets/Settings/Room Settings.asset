@@ -16,7 +16,7 @@ MonoBehaviour:
   _blockingTimeSeconds: 3
   _blockingColor:
     serializedVersion: 2
-    rgba: 4294901989
+    rgba: 4278386861
   _restartTimeSeconds: 5
   _playerColors:
   - serializedVersion: 2

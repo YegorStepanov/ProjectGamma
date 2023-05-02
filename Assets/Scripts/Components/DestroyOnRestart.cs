@@ -4,7 +4,7 @@ public sealed class DestroyOnRestart : MonoBehaviour
 {
     private bool _created;
 
-    // Mirror loads the bootstrap scene on each host disconnect so remove the old Managers to preserve component links
+    // Mirror loads the bootstrap scene every times the host goes down, so remove the old managers to preserve component links
     private void Awake()
     {
         foreach (var duplicate in FindObjectsOfType<DestroyOnRestart>(true))

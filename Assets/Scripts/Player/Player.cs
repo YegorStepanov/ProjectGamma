@@ -44,7 +44,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public Vector3 Up => Pivot.up;
     public Vector3 Forward => Pivot.forward;
     public Vector3 Right => Pivot.right;
-    public Vector3 Velocity => _controller.velocity; //is ok?
+    public Vector3 Velocity => _controller.velocity;
     public PlayerCollider Collider => _playerCollider.NotNull();
 
     public PlayerSettings Settings { get; private set; }

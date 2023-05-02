@@ -14,7 +14,6 @@ namespace Infrastructure.Server
 
         private void Awake()
         {
-            // Debug.Log("awake");
             _blockedPlayers = new HashSet<Player>();
         }
 
@@ -26,7 +25,9 @@ namespace Infrastructure.Server
         public bool TryBlock(Player player)
         {
             if (IsBlocked(player))
+            {
                 return false;
+            }
 
             _blockedPlayers.Add(player);
             StartCoroutine(SetColorRoutine(player));

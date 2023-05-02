@@ -3,7 +3,7 @@ using Mirror;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-// exclude the points after creation so that another player cannot be spawned on the same point
+// Exclude the points after creation so that another player cannot be spawned at the same point
 namespace Room
 {
     public sealed class FreeStartPositions
@@ -31,7 +31,7 @@ namespace Room
         {
             int index = GetIndex();
             Transform point = _availablePoints[index];
-            _availablePoints.RemoveAt(index); //it can be O(1) instead O(n) for RoundRobin case if we revert points.
+            _availablePoints.RemoveAt(index); // It can be O(1) instead O(n) for RoundRobin case if we revert points.
             return point.position;
         }
 

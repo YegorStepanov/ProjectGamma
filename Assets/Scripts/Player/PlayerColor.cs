@@ -11,7 +11,6 @@ public sealed class PlayerColor : MonoBehaviour
     {
         _player = GetComponent<Player>().NotNull();
         _player.Data.Changed += OnColorChanged;
-
         _material = CloneMaterial(_renderer);
     }
 
@@ -27,7 +26,7 @@ public sealed class PlayerColor : MonoBehaviour
 
     private void OnColorChanged(Player player)
     {
-        Debug.Log($"change color {player.Data.Color}");
+        Debug.Log($"change color {player.Data.Color}"); //todo
         _material.color = player.Data.Color;
     }
 }

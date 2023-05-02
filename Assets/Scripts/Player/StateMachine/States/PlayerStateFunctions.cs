@@ -50,7 +50,6 @@ public sealed class PlayerStateFunctions
 
     private bool IsMovementZero(Vector3 moveDirection)
     {
-        //settings null!?
         return moveDirection.sqrMagnitude < _player.Settings.MinMoveDistance * _player.Settings.MinMoveDistance;
     }
 

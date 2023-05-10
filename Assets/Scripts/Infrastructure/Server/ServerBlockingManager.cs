@@ -14,7 +14,6 @@ namespace Infrastructure.Server
 
         private void Awake()
         {
-            // Debug.Log("awake");
             _blockedPlayers = new HashSet<Player>();
         }
 

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Mirror;
+using UnityEngine;
 
 public class WalkState : IPlayerState
 {

@@ -31,7 +31,7 @@ namespace Room
         {
             int index = GetIndex();
             Transform point = _availablePoints[index];
-            _availablePoints.RemoveAt(index); //it can be O(1) instead O(n) for RoundRobin case if we revert points.
+            _availablePoints.RemoveAt(index);
             return point.position;
         }
 
@@ -42,7 +42,7 @@ namespace Room
                 case PlayerSpawnMethod.Random:
                     return Random.Range(0, _availablePoints.Count);
                 case PlayerSpawnMethod.RoundRobin:
-                    return 0;
+                    return _availablePoints.Count - 1;
                 default:
                     Debug.LogError($"Incorrect {nameof(_playerSpawnMethod)} value");
                     break;

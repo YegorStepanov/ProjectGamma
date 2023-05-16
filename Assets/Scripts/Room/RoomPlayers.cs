@@ -32,14 +32,8 @@ namespace Room
                 player.StateMachine.SetState(PlayerState.Walk);
         }
 
-        public void DisableMovingForAll()
-        {
-            //todo: call rpc! here
-            foreach (Player player in _players)
-                player.StateMachine.SetState(PlayerState.None);
-        }
-
-        public void PreparePlayerToPlay(Player player, Vector3 position, string playerName)
+        //move it
+        public static void SetInitialPlayerData(Player player, Vector3 position, string playerName)
         {
             player.transform.name = playerName;
             player.Position = position;

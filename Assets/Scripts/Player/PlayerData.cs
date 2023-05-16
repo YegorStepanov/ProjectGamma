@@ -1,28 +1,30 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 
-public sealed class PlayerData : NetworkBehaviour//, IPlayerData
+public sealed class PlayerData : NetworkBehaviour //, IPlayerData
 {
-    public event Action<Player> Changed;
+    public event Action<string> NameChanged;
+    public event Action<uint> ScoreChanged;
+    public event Action<Color32> ColorChanged; //todo color32->color?
 
-    [SyncVar(hook = nameof(RaiseChanged))] private string _name;
-    [SyncVar(hook = nameof(RaiseChanged))] private uint _score;
-    [SyncVar(hook = nameof(RaiseChanged))] private Color32 _color;
-
-    private Player _player;
+    [SyncVar(hook = nameof(OnNameChanged))]
+    private string _name = "";
+    [SyncVar(hook = nameof(OnScoreChanged))]
+    private uint _score;
+    [SyncVar(hook = nameof(OnColorChanged))]
+    private Color32 _color;
 
     public int Layer => gameObject.layer;
 
-    [NotNull]
     public string Name
     {
         get => _name;
         set
         {
+            if (_name == value) return;
             _name = value;
-            Changed?.Invoke(_player);
+            NameChanged?.Invoke(value);
         }
     }
 
@@ -31,8 +33,9 @@ public sealed class PlayerData : NetworkBehaviour//, IPlayerData
         get => _score;
         set
         {
+            if (_score == value) return;
             _score = value;
-            Changed?.Invoke(_player);
+            ScoreChanged?.Invoke(value);
         }
     }
 
@@ -41,38 +44,25 @@ public sealed class PlayerData : NetworkBehaviour//, IPlayerData
         get => _color;
         set
         {
+            if ((Color)_color == value) return;
             _color = value;
-            Changed?.Invoke(_player);
+            ColorChanged?.Invoke(value);
         }
     }
 
-    private void Awake()
+    private void OnDestroy()
     {
-        _name = "";
-        _player = GetComponent<Player>().NotNull();
+        NameChanged = null;
+        ScoreChanged = null;
+        ColorChanged = null;
     }
 
-    private void OnDestroy() =>
-        Changed = null;
+    private void OnNameChanged(string oldValue, string newValue) =>
+        NameChanged?.Invoke(newValue);
 
-    private void RaiseChanged(string _, string __)
-    {
-        Debug.Log($"Changed Name {__}");
-        RaiseChanged();
-    }
+    private void OnScoreChanged(uint oldValue, uint newValue) =>
+        ScoreChanged?.Invoke(newValue);
 
-    private void RaiseChanged(uint _, uint __)
-    {
-        Debug.Log($"Changed Score {__}");
-        RaiseChanged();
-    }
-
-    private void RaiseChanged(Color32 _, Color32 __)
-    {
-        Debug.Log($"Changed Color {__}");
-        RaiseChanged();
-    }
-
-    private void RaiseChanged() =>
-        Changed?.Invoke(_player);
+    private void OnColorChanged(Color32 oldValue, Color32 newValue) =>
+        ColorChanged?.Invoke(newValue);
 }

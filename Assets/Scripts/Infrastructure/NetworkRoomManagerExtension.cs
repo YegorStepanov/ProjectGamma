@@ -10,18 +10,12 @@ namespace Infrastructure
         [SerializeField] private ServerRoomManager _serverRoomManager;
         [SerializeField] private ServerGUIManager _serverGUIManager;
 
-        private Player PlayerPrefab => playerPrefab.GetComponent<Player>();
-
-                return NetworkClient.connection.identity.isServerOnly;
-            }
-        }
+        private Player _playerPrefab;
 
         public override void Start()
         {
             base.Start();
             _playerPrefab = playerPrefab.GetComponent<Player>().NotNull();
-            _isServerOnly = NetworkClient.connection.identity.isServerOnly;
-            _ = IsServerOnly;
         }
 
         public override void OnRoomServerSceneChanged(string sceneName)
@@ -63,7 +57,7 @@ namespace Infrastructure
 
         public override void OnRoomServerPlayersReady()
         {
-            if (IsServerOnly)
+            if (NetworkClient.connection.identity.isServerOnly)
             {
                 ServerChangeScene(GameplayScene);
             }

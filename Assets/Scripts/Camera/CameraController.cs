@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public sealed class CameraController : MonoBehaviour, ICameraController
 {
+    [SerializeField] private Camera _camera;
     [SerializeField] private float _maxDistance = 5;
     [SerializeField] private float _rotationSpeed = 90f;
     [Range(-89.9f, 89.9f)]
@@ -11,21 +12,14 @@ public sealed class CameraController : MonoBehaviour, ICameraController
     [Range(-89.9f, 89.9f)]
     [SerializeField] private float _maxVerticalAngle = 45f;
 
-    private Camera _camera;
     private IInputManager _inputManager;
     private Vector2 _rotation = new Vector2(45f, 0f);
 
     public Transform FocusOn { get; set; }
 
-    public void Construct(Camera cam, IInputManager inputManager)
+    public void Construct(IInputManager inputManager)
     {
-        _camera = cam;
         _inputManager = inputManager;
-    }
-
-    public Vector3 TransformDirection(Vector3 direction)
-    {
-        return transform.TransformDirection(direction);
     }
 
     private void Awake()

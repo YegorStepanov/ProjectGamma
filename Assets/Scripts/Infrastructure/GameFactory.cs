@@ -5,7 +5,6 @@ namespace Infrastructure
 {
     public sealed class GameFactory : MonoBehaviour
     {
-        [SerializeField] private Camera _camera;
         [SerializeField] private CameraController _playerCameraPrefab;
         [SerializeField] private PlayerSettings _playerSettings;
 
@@ -22,7 +21,7 @@ namespace Infrastructure
         {
             CameraController controller = Instantiate(_playerCameraPrefab);
             var inputManager = new DefaultInputManager();
-            controller.Construct(_camera, inputManager);
+            controller.Construct(inputManager);
             controller.FocusOn = focusOn;
             return controller;
         }

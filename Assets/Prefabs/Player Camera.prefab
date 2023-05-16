@@ -87,6 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4adcf483633f4d5c881ac4111c773ac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _camera: {fileID: 8683265247375038126}
   _maxDistance: 5
   _rotationSpeed: 90
   _minVerticalAngle: -45

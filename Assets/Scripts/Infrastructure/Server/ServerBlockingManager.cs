@@ -17,11 +17,6 @@ namespace Infrastructure.Server
             _blockedPlayers = new HashSet<Player>();
         }
 
-        private bool IsBlocked(Player player)
-        {
-            return _blockedPlayers.Contains(player);
-        }
-
         public bool TryBlock(Player player)
         {
             if (IsBlocked(player))
@@ -30,6 +25,11 @@ namespace Infrastructure.Server
             _blockedPlayers.Add(player);
             StartCoroutine(SetColorRoutine(player));
             return true;
+        }
+
+        private bool IsBlocked(Player player)
+        {
+            return _blockedPlayers.Contains(player);
         }
 
         private IEnumerator SetColorRoutine(Player player)

@@ -3,9 +3,9 @@ using Mirror;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-// exclude the points after creation so that another player cannot be spawned on the same point
 namespace Room
 {
+    // Exclude the points after creation so that another player cannot be spawned on the same point
     public sealed class FreeStartPositions
     {
         private readonly List<Transform> _allPoints;

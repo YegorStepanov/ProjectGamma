@@ -8,22 +8,28 @@ namespace Infrastructure
     {
         [Header("Dependencies")]
         [SerializeField] private ServerRoomManager _serverRoomManager;
-        [SerializeField] private ClientRoomManager _clientRoomManager;
-        [SerializeField] private GUIManager _guiManager;
+        [SerializeField] private ServerGUIManager _serverGUIManager;
 
         private Player PlayerPrefab => playerPrefab.GetComponent<Player>();
 
-        // on the client _serverRoomManager is null and vice versa
-        private bool IsServerOnly => _serverRoomManager == null
-            ? _clientRoomManager.isServerOnly
-            : _serverRoomManager.isServerOnly; //or isServer?
+                return NetworkClient.connection.identity.isServerOnly;
+            }
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            _playerPrefab = playerPrefab.GetComponent<Player>().NotNull();
+            _isServerOnly = NetworkClient.connection.identity.isServerOnly;
+            _ = IsServerOnly;
+        }
 
         public override void OnRoomServerSceneChanged(string sceneName)
         {
             if (sceneName == GameplayScene)
             {
                 _serverRoomManager.InitRoom(startPositions, playerSpawnMethod);
-                _guiManager.RpcShowInGamePlayersScore();
+                _serverGUIManager.RpcShowInGamePlayersScore();
                 // button: create bot
                 // _roomManager.CreateBot(PlayerPrefab);
             }
@@ -31,12 +37,11 @@ namespace Infrastructure
 
         public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
         {
-            return _serverRoomManager.CreatePlayer(PlayerPrefab).gameObject;
+            return _serverRoomManager.CreatePlayer(_playerPrefab).gameObject;
         }
 
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
         {
-            Debug.Log("OnRoomServerSceneLoadedForPlayer");
             int playerIndex = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
 
             _serverRoomManager.ReplaceAndConstructPlayer(conn, gamePlayer, playerIndex);
@@ -64,9 +69,9 @@ namespace Infrastructure
             }
             else
             {
-                _guiManager.ShowStartGameButton(onClick: () =>
+                _serverGUIManager.ShowStartGameButton(onClick: () =>
                 {
-                    _guiManager.HideStartGameButton();
+                    _serverGUIManager.HideStartGameButton();
                     ServerChangeScene(GameplayScene);
                 });
             }
@@ -74,7 +79,7 @@ namespace Infrastructure
 
         public override void OnRoomServerPlayersNotReady()
         {
-            _guiManager.HideStartGameButton();
+            _serverGUIManager.HideStartGameButton();
         }
     }
 }

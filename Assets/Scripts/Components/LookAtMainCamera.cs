@@ -7,10 +7,7 @@ public sealed class LookAtMainCamera : MonoBehaviour
     private void LateUpdate()
     {
         if (_camera == null)
-        {
             _camera = Camera.main;
-            return;
-        }
 
         if (_camera != null)
             transform.forward = _camera.transform.forward;

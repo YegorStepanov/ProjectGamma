@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
 
     private void Awake()
     {
-        var player = GetComponent<Player>();
+        var player = GetComponent<Player>().NotNull();
 
         var functions = new PlayerStateFunctions(player);
 
@@ -25,16 +24,13 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
 
     private void Start()
     {
-        //set it on the server
-        if (isLocalPlayer)
-            State = PlayerState.Walk;
+        if (!isLocalPlayer) return;
+
+        State = PlayerState.Walk;
     }
 
     private void Update()
     {
-        // !hasAuthority
-        // if (!isServer) return;
-        // if (!isLocalPlayer || !isServer) return;
         if (!isLocalPlayer) return;
 
         _states[State].Update();
@@ -48,7 +44,6 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
 
         State = state;
         CmdSetState(state);
-        //_states[State] = _states[State];
 
         _states[State].Enter();
     }

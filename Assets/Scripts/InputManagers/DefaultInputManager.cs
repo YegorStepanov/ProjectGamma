@@ -2,7 +2,7 @@
 
 namespace InputManagers
 {
-    public sealed class InputManager : IInputManager
+    public sealed class DefaultInputManager : IInputManager
     {
         public Vector3 ReadMoveAction()
         {

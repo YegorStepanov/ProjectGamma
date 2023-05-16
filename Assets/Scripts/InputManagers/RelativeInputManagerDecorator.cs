@@ -2,13 +2,14 @@
 
 namespace InputManagers
 {
-    public sealed class TransformRelativeInputManager : IInputManager
+    public sealed class RelativeInputManagerDecorator : IInputManager
     {
-        private readonly IInputManager _inputManager = new InputManager();
+        private readonly IInputManager _inputManager;
         private readonly Transform _relativeTo;
 
-        public TransformRelativeInputManager(Transform relativeTo)
+        public RelativeInputManagerDecorator(IInputManager inputManager, Transform relativeTo)
         {
+            _inputManager = inputManager;
             _relativeTo = relativeTo;
         }
 

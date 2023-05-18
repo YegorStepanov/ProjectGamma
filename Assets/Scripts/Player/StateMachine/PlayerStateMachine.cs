@@ -16,7 +16,7 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
 
         _states = new Dictionary<PlayerState, IPlayerState>
         {
-            [PlayerState.None] = NoneState.Instance,
+            [PlayerState.None] = new NoneState(player),
             [PlayerState.Dash] = new DashState(player, functions),
             [PlayerState.Walk] = new WalkState(player, functions)
         };

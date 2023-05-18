@@ -24,8 +24,8 @@ namespace Infrastructure.Server
                 return false;
 
             _blockedPlayers.Add(player);
-            StartCoroutine(SetColorRoutine(player));
             TargetTriggerFallAnimation(player.connectionToClient, player);
+            StartCoroutine(WaitAndUnblock(player));
             return true;
         }
 
@@ -34,14 +34,9 @@ namespace Infrastructure.Server
             return _blockedPlayers.Contains(player);
         }
 
-        private IEnumerator SetColorRoutine(Player player)
+        private IEnumerator WaitAndUnblock(Player player)
         {
-            Color oldColor = player.Data.Color;
-
-            player.Data.Color = _settings.BlockingColor;
-            yield return new WaitForSeconds(_settings.BlockingTime);
-            player.Data.Color = oldColor;
-
+            yield return new WaitForSecondsRealtime(_settings.BlockingTime);
             _blockedPlayers.Remove(player);
         }
 

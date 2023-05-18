@@ -484,7 +484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9c8aa49875b3ca46a6a069ccf45a286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 2021090293}
   _playerCameraPrefab: {fileID: 4008113573551312901, guid: 62fa9862b68aad94bac1cb3b1f67e4bb, type: 3}
   _playerSettings: {fileID: 11400000, guid: d89cf2d56bfe28b42829957018a3974c, type: 2}
 --- !u!1 &1716700343
@@ -577,6 +576,7 @@ MonoBehaviour:
   _clientRoomManager: {fileID: 431710619}
   _serverHeroCollisionManager: {fileID: 1716700353}
   _gameFactory: {fileID: 1587623850}
+  _roomSettings: {fileID: 11400000, guid: 189f6c31068167c47882e9a67662aca3, type: 2}
 --- !u!4 &1716700350
 Transform:
   m_ObjectHideFlags: 0

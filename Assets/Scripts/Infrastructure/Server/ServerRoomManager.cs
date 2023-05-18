@@ -87,11 +87,11 @@ namespace Infrastructure.Server
             RoomPlayers.SetInitialPlayerData(player, position, playerName);
 
         [TargetRpc]
-        private void TargetSetInitialPlayerData([UsedImplicitly] NetworkConnection target, Player player, Vector3 position, string playerName) =>
+        private void TargetSetInitialPlayerData([UsedImplicitly] NetworkConnectionToClient target, Player player, Vector3 position, string playerName) =>
             RoomPlayers.SetInitialPlayerData(player, position, playerName);
 
         [TargetRpc]
-        private void TargetConstructPlayer([UsedImplicitly] NetworkConnection conn, GameObject playerGameObject) =>
+        private void TargetConstructPlayer([UsedImplicitly] NetworkConnectionToClient conn, GameObject playerGameObject) =>
             _gameFactory.ConstructPlayer(playerGameObject);
     }
 }

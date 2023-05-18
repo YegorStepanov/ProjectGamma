@@ -47,7 +47,7 @@ namespace Infrastructure.Server
         }
 
         [TargetRpc]
-        private void TargetSetState([UsedImplicitly] NetworkConnection target, Player player, PlayerState state)
+        private void TargetSetState([UsedImplicitly] NetworkConnectionToClient target, Player player, PlayerState state)
         {
             player.StateMachine.SetState(state);
         }

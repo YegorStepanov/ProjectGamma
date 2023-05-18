@@ -26,7 +26,7 @@ public sealed class DashState : IPlayerState
     {
         if (_remainingDistance <= ZeroPrecision)
         {
-            MoveRemaining();
+            MoveRemainingDistance();
 
             _player.StateMachine.SetState(PlayerState.Walk);
             return;
@@ -44,7 +44,7 @@ public sealed class DashState : IPlayerState
         _remainingDistance -= speed * Time.deltaTime;
     }
 
-    private void MoveRemaining()
+    private void MoveRemainingDistance()
     {
         _functions.Move(_player.Forward, _remainingDistance / Time.deltaTime, Vector3.zero);
         _remainingDistance = 0f;
@@ -52,9 +52,15 @@ public sealed class DashState : IPlayerState
 
     private float GetSpeed()
     {
-        float percentage = _remainingDistance / _player.Settings.DashDistance;
-        float speed = _player.Settings.DashSpeed.Evaluate(percentage) * _player.Settings.DashMaxSpeed;
-        return speed;
+        float completedPercentage = 1f - _remainingDistance / _player.Settings.DashDistance;
+        return ReadSpeedPercentageCurve(completedPercentage) * _player.Settings.DashMaxSpeed;
+    }
+
+    private float ReadSpeedPercentageCurve(float percentage)
+    {
+        float speedPercentage = _player.Settings.DashSpeedPercentage.Evaluate(percentage);
+        // defense: if the value on the curve is zero, there will be an endless loop
+        return speedPercentage <= ZeroPrecision ? ZeroPrecision : speedPercentage;
     }
 
     private float ClampSpeed(float speed)

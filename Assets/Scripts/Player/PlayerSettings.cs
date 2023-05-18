@@ -19,5 +19,5 @@ public sealed class PlayerSettings : ScriptableObject
     public float DashDistance = 5f;
     [Range(0.1f, 100f)]
     public float DashMaxSpeed = 30f;
-    public AnimationCurve DashSpeed;
+    public AnimationCurve DashSpeedPercentage;
 }

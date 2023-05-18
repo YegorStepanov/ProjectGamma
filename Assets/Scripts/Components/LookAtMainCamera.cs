@@ -2,14 +2,30 @@
 
 public sealed class LookAtMainCamera : MonoBehaviour
 {
-    private Camera _camera;
+    private CameraController _cameraController;
 
-    private void LateUpdate()
+    private void Update()
     {
-        if (_camera == null)
-            _camera = Camera.main;
+        if (_cameraController == null)
+        {
+            var cam = Camera.main;
+            if (cam != null && cam.TryGetComponent(out CameraController cameraController))
+            {
+                _cameraController = cameraController;
+                _cameraController.AfterCameraLateUpdate += OnAfterCameraLateUpdate;
+            }
+        }
+    }
 
-        if (_camera != null)
-            transform.forward = _camera.transform.forward;
+    private void OnDestroy()
+    {
+        // _cameraController can be destroyed first and remove all subscribers by itself.
+        if(_cameraController != null)
+            _cameraController.AfterCameraLateUpdate -= OnAfterCameraLateUpdate;
+    }
+
+    private void OnAfterCameraLateUpdate()
+    {
+        transform.forward = _cameraController.transform.forward;
     }
 }

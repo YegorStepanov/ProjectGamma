@@ -1,9 +1,12 @@
-﻿using InputManagers;
+﻿using System;
+using InputManagers;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 public sealed class CameraController : MonoBehaviour, ICameraController
 {
+    public event Action AfterCameraLateUpdate;
+
     [SerializeField] private Camera _camera;
     [SerializeField] private float _maxDistance = 5;
     [SerializeField] private float _rotationSpeed = 90f;
@@ -38,6 +41,13 @@ public sealed class CameraController : MonoBehaviour, ICameraController
         LookToTarget(rotation);
 
         _rotation = rotation;
+
+        AfterCameraLateUpdate?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        AfterCameraLateUpdate = null;
     }
 
     private Vector2 GetInputRotation()

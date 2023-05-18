@@ -24,6 +24,7 @@ namespace Infrastructure.Server
 
             _blockedPlayers.Add(player);
             StartCoroutine(SetColorRoutine(player));
+            player.Animator.TriggerFallAnimation(); //todo rpccall?
             return true;
         }
 

@@ -33,5 +33,6 @@ public class WalkState : IPlayerState
         Vector3 moveDirection = _functions.GetMovementDirection();
 
         _functions.Move(moveDirection, _player.Settings.WalkSpeed, _gravityAcceleration);
+        _player.Animator.UpdateMovementAnimation(moveDirection);
     }
 }

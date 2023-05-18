@@ -18,6 +18,7 @@ public sealed class DashState : IPlayerState
     public void Enter()
     {
         _remainingDistance = _player.Settings.DashDistance;
+        _player.Animator.TriggerKickAnimation();
     }
 
     public void Exit() { }

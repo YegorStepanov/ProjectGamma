@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerStateMachine))]
 [RequireComponent(typeof(PlayerData))]
+[RequireComponent(typeof(PlayerAnimator))]
 public sealed class Player : NetworkBehaviour, IPlayer
 {
     public event Action<Player> Destroying;
@@ -49,6 +50,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
     public PlayerSettings Settings { get; private set; }
     public IInputManager InputManager { get; private set; }
+    public PlayerAnimator Animator { get; private set; }
     public Transform CameraFocusPoint => _cameraFocusPoint.NotNull();
 
     public void Construct(PlayerSettings settings, IInputManager inputManager)
@@ -62,6 +64,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
         InputManager = EmptyInputManager.Instance;
         StateMachine = GetComponent<PlayerStateMachine>().NotNull();
         _controller = GetComponent<CharacterController>().NotNull();
+        Animator = GetComponent<PlayerAnimator>().NotNull();
         Data = GetComponent<PlayerData>().NotNull();
         Debug.Assert(gameObject.layer == Data.Layer);
     }

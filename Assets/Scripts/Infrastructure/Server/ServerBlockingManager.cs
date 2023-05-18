@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Mirror;
 using Room;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace Infrastructure.Server
 
             _blockedPlayers.Add(player);
             StartCoroutine(SetColorRoutine(player));
-            player.Animator.TriggerFallAnimation(); //todo rpccall?
+            TargetTriggerFallAnimation(player.connectionToClient, player);
             return true;
         }
 
@@ -42,6 +43,12 @@ namespace Infrastructure.Server
             player.Data.Color = oldColor;
 
             _blockedPlayers.Remove(player);
+        }
+
+        [TargetRpc]
+        private void TargetTriggerFallAnimation([UsedImplicitly] NetworkConnectionToClient conn, Player player)
+        {
+            player.Animator.TriggerFallAnimation();
         }
     }
 }

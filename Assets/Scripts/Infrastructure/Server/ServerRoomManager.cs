@@ -11,6 +11,7 @@ namespace Infrastructure.Server
         [SerializeField] private ClientRoomManager _clientRoomManager;
         [SerializeField] private ServerHeroCollisionManager _serverHeroCollisionManager;
         [SerializeField] private GameFactory _gameFactory;
+        [SerializeField] private RoomSettings _roomSettings;
 
         private FreeStartPositions _freeStartPositions;
         private int _botCounts;
@@ -45,6 +46,7 @@ namespace Infrastructure.Server
         {
             Player player = gamePlayer.GetComponent<Player>().NotNull();
             player.Collider.CollisionEntered += HandlePlayersCollisions;
+            player.Data.Color = _roomSettings.PlayerColors[playerIndex];
 
             SetUpPlayer(player, playerIndex);
             NetworkServer.ReplacePlayerForConnection(conn, gamePlayer, true);

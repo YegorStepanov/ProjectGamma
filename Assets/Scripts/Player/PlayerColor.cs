@@ -9,10 +9,11 @@ public sealed class PlayerColor : MonoBehaviour
 
     private void Start()
     {
+        _material = CloneMaterial(_renderer);
+
         _player = GetComponent<Player>().NotNull();
         _player.Data.ColorChanged += OnColorChanged;
-
-        _material = CloneMaterial(_renderer);
+        OnColorChanged(_player.Data.Color);
     }
 
     private void OnDestroy()

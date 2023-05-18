@@ -15,30 +15,39 @@ MonoBehaviour:
   HorizontalRotationSpeedRadians: 25
   VerticalRotationSpeedRadians: 1
   MinMoveDistance: 0.01
-  WalkSpeed: 10
+  WalkSpeed: 4
   DashDistance: 5
-  DashMaxSpeed: 30
-  DashSpeed:
+  DashMaxSpeed: 14
+  DashSpeedPercentage:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      value: 0.2
+      inSlope: 0.6659846
+      outSlope: 0.6659846
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.11453877
+    - serializedVersion: 3
+      time: 0.1
+      value: 1
+      inSlope: -0.07328775
+      outSlope: -0.07328775
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.076109245
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      value: 0.1
+      inSlope: -0.13158058
+      outSlope: -0.13158058
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.16364998
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

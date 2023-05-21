@@ -24,7 +24,6 @@ namespace Infrastructure.Server
                 return false;
 
             _blockedPlayers.Add(player);
-            TargetTriggerFallAnimation(player.connectionToClient, player);
             StartCoroutine(WaitAndUnblock(player));
             return true;
         }

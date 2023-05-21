@@ -17,6 +17,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
     [SerializeField] private Transform _cameraFocusPoint;
     [SerializeField] private Transform _pivot;
     [SerializeField] private PlayerCollider _playerCollider;
+    [SerializeField] private Transform _hitPlace;
 
     private CharacterController _controller;
 
@@ -54,6 +55,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public IInputManager InputManager { get; private set; }
     public PlayerAnimator Animator { get; private set; }
     public Transform CameraFocusPoint => _cameraFocusPoint.NotNull();
+    public Vector3 HitPlace => _hitPlace.position;
     public bool IsMovementBlocked => Animator.IsMovementBlocked;
 
     public void Construct(PlayerSettings settings, IInputManager inputManager)

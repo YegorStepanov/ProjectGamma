@@ -6,7 +6,7 @@ public sealed class PlayerData : NetworkBehaviour //, IPlayerData
 {
     public event Action<string> NameChanged;
     public event Action<uint> ScoreChanged;
-    public event Action<Color32> ColorChanged; //todo color32->color?
+    public event Action<Color32> ColorChanged;
 
     [SyncVar(hook = nameof(OnNameChanged))]
     private string _name = "";

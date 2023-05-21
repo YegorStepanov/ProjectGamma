@@ -25,12 +25,15 @@ public sealed class Player : NetworkBehaviour, IPlayer
         get => transform.position;
         set
         {
-            if (_controller.enabled)
+            // CharacterController should be disabled when we want change position directly
+            bool isEnabled = _controller.enabled;
+            if (isEnabled)
                 _controller.enabled = false;
 
             transform.position = value;
 
-            _controller.enabled = true;
+            if (isEnabled)
+                _controller.enabled = true;
         }
     }
 

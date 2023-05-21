@@ -54,6 +54,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public IInputManager InputManager { get; private set; }
     public PlayerAnimator Animator { get; private set; }
     public Transform CameraFocusPoint => _cameraFocusPoint.NotNull();
+    public bool IsMovementBlocked => Animator.IsMovementBlocked;
 
     public void Construct(PlayerSettings settings, IInputManager inputManager)
     {
@@ -80,5 +81,15 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public void Move(Vector3 motion)
     {
         _controller.Move(motion);
+    }
+
+    public void EnableMovement(bool enable)
+    {
+        if (enable)
+            StateMachine.SetState(PlayerState.Walk);
+        else
+            StateMachine.SetState(PlayerState.None);
+
+        // Animator.SetIsNoneState(enable); todo
     }
 }

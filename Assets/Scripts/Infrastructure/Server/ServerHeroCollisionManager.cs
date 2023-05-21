@@ -40,6 +40,8 @@ namespace Infrastructure.Server
         {
             if (_serverBlockingManager.TryBlock(loser))
             {
+                TargetTriggerFallAnimation(loser.connectionToClient, loser);
+
                 _serverScoreManager.IncreaseScore(winner);
 
                 if (_serverScoreManager.IsPlayerWon(winner))
@@ -47,6 +49,12 @@ namespace Infrastructure.Server
                     _serverGameOverManager.EndGame(winner);
                 }
             }
+        }
+
+        [TargetRpc]
+        private void TargetTriggerFallAnimation( NetworkConnectionToClient conn, Player loser)
+        {
+            loser.Animator.TriggerFallAnimation();
         }
     }
 }

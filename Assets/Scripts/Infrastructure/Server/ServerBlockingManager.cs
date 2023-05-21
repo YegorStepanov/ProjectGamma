@@ -35,14 +35,16 @@ namespace Infrastructure.Server
 
         private IEnumerator WaitAndUnblock(Player player)
         {
+            TargetEnableMovement(player.connectionToClient, player, false);
             yield return new WaitForSecondsRealtime(_settings.BlockingTime);
+            TargetEnableMovement(player.connectionToClient, player, true);
             _blockedPlayers.Remove(player);
         }
 
         [TargetRpc]
-        private void TargetTriggerFallAnimation([UsedImplicitly] NetworkConnectionToClient conn, Player player)
+        private void TargetEnableMovement([UsedImplicitly] NetworkConnectionToClient conn, Player player, bool enableMovement)
         {
-            player.Animator.TriggerFallAnimation();
+            player.EnableMovement(enableMovement);
         }
     }
 }

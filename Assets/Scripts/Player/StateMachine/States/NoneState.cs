@@ -7,10 +7,16 @@ public sealed class NoneState : IPlayerState
     public NoneState(Player player) =>
         _player = player;
 
-    public void Enter() =>
-        _player.Animator.UpdateMovementAnimation(Vector3.zero);
+    public void Enter()
+    {
+        _player.Animator.UpdateMovementAnimation(Vector3.zero); // i forgot what is it??
+        _player.Animator.SetIsNoneState(true); //todo
+    }
 
-    public void Exit() { }
+    public void Exit()
+    {
+        _player.Animator.SetIsNoneState(false); //todo
+    }
 
     public void Update() { }
 }

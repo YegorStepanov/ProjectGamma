@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-public class WalkState : IPlayerState
+public class MovementState : IPlayerState
 {
     private readonly Player _player;
-    private readonly PlayerStateFunctions _functions;
+    private readonly CommonStateFunctions _functions;
 
-    private Vector3 _gravityAcceleration = Vector3.zero;
+    private float _verticalVelocity;
 
-    public WalkState(Player player, PlayerStateFunctions functions)
+    public MovementState(Player player, CommonStateFunctions functions)
     {
         _player = player;
         _functions = functions;
@@ -19,7 +19,7 @@ public class WalkState : IPlayerState
 
     public void Update()
     {
-        if (_functions.IsDashing())
+        if (_functions.IsDashPressed())
         {
             _player.StateMachine.SetState(PlayerState.Dash);
             return;

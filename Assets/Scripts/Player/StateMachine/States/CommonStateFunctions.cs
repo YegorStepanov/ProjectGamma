@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public sealed class PlayerStateFunctions
+public sealed class CommonStateFunctions
 {
     private const float RaycastDistance = 1.5f;
 
@@ -8,15 +8,14 @@ public sealed class PlayerStateFunctions
 
     private int ExcludePlayerMask => ~(1 << _player.Data.Layer);
 
-    public PlayerStateFunctions(Player player)
+    public CommonStateFunctions(Player player)
     {
-        _player = player;
+        _player = player.NotNull();
     }
 
-    public bool IsDashing()
+    public bool IsDashPressed()
     {
-        var im = _player.InputManager;
-        return im.ReadDashAction();
+        return _player.InputManager.ReadDashAction();
     }
 
     public Vector3 GetMovementDirection()
@@ -40,9 +39,8 @@ public sealed class PlayerStateFunctions
                 moveDirection = Vector3.ProjectOnPlane(moveDirection, normal);
             }
 
-            RotateHorizontally(normal);
-            RotateVertically(moveDirection);
-        }
+        RotateVertically(normal);
+        RotateHorizontally(moveDirection);
 
         Vector3 motion = (moveDirection * speed + gravityVelocity) * Time.deltaTime;
         _player.Move(motion);
@@ -54,7 +52,7 @@ public sealed class PlayerStateFunctions
         return moveDirection.sqrMagnitude < _player.Settings.MinMoveDistance * _player.Settings.MinMoveDistance;
     }
 
-    private void RotateHorizontally(Vector3 upwards)
+    private void RotateVertically(Vector3 upwards)
     {
         float step = _player.Settings.VerticalRotationSpeedRadians * Time.deltaTime;
         Vector3 up = Vector3.RotateTowards(_player.Up, upwards, step, 1f);
@@ -63,7 +61,7 @@ public sealed class PlayerStateFunctions
         _player.Rotation = rotation * _player.Rotation;
     }
 
-    private void RotateVertically(Vector3 direction)
+    private void RotateHorizontally(Vector3 direction)
     {
         direction.Normalize();
 
@@ -71,8 +69,8 @@ public sealed class PlayerStateFunctions
 
         Quaternion lookRotation = Quaternion.LookRotation(directionXZ, _player.Up);
 
-        float step = _player.Settings.HorizontalRotationSpeedRadians * Mathf.Rad2Deg * Time.deltaTime;
-        _player.Rotation = Quaternion.RotateTowards(_player.Rotation, lookRotation, step);
+        float step = _player.Settings.HorizontalRotationSpeedRadians * Time.deltaTime;
+        _player.Rotation = Quaternion.RotateTowards(_player.Rotation, lookRotation, step * Mathf.Rad2Deg);
     }
 
     private bool TryGetGroundNormal(out Vector3 normal)

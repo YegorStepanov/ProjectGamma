@@ -15,8 +15,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public PlayerStateMachine StateMachine { get; private set; }
 
     [SerializeField] private Transform _cameraFocusPoint;
-    [Tooltip("Child transform without CharacterController because it doesn't support Y rotation")]
-    [SerializeField] private Transform Pivot;
+    [SerializeField] private Transform _pivot;
     [SerializeField] private PlayerCollider _playerCollider;
 
     private CharacterController _controller;
@@ -37,15 +36,15 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
     public Quaternion Rotation
     {
-        get => Pivot.rotation;
-        set => Pivot.rotation = value;
+        get => _pivot.rotation;
+        set => _pivot.rotation = value;
     }
 
     public bool IsGrounded => _controller.isGrounded;
-    public Vector3 Up => Pivot.up;
-    public Vector3 Forward => Pivot.forward;
-    public Vector3 Right => Pivot.right;
-    public Vector3 Velocity => _controller.velocity; //is ok?
+    public Vector3 Up => _pivot.up;
+    public Vector3 Forward => _pivot.forward;
+    public Vector3 Right => _pivot.right;
+    public Vector3 Velocity => _controller.velocity;
     public PlayerCollider Collider => _playerCollider.NotNull();
 
     public PlayerSettings Settings { get; private set; }

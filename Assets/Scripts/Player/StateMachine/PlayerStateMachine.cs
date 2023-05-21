@@ -12,13 +12,13 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
     {
         var player = GetComponent<Player>().NotNull();
 
-        var functions = new PlayerStateFunctions(player);
+        var functions = new CommonStateFunctions(player);
 
         _states = new Dictionary<PlayerState, IPlayerState>
         {
             [PlayerState.None] = new NoneState(player),
             [PlayerState.Dash] = new DashState(player, functions),
-            [PlayerState.Walk] = new WalkState(player, functions)
+            [PlayerState.Walk] = new MovementState(player, functions)
         };
     }
 

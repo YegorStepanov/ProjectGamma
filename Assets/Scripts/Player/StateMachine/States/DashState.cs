@@ -2,14 +2,14 @@
 
 public sealed class DashState : IPlayerState
 {
-    private const float ZeroPrecision = 0.01f;
+    private const float ZeroThreshold = 0.01f;
 
     private readonly Player _player;
-    private readonly PlayerStateFunctions _functions;
+    private readonly CommonStateFunctions _functions;
 
     private float _remainingDistance;
 
-    public DashState(Player player, PlayerStateFunctions functions)
+    public DashState(Player player, CommonStateFunctions functions)
     {
         _player = player;
         _functions = functions;
@@ -25,7 +25,7 @@ public sealed class DashState : IPlayerState
 
     public void Update()
     {
-        if (_remainingDistance <= ZeroPrecision)
+        if (_remainingDistance <= ZeroThreshold)
         {
             MoveRemainingDistance();
 
@@ -61,7 +61,7 @@ public sealed class DashState : IPlayerState
     {
         float speedPercentage = _player.Settings.DashSpeedPercentage.Evaluate(percentage);
         // defense: if the value on the curve is zero, there will be an endless loop
-        return speedPercentage <= ZeroPrecision ? ZeroPrecision : speedPercentage;
+        return speedPercentage <= ZeroThreshold ? ZeroThreshold : speedPercentage;
     }
 
     private float ClampSpeed(float speed)

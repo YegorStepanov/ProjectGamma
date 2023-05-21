@@ -14,13 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pointsToWin: 3
   _blockingTimeSeconds: 3
-  _blockingColor:
-    serializedVersion: 2
-    rgba: 4278255615
   _restartTimeSeconds: 5
   _playerColors:
   - serializedVersion: 2
-    rgba: 4285158932
+    rgba: 4278243537
   - serializedVersion: 2
     rgba: 4281745067
   - serializedVersion: 2

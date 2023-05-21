@@ -9,6 +9,8 @@ namespace Infrastructure
         [Header("Dependencies")]
         [SerializeField] private ServerRoomManager _serverRoomManager;
         [SerializeField] private ServerGUIManager _serverGUIManager;
+        [SerializeField] private ServerParticleSystem _serverParticleSystem;
+
 
         private Player _playerPrefab;
 
@@ -39,6 +41,8 @@ namespace Infrastructure
             int playerIndex = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
 
             _serverRoomManager.ReplaceAndConstructPlayer(conn, gamePlayer, playerIndex);
+            // _serverParticleSystem.RpcPlaySpawnEffect(player.Position);
+
             return false; // ReplacePlayerForConnection already called
         }
 

@@ -8,6 +8,7 @@ namespace Infrastructure.Server
         [SerializeField] private ServerGameOverManager _serverGameOverManager;
         [SerializeField] private ServerScoreManager _serverScoreManager;
         [SerializeField] private ServerBlockingManager _serverBlockingManager;
+        [SerializeField] private ServerParticleSystem _serverParticleSystem;
 
         [Server]
         public void HandleColliderHit(Player player, Player collidedPlayer)
@@ -41,6 +42,7 @@ namespace Infrastructure.Server
             if (_serverBlockingManager.TryBlock(loser))
             {
                 TargetTriggerFallAnimation(loser.connectionToClient, loser);
+                RpcPlayHitEffect(winner);
 
                 _serverScoreManager.IncreaseScore(winner);
 
@@ -55,6 +57,12 @@ namespace Infrastructure.Server
         private void TargetTriggerFallAnimation( NetworkConnectionToClient conn, Player loser)
         {
             loser.Animator.TriggerFallAnimation();
+        }
+
+        [ClientRpc]
+        private void RpcPlayHitEffect(Player winner)
+        {
+            _serverParticleSystem.RpcPlayHitEffect(winner.HitPlace);
         }
     }
 }

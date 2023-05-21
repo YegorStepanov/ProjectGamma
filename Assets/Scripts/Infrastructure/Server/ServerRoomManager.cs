@@ -12,6 +12,7 @@ namespace Infrastructure.Server
         [SerializeField] private ServerHeroCollisionManager _serverHeroCollisionManager;
         [SerializeField] private GameFactory _gameFactory;
         [SerializeField] private RoomSettings _roomSettings;
+        [SerializeField] private ServerParticleSystem _serverParticleSystem;
 
         private FreeStartPositions _freeStartPositions;
         private int _botCounts;
@@ -45,13 +46,14 @@ namespace Infrastructure.Server
         public void ReplaceAndConstructPlayer(NetworkConnectionToClient conn, GameObject gamePlayer, int playerIndex)
         {
             Player player = gamePlayer.GetComponent<Player>().NotNull();
-            player.Collider.CollisionEntered += HandlePlayersCollisions;
+            player.Collider.CollisionEntered += HandlePlayersCollisions; //todo?
             player.Data.Color = _roomSettings.PlayerColors[playerIndex];
 
             SetUpPlayer(player, playerIndex);
             NetworkServer.ReplacePlayerForConnection(conn, gamePlayer, true);
 
             TargetConstructPlayer(conn, gamePlayer);
+            _serverParticleSystem.RpcPlaySpawnEffect(player.Position);
         }
 
         [Server]
@@ -63,6 +65,7 @@ namespace Infrastructure.Server
                 Vector3 position = _freeStartPositions.Pop();
                 SetInitialPlayerData(player, position, player.Data.Name);
                 TargetSetInitialPlayerData(player.connectionToClient, player, position, player.Data.Name);            _serverParticleSystem.RpcPlaySpawnEffect(player.Position);
+                _serverParticleSystem.RpcPlaySpawnEffect(player.Position);
             }
         }
 

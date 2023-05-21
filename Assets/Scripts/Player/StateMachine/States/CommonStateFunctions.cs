@@ -48,8 +48,7 @@ public sealed class CommonStateFunctions
 
     private bool IsMovementZero(Vector3 moveDirection)
     {
-        //settings null!?
-        return moveDirection.sqrMagnitude < _player.Settings.MinMoveDistance * _player.Settings.MinMoveDistance;
+        return moveDirection.sqrMagnitude < _player.Settings.MoveThreshold * _player.Settings.MoveThreshold;
     }
 
     private void RotateVertically(Vector3 upwards)

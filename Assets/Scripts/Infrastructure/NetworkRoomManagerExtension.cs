@@ -46,7 +46,7 @@ namespace Infrastructure
 
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
-            foreach (NetworkIdentity id in conn.clientOwnedObjects)
+            foreach (NetworkIdentity id in conn.owned)
             {
                 if (id.TryGetComponent(out Player player))
                 {

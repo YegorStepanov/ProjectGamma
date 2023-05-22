@@ -15,10 +15,10 @@ public sealed class Player : NetworkBehaviour, IPlayer
     public PlayerStateMachine StateMachine { get; private set; }
 
     [SerializeField] private Transform _cameraFocusPoint;
-    [SerializeField] private Transform _pivot;
     [SerializeField] private PlayerCollider _playerCollider;
     [SerializeField] private Transform _hitPlace;
 
+    private Transform _transform;
     private CharacterController _controller;
 
     public Vector3 Position
@@ -40,14 +40,14 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
     public Quaternion Rotation
     {
-        get => _pivot.rotation;
-        set => _pivot.rotation = value;
+        get => _transform.rotation;
+        set => _transform.rotation = value;
     }
 
     public bool IsGrounded => _controller.isGrounded;
-    public Vector3 Up => _pivot.up;
-    public Vector3 Forward => _pivot.forward;
-    public Vector3 Right => _pivot.right;
+    public Vector3 Up => _transform.up;
+    public Vector3 Forward => _transform.forward;
+    public Vector3 Right => _transform.right;
     public Vector3 Velocity => _controller.velocity;
     public PlayerCollider Collider => _playerCollider.NotNull();
 
@@ -66,6 +66,7 @@ public sealed class Player : NetworkBehaviour, IPlayer
 
     private void Awake()
     {
+        _transform = transform;
         InputManager = EmptyInputManager.Instance;
         StateMachine = GetComponent<PlayerStateMachine>().NotNull();
         _controller = GetComponent<CharacterController>().NotNull();
@@ -80,11 +81,6 @@ public sealed class Player : NetworkBehaviour, IPlayer
         Destroying = null;
     }
 
-    public void Move(Vector3 motion)
-    {
-        _controller.Move(motion);
-    }
-
     public void EnableMovement(bool enable)
     {
         if (enable)
@@ -93,5 +89,24 @@ public sealed class Player : NetworkBehaviour, IPlayer
             StateMachine.SetState(PlayerState.None);
 
         // Animator.SetIsNoneState(enable); todo
+    }
+
+    public void Move(Vector3 moveVelocity)
+    {
+        Vector3 horizontalVelocity = Vector3.ProjectOnPlane(moveVelocity, Up);
+
+        bool isVelocityZero = horizontalVelocity.sqrMagnitude < Settings.MoveThreshold * Settings.MoveThreshold;
+        if (!isVelocityZero)
+        {
+            RotateHorizontal(horizontalVelocity);
+        }
+
+        _controller.Move(moveVelocity * Time.deltaTime);
+    }
+
+    private void RotateHorizontal(Vector3 horizontalDirection)
+    {
+        Quaternion lookRotation = Quaternion.LookRotation(horizontalDirection, Up);
+        Rotation = Quaternion.RotateTowards(Rotation, lookRotation, Settings.RotationSpeed * Time.deltaTime);
     }
 }

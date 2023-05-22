@@ -3,14 +3,12 @@
 public class MovementState : IPlayerState
 {
     private readonly Player _player;
-    private readonly CommonStateFunctions _functions;
 
-    private float _verticalVelocity;
+    private float _verticalVelocity; //todo -> it should be velocity instead speed
 
-    public MovementState(Player player, CommonStateFunctions functions)
+    public MovementState(Player player)
     {
         _player = player;
-        _functions = functions;
     }
 
     public void Enter()
@@ -25,14 +23,20 @@ public class MovementState : IPlayerState
         if (_player.IsMovementBlocked)
             return;
 
-        if (_functions.IsDashPressed())
+        if (_player.InputManager.ReadDashAction())
         {
             _player.StateMachine.SetState(PlayerState.Dash);
             return;
         }
 
         //add terminalGravityVelocity
-        if (_functions.IsJumpPressed())
+        if (!_player.IsGrounded)
+            _verticalVelocity += _player.Settings.Gravity * Time.deltaTime; //todo
+        else
+            _verticalVelocity = 0f;
+
+
+        if (_player.InputManager.ReadJumpAction())
         {
             _verticalVelocity = Mathf.Sqrt(_player.Settings.JumpHeight * -2f * _player.Settings.Gravity);
 
@@ -40,12 +44,10 @@ public class MovementState : IPlayerState
             //     _jumpTimeoutDelta -= Time.deltaTime;
         }
 
-        if (!_player.IsGrounded)
-            _verticalVelocity += _player.Settings.Gravity * Time.deltaTime; //todo
+        Vector3 moveInputVector = _player.InputManager.ReadMoveVector();
+        Vector3 moveVelocity = moveInputVector * _player.Settings.WalkSpeed + _verticalVelocity * _player.Up;
 
-        Vector3 moveDirection = _functions.GetMovementDirection();
-
-        _functions.Move(moveDirection, _player.Settings.WalkSpeed, _verticalVelocity);
-        _player.Animator.UpdateMovementAnimation(moveDirection);
+        _player.Move(moveVelocity);
+        _player.Animator.UpdateMovementAnimation(moveInputVector);
     }
 }

@@ -8,8 +8,9 @@ namespace InputManagers
 
         private EmptyInputManager() { }
 
-        public Vector3 ReadMoveAction() => default;
-        public Vector2 ReadRotateAction() => default;
+        public Vector3 ReadMoveVector() => default;
+        public Vector2 ReadRotateVector() => default;
         public bool ReadDashAction() => default;
+        public bool ReadJumpAction() => default;
     }
 }

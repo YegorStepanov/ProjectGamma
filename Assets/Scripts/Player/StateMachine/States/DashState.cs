@@ -5,14 +5,12 @@ public sealed class DashState : IPlayerState
     private const float ZeroThreshold = 0.01f;
 
     private readonly Player _player;
-    private readonly CommonStateFunctions _functions;
 
     private float _remainingDistance;
 
-    public DashState(Player player, CommonStateFunctions functions)
+    public DashState(Player player)
     {
         _player = player;
-        _functions = functions;
     }
 
     public void Enter()
@@ -41,13 +39,14 @@ public sealed class DashState : IPlayerState
 
     private void Move(float speed)
     {
-        _functions.Move(_player.Forward, speed, Vector3.zero);
+        _player.Move(_player.Forward * speed);
         _remainingDistance -= speed * Time.deltaTime;
     }
 
     private void MoveRemainingDistance()
     {
-        _functions.Move(_player.Forward, _remainingDistance / Time.deltaTime, Vector3.zero);
+        float speed = _remainingDistance / Time.deltaTime;
+        _player.Move(_player.Forward * speed);
         _remainingDistance = 0f;
     }
 

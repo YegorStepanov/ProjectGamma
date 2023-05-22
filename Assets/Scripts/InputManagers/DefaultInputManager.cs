@@ -4,7 +4,7 @@ namespace InputManagers
 {
     public sealed class DefaultInputManager : IInputManager
     {
-        public Vector3 ReadMoveAction()
+        public Vector3 ReadMoveVector()
         {
             Vector2 input;
             input.x = Input.GetAxis("Horizontal");
@@ -13,7 +13,7 @@ namespace InputManagers
             return input;
         }
 
-        public Vector2 ReadRotateAction()
+        public Vector2 ReadRotateVector()
         {
             Vector2 input;
             input.x = -Input.GetAxis("Mouse Y");
@@ -24,6 +24,11 @@ namespace InputManagers
         public bool ReadDashAction()
         {
             return Input.GetKeyDown(KeyCode.LeftControl);
+        }
+
+        public bool ReadJumpAction()
+        {
+            return Input.GetKeyDown(KeyCode.Space);
         }
     }
 }

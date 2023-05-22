@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b903646f004e9bbf412bb1963ff01d, type: 3}
   m_Name: Player Settings
   m_EditorClassIdentifier: 
-  _horizontalRotationSpeedRadians: 25
-  _verticalRotationSpeedRadians: 2
+  _rotationSpeed: 1080
   _moveThreshold: 0.01
   _walkSpeed: 4
   _jumpHeight: 1.2

@@ -3,10 +3,8 @@
 [CreateAssetMenu(menuName = "Settings/Player", fileName = "Player Settings")]
 public sealed class PlayerSettings : ScriptableObject
 {
-    [Range(0.01f, 30f)]
-    [SerializeField] private float _horizontalRotationSpeedRadians = 25f;
-    [Range(0.01f, 30f)]
-    [SerializeField] private float _verticalRotationSpeedRadians = 2f;
+    [Range(1f, 360 * 5f)]
+    [SerializeField] private float _rotationSpeed = 1080f;
     [Min(0f)]
     [SerializeField] private float _moveThreshold = 0.01f;
 
@@ -25,8 +23,7 @@ public sealed class PlayerSettings : ScriptableObject
     [SerializeField] private float _dashMaxSpeed = 14f;
     [SerializeField] private AnimationCurve _dashSpeedPercentage;
 
-    public float HorizontalRotationSpeedRadians => _horizontalRotationSpeedRadians;
-    public float VerticalRotationSpeedRadians => _verticalRotationSpeedRadians;
+    public float RotationSpeed => _rotationSpeed;
     public float MoveThreshold => _moveThreshold;
     public float WalkSpeed => _walkSpeed;
     public float DashDistance => _dashDistance;

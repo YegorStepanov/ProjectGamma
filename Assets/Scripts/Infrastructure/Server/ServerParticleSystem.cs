@@ -18,6 +18,5 @@ namespace Infrastructure.Server
         {
             _clientParticleSystem.PlayHitEffect(position);
         }
-
     }
 }

@@ -54,7 +54,7 @@ namespace Infrastructure.Server
         }
 
         [TargetRpc]
-        private void TargetTriggerFallAnimation( NetworkConnectionToClient conn, Player loser)
+        private void TargetTriggerFallAnimation(NetworkConnectionToClient conn, Player loser)
         {
             loser.Animator.TriggerFallAnimation();
         }

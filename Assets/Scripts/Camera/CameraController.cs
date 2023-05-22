@@ -52,7 +52,7 @@ public sealed class CameraController : MonoBehaviour, ICameraController
 
     private Vector2 GetInputRotation()
     {
-        Vector2 rotation = _inputManager.ReadRotateAction();
+        Vector2 rotation = _inputManager.ReadRotateVector();
         return rotation * _rotationSpeed * Time.unscaledDeltaTime;
     }
 

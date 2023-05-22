@@ -13,6 +13,7 @@ public sealed class PlayerSettings : ScriptableObject
     [SerializeField] private float _walkSpeed = 4f;
     [SerializeField] private float _jumpHeight = 1.2f;
     [SerializeField] private float _gravity = -15f;
+    [SerializeField] private float _terminalGravitySpeed = -50f;
     [Min(0.01f)]
     [SerializeField] private float _groundProbingDistance = 0.5f;
 
@@ -31,5 +32,6 @@ public sealed class PlayerSettings : ScriptableObject
     public AnimationCurve DashSpeedPercentage => _dashSpeedPercentage;
     public float JumpHeight => _jumpHeight;
     public float Gravity => _gravity;
+    public float TerminalGravitySpeed => _terminalGravitySpeed;
     public float GroundProbingDistance => _groundProbingDistance;
 }

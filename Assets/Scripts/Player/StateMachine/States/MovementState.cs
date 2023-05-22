@@ -4,7 +4,7 @@ public class MovementState : IPlayerState
 {
     private readonly Player _player;
 
-    private float _verticalVelocity; //todo -> it should be velocity instead speed
+    private float _verticalSpeed;
 
     public MovementState(Player player)
     {
@@ -13,7 +13,7 @@ public class MovementState : IPlayerState
 
     public void Enter()
     {
-        _verticalVelocity = 0f;
+        _verticalSpeed = 0f;
     }
 
     public void Exit() { }
@@ -29,23 +29,23 @@ public class MovementState : IPlayerState
             return;
         }
 
-        //add terminalGravityVelocity
         if (!_player.IsGrounded)
-            _verticalVelocity += _player.Settings.Gravity * Time.deltaTime; //todo
+            _verticalSpeed += _player.Settings.Gravity * Time.deltaTime;
         else
-            _verticalVelocity = 0f;
+            _verticalSpeed = 0f;
 
+        _verticalSpeed = Mathf.Min(_verticalSpeed, _player.Settings.TerminalGravitySpeed);
 
         if (_player.InputManager.ReadJumpAction())
         {
-            _verticalVelocity = Mathf.Sqrt(_player.Settings.JumpHeight * -2f * _player.Settings.Gravity);
+            _verticalSpeed = Mathf.Sqrt(_player.Settings.JumpHeight * -2f * _player.Settings.Gravity);
 
             // if (_jumpTimeoutDelta >= 0.0f)
             //     _jumpTimeoutDelta -= Time.deltaTime;
         }
 
         Vector3 moveInputVector = _player.InputManager.ReadMoveVector();
-        Vector3 moveVelocity = moveInputVector * _player.Settings.WalkSpeed + _verticalVelocity * _player.Up;
+        Vector3 moveVelocity = moveInputVector * _player.Settings.WalkSpeed + _verticalSpeed * _player.Up;
 
         _player.Move(moveVelocity);
         _player.Animator.UpdateMovementAnimation(moveInputVector);

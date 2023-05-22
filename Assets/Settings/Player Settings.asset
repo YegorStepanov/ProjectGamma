@@ -19,6 +19,7 @@ MonoBehaviour:
   _jumpHeight: 1.2
   _gravity: -15
   _terminalGravitySpeed: -50
+  _groundProbingDistance: 0.1
   _dashDistance: 5
   _dashMaxSpeed: 14
   _dashSpeedPercentage:

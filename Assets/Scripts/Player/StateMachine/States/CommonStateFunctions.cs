@@ -2,8 +2,6 @@
 
 public sealed class CommonStateFunctions
 {
-    private const float RaycastDistance = 1.5f;
-
     private readonly Player _player;
 
     private int ExcludePlayerMask => ~(1 << _player.Data.Layer);
@@ -74,7 +72,7 @@ public sealed class CommonStateFunctions
 
     private bool TryGetGroundNormal(out Vector3 normal)
     {
-        if (Physics.Raycast(_player.Position, -_player.Up, out RaycastHit hit, RaycastDistance, ExcludePlayerMask))
+        if (Physics.Raycast(_player.Position, -_player.Up, out RaycastHit hit, _player.Settings.GroundProbingDistance, ExcludePlayerMask))
         {
             normal = hit.normal;
             return true;

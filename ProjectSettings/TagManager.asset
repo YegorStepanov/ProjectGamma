@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TempPrize
   - PlayerCollider
+  - CinemachineTarget
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - 
   - Player
   - PlayerCollider
-  - 
+  - Box
   - 
   - 
   - 

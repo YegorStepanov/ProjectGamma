@@ -19,7 +19,7 @@ public class PlayerAnimator : NetworkAnimator
     public void TriggerKickAnimation() =>
         SetTrigger(Kick);
 
-    public void UpdateMovementAnimation(Vector3 horizontalMoveDirection) =>
+    public void SetMovementAnimation(Vector3 horizontalMoveDirection) =>
         animator.SetFloat(MovementSpeed, horizontalMoveDirection.magnitude);
 
     public void SetIsNoneState(bool isSet) =>

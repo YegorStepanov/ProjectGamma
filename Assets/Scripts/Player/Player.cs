@@ -11,9 +11,6 @@ public sealed class Player : NetworkBehaviour, IPlayer
 {
     public event Action<Player> Destroying;
 
-    public PlayerData Data { get; set; }
-    public PlayerStateMachine StateMachine { get; private set; }
-
     [SerializeField] private Transform _cameraFocusPoint;
     [SerializeField] private PlayerCollider _playerCollider;
     [SerializeField] private Transform _hitPlace;
@@ -44,6 +41,8 @@ public sealed class Player : NetworkBehaviour, IPlayer
         set => _transform.rotation = value;
     }
 
+    public PlayerData Data { get; set; }
+    public PlayerStateMachine StateMachine { get; private set; }
     public bool IsGrounded => _controller.isGrounded;
     public Vector3 Up => _transform.up;
     public Vector3 Forward => _transform.forward;
@@ -75,6 +74,12 @@ public sealed class Player : NetworkBehaviour, IPlayer
         Debug.Assert(gameObject.layer == Data.Layer);
     }
 
+    public override void OnStartClient() =>
+        Collider.enabled = false;
+
+    public override void OnStartServer() =>
+        Collider.enabled = true;
+
     private void OnDestroy()
     {
         Destroying?.Invoke(this);
@@ -87,8 +92,6 @@ public sealed class Player : NetworkBehaviour, IPlayer
             StateMachine.SetState(PlayerState.Walk);
         else
             StateMachine.SetState(PlayerState.None);
-
-        // Animator.SetIsNoneState(enable); todo
     }
 
     public void Move(Vector3 moveVelocity)

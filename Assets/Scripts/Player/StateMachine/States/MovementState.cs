@@ -5,6 +5,7 @@ public class MovementState : IPlayerState
     private readonly Player _player;
 
     private float _verticalSpeed;
+    private float _jumpTimeoutDelta;
 
     public MovementState(Player player)
     {
@@ -29,25 +30,38 @@ public class MovementState : IPlayerState
             return;
         }
 
+        UpdateVerticalSpeed();
+        HandleJump();
+
+        Vector3 moveInputVector = _player.InputManager.ReadMoveVector();
+        Vector3 moveVelocity = moveInputVector * _player.Settings.WalkSpeed + _verticalSpeed * _player.Up;
+
+        _player.Move(moveVelocity);
+        _player.Animator.SetMovementAnimation(moveInputVector);
+    }
+
+    private void UpdateVerticalSpeed()
+    {
         if (!_player.IsGrounded)
             _verticalSpeed += _player.Settings.Gravity * Time.deltaTime;
         else
             _verticalSpeed = 0f;
 
         _verticalSpeed = Mathf.Min(_verticalSpeed, _player.Settings.TerminalGravitySpeed);
+    }
 
-        if (_player.InputManager.ReadJumpAction())
+    private void HandleJump()
+    {
+        if (_jumpTimeoutDelta > 0 && _player.InputManager.ReadJumpAction())
         {
             _verticalSpeed = Mathf.Sqrt(_player.Settings.JumpHeight * -2f * _player.Settings.Gravity);
 
-            // if (_jumpTimeoutDelta >= 0.0f)
-            //     _jumpTimeoutDelta -= Time.deltaTime;
+            _jumpTimeoutDelta = _player.Settings.JumpTimeout;
         }
-
-        Vector3 moveInputVector = _player.InputManager.ReadMoveVector();
-        Vector3 moveVelocity = moveInputVector * _player.Settings.WalkSpeed + _verticalSpeed * _player.Up;
-
-        _player.Move(moveVelocity);
-        _player.Animator.UpdateMovementAnimation(moveInputVector);
+        else
+        {
+            if (_jumpTimeoutDelta >= 0.0f)
+                _jumpTimeoutDelta -= Time.deltaTime;
+        }
     }
 }

@@ -9,7 +9,7 @@ public sealed class NoneState : IPlayerState
 
     public void Enter()
     {
-        _player.Animator.UpdateMovementAnimation(Vector3.zero); // i forgot what is it??
+        _player.Animator.SetMovementAnimation(Vector3.zero); // i forgot what is it??
         _player.Animator.SetIsNoneState(true); //todo
     }
 

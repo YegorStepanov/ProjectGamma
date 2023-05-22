@@ -11,9 +11,13 @@ public sealed class PlayerSettings : ScriptableObject
     [Header("Walking")]
     [Range(0.1f, 100f)]
     [SerializeField] private float _walkSpeed = 4f;
+    [Min(0.1f)]
     [SerializeField] private float _jumpHeight = 1.2f;
     [SerializeField] private float _gravity = -15f;
-    [SerializeField] private float _terminalGravitySpeed = -50f;
+    [Min(0.1f)]
+    [SerializeField] private float _terminalGravitySpeed = 50f;
+    [Min(0f)]
+    [SerializeField] private float _jumpTimeout = 0.5f;
 
     [Header("Dashing")]
     [Min(0.1f)]
@@ -31,4 +35,5 @@ public sealed class PlayerSettings : ScriptableObject
     public float JumpHeight => _jumpHeight;
     public float Gravity => _gravity;
     public float TerminalGravitySpeed => _terminalGravitySpeed;
+    public float JumpTimeout => _jumpTimeout;
 }

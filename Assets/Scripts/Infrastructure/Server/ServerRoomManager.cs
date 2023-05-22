@@ -15,7 +15,6 @@ namespace Infrastructure.Server
         [SerializeField] private ServerParticleSystem _serverParticleSystem;
 
         private FreeStartPositions _freeStartPositions;
-        private int _botCounts;
 
         public RoomPlayers RoomPlayers { get; private set; }
 
@@ -23,7 +22,6 @@ namespace Infrastructure.Server
         {
             _freeStartPositions = new FreeStartPositions(startPositions, playerSpawnMethod);
             RoomPlayers = new RoomPlayers(startPositions.Count);
-            _botCounts = 0;
         }
 
         [Server]

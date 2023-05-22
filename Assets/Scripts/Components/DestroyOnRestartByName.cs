@@ -9,12 +9,15 @@ public sealed class DestroyOnRestartByName : MonoBehaviour
     {
         foreach (var duplicateComponent in FindObjectsOfType<DestroyOnRestartByName>(true))
         {
-            if (duplicateComponent.name != name) // todo
+            // TODO
+            // update to the latest version of Mirror and try to remove this component.
+            // IMO it's a Mirror bug.
+            if (duplicateComponent.name != name)
                 continue;
 
             if (duplicateComponent._isCreated)
             {
-                Debug.Log($"Destroying {name}"); // todo
+                Debug.Log($"Destroying {name}");
                 Destroy(duplicateComponent.gameObject);
             }
         }

@@ -22,6 +22,9 @@ public class PlayerAnimator : NetworkAnimator
     public void SetMovementAnimation(Vector3 horizontalMoveDirection) =>
         animator.SetFloat(MovementSpeed, horizontalMoveDirection.magnitude);
 
+    public void SetIdleAnimation() =>
+        SetMovementAnimation(Vector3.zero);
+
     public void SetIsNoneState(bool isSet) =>
         animator.SetBool(IsNoneState, isSet);
 }

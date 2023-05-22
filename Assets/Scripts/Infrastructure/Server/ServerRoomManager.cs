@@ -46,7 +46,7 @@ namespace Infrastructure.Server
         public void ReplaceAndConstructPlayer(NetworkConnectionToClient conn, GameObject gamePlayer, int playerIndex)
         {
             Player player = gamePlayer.GetComponent<Player>().NotNull();
-            player.Collider.CollisionEntered += HandlePlayersCollisions; //todo?
+            player.Collider.CollisionEntered += HandlePlayersCollisions;
             player.Data.Color = _roomSettings.PlayerColors[playerIndex];
 
             SetUpPlayer(player, playerIndex);
@@ -64,7 +64,7 @@ namespace Infrastructure.Server
             {
                 Vector3 position = _freeStartPositions.Pop();
                 SetInitialPlayerData(player, position, player.Data.Name);
-                TargetSetInitialPlayerData(player.connectionToClient, player, position, player.Data.Name);            _serverParticleSystem.RpcPlaySpawnEffect(player.Position);
+                TargetSetInitialPlayerData(player.connectionToClient, player, position, player.Data.Name);
                 _serverParticleSystem.RpcPlaySpawnEffect(player.Position);
             }
         }

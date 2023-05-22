@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public sealed class NoneState : IPlayerState
+﻿public sealed class NoneState : IPlayerState
 {
     private readonly Player _player;
 
@@ -9,13 +7,13 @@ public sealed class NoneState : IPlayerState
 
     public void Enter()
     {
-        _player.Animator.SetMovementAnimation(Vector3.zero); // i forgot what is it??
-        _player.Animator.SetIsNoneState(true); //todo
+        _player.Animator.SetIdleAnimation();
+        _player.Animator.SetIsNoneState(true);
     }
 
     public void Exit()
     {
-        _player.Animator.SetIsNoneState(false); //todo
+        _player.Animator.SetIsNoneState(false);
     }
 
     public void Update() { }

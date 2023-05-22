@@ -19,7 +19,7 @@ public sealed class LookAtMainCamera : MonoBehaviour
 
     private void OnDestroy()
     {
-        // _cameraController can be destroyed first and remove all subscribers by itself.
+        // _cameraController can be destroyed first (it will remove all its subscribers by itself)
         if(_cameraController != null)
             _cameraController.AfterCameraLateUpdate -= OnAfterCameraLateUpdate;
     }

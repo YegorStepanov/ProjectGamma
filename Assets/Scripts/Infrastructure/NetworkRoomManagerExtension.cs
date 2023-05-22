@@ -9,8 +9,7 @@ namespace Infrastructure
         [Header("Dependencies")]
         [SerializeField] private ServerRoomManager _serverRoomManager;
         [SerializeField] private ServerGUIManager _serverGUIManager;
-        [SerializeField] private ServerParticleSystem _serverParticleSystem;
-
+        [SerializeField] private ServerParticleSystem _serverParticleSystem; //todo
 
         private Player _playerPrefab;
 
@@ -26,8 +25,7 @@ namespace Infrastructure
             {
                 _serverRoomManager.InitRoom(startPositions, playerSpawnMethod);
                 _serverGUIManager.RpcShowInGamePlayersScore();
-                // button: create bot
-                // _roomManager.CreateBot(PlayerPrefab);
+                // future: spawn a bot here
             }
         }
 
@@ -41,7 +39,7 @@ namespace Infrastructure
             int playerIndex = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
 
             _serverRoomManager.ReplaceAndConstructPlayer(conn, gamePlayer, playerIndex);
-            // _serverParticleSystem.RpcPlaySpawnEffect(player.Position);
+            // _serverParticleSystem.RpcPlaySpawnEffect(player.Position); todo?
 
             return false; // ReplacePlayerForConnection already called
         }

@@ -21,19 +21,13 @@ namespace InputManagers
             return input;
         }
 
-        public Vector2 ReadRotateVector()
-        {
-            return _inputManager.ReadRotateVector();
-        }
+        public Vector2 ReadRotateVector() =>
+            _inputManager.ReadRotateVector();
 
-        public bool ReadDashAction()
-        {
-            return _inputManager.ReadDashAction();
-        }
+        public bool ReadDashAction() =>
+            _inputManager.ReadDashAction();
 
-        public bool ReadJumpAction()
-        {
-            return _inputManager.ReadJumpAction();
-        }
+        public bool ReadJumpAction() =>
+            _inputManager.ReadJumpAction();
     }
 }

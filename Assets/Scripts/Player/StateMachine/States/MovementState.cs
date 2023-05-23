@@ -7,7 +7,7 @@ public class MovementState : IPlayerState
     private float _verticalSpeed;
     private bool _previousIsGround;
 
-    private bool IsGrounded;
+    private bool _isGrounded;
 
     public MovementState(Player player)
     {
@@ -48,12 +48,12 @@ public class MovementState : IPlayerState
     {
         Vector3 pos = _player.Position;
         pos += _player.Up * _player.Settings.GroundProbingOffset;
-        IsGrounded = Physics.CheckSphere(pos, _player.Settings.GroundProbingRadius, _player.Settings.GroundProbingLayers);
+        _isGrounded = Physics.CheckSphere(pos, _player.Settings.GroundProbingRadius, _player.Settings.GroundProbingLayers);
     }
 
     private void UpdateVerticalSpeed()
     {
-        if (!IsGrounded)
+        if (!_isGrounded)
             _verticalSpeed += _player.Settings.Gravity * Time.deltaTime;
         else
             _verticalSpeed = 0f;
@@ -63,7 +63,7 @@ public class MovementState : IPlayerState
 
     private void HandleJump()
     {
-        if (IsGrounded && _player.InputManager.ReadJumpAction())
+        if (_isGrounded && _player.InputManager.ReadJumpAction())
         {
             _verticalSpeed = Mathf.Sqrt(-2f * _player.Settings.JumpHeight * _player.Settings.Gravity);
         }
@@ -71,7 +71,7 @@ public class MovementState : IPlayerState
 
     private void HandleFall()
     {
-        if (IsGrounded)
+        if (_isGrounded)
             _player.Animator.UnsetFallAnimation();
         else
             _player.Animator.SetFallAnimation();

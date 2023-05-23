@@ -21,14 +21,13 @@ namespace InputManagers
             return input;
         }
 
-        public bool ReadDashAction()
-        {
-            return Input.GetKeyDown(KeyCode.LeftControl);
-        }
+        public bool ReadDashAction() =>
+            Input.GetKeyDown(KeyCode.LeftControl);
 
-        public bool ReadJumpAction()
-        {
-            return Input.GetKeyDown(KeyCode.Space);
-        }
+        public bool ReadJumpAction() =>
+            Input.GetKeyDown(KeyCode.Space);
+
+        public bool ReadSprintAction() =>
+            Input.GetKey(KeyCode.LeftShift);
     }
 }

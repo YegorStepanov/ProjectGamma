@@ -12,5 +12,6 @@ namespace InputManagers
         public Vector2 ReadRotateVector() => default;
         public bool ReadDashAction() => default;
         public bool ReadJumpAction() => default;
+        public bool ReadSprintAction() => default;
     }
 }

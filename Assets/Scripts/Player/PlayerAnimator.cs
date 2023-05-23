@@ -19,11 +19,11 @@ public class PlayerAnimator : NetworkAnimator
     public void TriggerKickAnimation() =>
         SetTrigger(Kick);
 
-    public void SetMovementAnimation(Vector3 horizontalVelocity) =>
-        animator.SetFloat(MovementSpeed, horizontalVelocity.magnitude);
+    public void SetMovementAnimation(float speed) =>
+        animator.SetFloat(MovementSpeed, speed);
 
     public void SetIdleAnimation() =>
-        SetMovementAnimation(Vector3.zero);
+        SetMovementAnimation(0f);
 
     public void SetFallAnimation() =>
         animator.SetBool(Fall, true);

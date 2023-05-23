@@ -8,5 +8,6 @@ namespace InputManagers
         public Vector2 ReadRotateVector();
         public bool ReadDashAction();
         public bool ReadJumpAction();
+        public bool ReadSprintAction();
     }
 }

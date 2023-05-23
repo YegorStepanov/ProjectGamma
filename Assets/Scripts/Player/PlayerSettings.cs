@@ -11,6 +11,9 @@ public sealed class PlayerSettings : ScriptableObject
     [Header("Walking")]
     [Range(0.1f, 100f)]
     [SerializeField] private float _walkSpeed = 4f;
+    [Range(0.1f, 100f)]
+    [SerializeField] private float _sprintSpeed = 6f;
+    [SerializeField] private float _speedChangeRate = 10f;
     [Min(0.1f)]
     [SerializeField] private float _jumpHeight = 1.2f;
     [SerializeField] private float _gravity = -15f;
@@ -35,6 +38,7 @@ public sealed class PlayerSettings : ScriptableObject
     public float MoveThreshold => _moveThreshold;
 
     public float WalkSpeed => _walkSpeed;
+    public float SprintSpeed => _sprintSpeed;
     public float JumpHeight => _jumpHeight;
     public float Gravity => _gravity;
     public float TerminalGravitySpeed => _terminalGravitySpeed;
@@ -47,4 +51,5 @@ public sealed class PlayerSettings : ScriptableObject
     public float GroundProbingOffset => _groundProbingOffset;
     public float GroundProbingRadius => _groundProbingRadius;
     public LayerMask GroundProbingLayers => _groundProbingLayers;
+    public float SpeedChangeRate => _speedChangeRate;
 }

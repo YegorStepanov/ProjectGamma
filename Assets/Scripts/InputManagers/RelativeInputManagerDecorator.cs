@@ -29,5 +29,8 @@ namespace InputManagers
 
         public bool ReadJumpAction() =>
             _inputManager.ReadJumpAction();
+
+        public bool ReadSprintAction() =>
+            _inputManager.ReadSprintAction();
     }
 }

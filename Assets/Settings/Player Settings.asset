@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rotationSpeed: 1080
   _moveThreshold: 0.01
-  _walkSpeed: 4
+  _walkSpeed: 6
+  _sprintSpeed: 10
+  _speedChangeRate: 300
   _jumpHeight: 1.6
-  _gravity: -15
+  _gravity: -10
   _terminalGravitySpeed: 50
   _jumpTimeout: 1
   _dashDistance: 5
@@ -54,7 +56,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _groundProbingOffset: 0.25
+  _groundProbingOffset: 0.3
   _groundProbingRadius: 0.4
   _groundProbingLayers:
     serializedVersion: 2

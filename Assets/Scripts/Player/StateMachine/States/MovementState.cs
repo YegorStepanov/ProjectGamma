@@ -5,7 +5,9 @@ public class MovementState : IPlayerState
     private readonly Player _player;
 
     private float _verticalSpeed;
-    private float _jumpTimeoutDelta;
+    private bool _previousIsGround;
+
+    private bool IsGrounded;
 
     public MovementState(Player player)
     {
@@ -14,7 +16,7 @@ public class MovementState : IPlayerState
 
     public void Enter()
     {
-        _verticalSpeed = 0f;
+        _verticalSpeed = -2f;
     }
 
     public void Exit() { }
@@ -30,19 +32,28 @@ public class MovementState : IPlayerState
             return;
         }
 
+        UpdateIsGrounded();
         UpdateVerticalSpeed();
         HandleJump();
+        HandleFall();
 
         Vector3 moveInputVector = _player.InputManager.ReadMoveVector();
-        Vector3 moveVelocity = moveInputVector * _player.Settings.WalkSpeed + _verticalSpeed * _player.Up;
-
-        _player.Move(moveVelocity);
+        Vector3 horizontalVelocity = moveInputVector * _player.Settings.WalkSpeed;
+        Vector3 verticalVelocity = _verticalSpeed * _player.Up;
+        _player.Move(horizontalVelocity + verticalVelocity);
         _player.Animator.SetMovementAnimation(moveInputVector);
+    }
+
+    private void UpdateIsGrounded()
+    {
+        Vector3 pos = _player.Position;
+        pos += _player.Up * _player.Settings.GroundProbingOffset;
+        IsGrounded = Physics.CheckSphere(pos, _player.Settings.GroundProbingRadius, _player.Settings.GroundProbingLayers);
     }
 
     private void UpdateVerticalSpeed()
     {
-        if (!_player.IsGrounded)
+        if (!IsGrounded)
             _verticalSpeed += _player.Settings.Gravity * Time.deltaTime;
         else
             _verticalSpeed = 0f;
@@ -52,16 +63,17 @@ public class MovementState : IPlayerState
 
     private void HandleJump()
     {
-        if (_jumpTimeoutDelta > 0 && _player.InputManager.ReadJumpAction())
+        if (IsGrounded && _player.InputManager.ReadJumpAction())
         {
-            _verticalSpeed = Mathf.Sqrt(_player.Settings.JumpHeight * -2f * _player.Settings.Gravity);
+            _verticalSpeed = Mathf.Sqrt(-2f * _player.Settings.JumpHeight * _player.Settings.Gravity);
+        }
+    }
 
-            _jumpTimeoutDelta = _player.Settings.JumpTimeout;
-        }
+    private void HandleFall()
+    {
+        if (IsGrounded)
+            _player.Animator.UnsetFallAnimation();
         else
-        {
-            if (_jumpTimeoutDelta >= 0.0f)
-                _jumpTimeoutDelta -= Time.deltaTime;
-        }
+            _player.Animator.SetFallAnimation();
     }
 }

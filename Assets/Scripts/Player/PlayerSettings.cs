@@ -26,14 +26,25 @@ public sealed class PlayerSettings : ScriptableObject
     [SerializeField] private float _dashMaxSpeed = 14f;
     [SerializeField] private AnimationCurve _dashSpeedPercentage;
 
+    [Header("Ground Probing")]
+    [SerializeField] private float _groundProbingOffset = -0.14f;
+    [SerializeField] private float _groundProbingRadius = 0.28f;
+    [SerializeField] private LayerMask _groundProbingLayers;
+
     public float RotationSpeed => _rotationSpeed;
     public float MoveThreshold => _moveThreshold;
+
     public float WalkSpeed => _walkSpeed;
-    public float DashDistance => _dashDistance;
-    public float DashMaxSpeed => _dashMaxSpeed;
-    public AnimationCurve DashSpeedPercentage => _dashSpeedPercentage;
     public float JumpHeight => _jumpHeight;
     public float Gravity => _gravity;
     public float TerminalGravitySpeed => _terminalGravitySpeed;
     public float JumpTimeout => _jumpTimeout;
+
+    public float DashDistance => _dashDistance;
+    public float DashMaxSpeed => _dashMaxSpeed;
+    public AnimationCurve DashSpeedPercentage => _dashSpeedPercentage;
+
+    public float GroundProbingOffset => _groundProbingOffset;
+    public float GroundProbingRadius => _groundProbingRadius;
+    public LayerMask GroundProbingLayers => _groundProbingLayers;
 }

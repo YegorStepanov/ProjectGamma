@@ -41,7 +41,7 @@ namespace Infrastructure.Server
         {
             if (_serverBlockingManager.TryBlock(loser))
             {
-                TargetTriggerFallAnimation(loser.connectionToClient, loser);
+                TargetTriggerFallBackAnimation(loser.connectionToClient, loser);
                 _serverParticleSystem.RpcPlayHitEffect(winner.HitPlace);
 
                 _serverScoreManager.IncreaseScore(winner);
@@ -54,9 +54,9 @@ namespace Infrastructure.Server
         }
 
         [TargetRpc]
-        private void TargetTriggerFallAnimation(NetworkConnectionToClient conn, Player loser)
+        private void TargetTriggerFallBackAnimation(NetworkConnectionToClient conn, Player loser)
         {
-            loser.Animator.TriggerFallAnimation();
+            loser.Animator.TriggerFallBackAnimation();
         }
     }
 }

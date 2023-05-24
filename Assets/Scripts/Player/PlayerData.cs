@@ -55,8 +55,22 @@ public sealed class PlayerData : NetworkBehaviour
     private void OnDestroy() =>
         Changed = null;
 
-    private void RaiseChanged(string _, string __) => RaiseChanged();
-    private void RaiseChanged(uint _, uint __) => RaiseChanged();
-    private void RaiseChanged(Color32 _, Color32 __) => RaiseChanged();
-    private void RaiseChanged() => Changed?.Invoke(_player);
+    private void RaiseChanged(string _, string __)
+    {
+        RaiseChanged();
+    }
+
+    private void RaiseChanged(uint _, uint __)
+    {
+        RaiseChanged();
+    }
+
+    private void RaiseChanged(Color32 _, Color32 __)
+    {
+        Debug.Log($"Changed Color {__}");
+        RaiseChanged();
+    }
+
+    private void RaiseChanged() =>
+        Changed?.Invoke(_player);
 }

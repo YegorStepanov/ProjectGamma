@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mirror;
+using UnityEngine;
 
 public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerState>
 {

@@ -24,7 +24,8 @@ namespace Infrastructure
             {
                 _serverRoomManager.InitRoom(startPositions, playerSpawnMethod);
                 _guiManager.RpcShowInGamePlayersScore();
-                // _roomManager.CreateBot(PlayerPrefab); // todo create a bot
+                // button: create bot
+                // _roomManager.CreateBot(PlayerPrefab);
             }
         }
 

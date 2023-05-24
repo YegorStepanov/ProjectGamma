@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Player Settings
   m_EditorClassIdentifier: 
   HorizontalRotationSpeedRadians: 25
-  VerticalRotationSpeedRadians: 3
+  VerticalRotationSpeedRadians: 1
   MinMoveDistance: 0.01
   WalkSpeed: 10
   DashDistance: 5

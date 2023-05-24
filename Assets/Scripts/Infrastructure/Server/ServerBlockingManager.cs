@@ -36,7 +36,7 @@ namespace Infrastructure.Server
         private IEnumerator WaitAndUnblock(Player player)
         {
             TargetEnableMovement(player.connectionToClient, player, false);
-            yield return new WaitForSecondsRealtime(_settings.BlockingTime);
+            yield return new WaitForSeconds(_settings.BlockingTime);
             TargetEnableMovement(player.connectionToClient, player, true);
             _blockedPlayers.Remove(player);
         }

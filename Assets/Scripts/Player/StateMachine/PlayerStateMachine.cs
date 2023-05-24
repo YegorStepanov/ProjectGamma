@@ -25,12 +25,16 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
 
     private void Start()
     {
+        //set it on the server
         if (isLocalPlayer)
             State = PlayerState.Walk;
     }
 
     private void Update()
     {
+        // !hasAuthority
+        // if (!isServer) return;
+        // if (!isLocalPlayer || !isServer) return;
         if (!isLocalPlayer) return;
 
         _states[State].Update();
@@ -44,6 +48,7 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
 
         State = state;
         CmdSetState(state);
+        //_states[State] = _states[State];
 
         _states[State].Enter();
     }
@@ -51,6 +56,7 @@ public sealed class PlayerStateMachine : NetworkBehaviour, IStateMachine<PlayerS
     [Command]
     private void CmdSetState(PlayerState state)
     {
+        Debug.Log($"update_state_on_server: old={State} new={state}");
         State = state;
     }
 }

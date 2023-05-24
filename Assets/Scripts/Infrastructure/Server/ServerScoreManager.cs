@@ -5,9 +5,15 @@ using UnityEngine;
 
 namespace Infrastructure
 {
+    // public sealed class ClientScoreManager : NetworkBehaviour
+    // {
+    //     public
+    // }
+
     public sealed class ServerScoreManager : NetworkBehaviour
     {
         [SerializeField] private RoomSettings _settings;
+        // [SerializeField] private ClientScoreManager _clientScoreManager;
 
         public bool IsPlayerWon(Player player)
         {

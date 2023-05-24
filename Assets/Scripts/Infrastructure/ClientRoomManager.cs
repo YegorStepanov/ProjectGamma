@@ -31,6 +31,10 @@ namespace Infrastructure
             CameraController cameraController = _gameFactory.CreateCamera(player.CameraFocusPoint);
             var inputManager = new TransformRelativeInputManager(cameraController.transform);
             player.Construct(settings, inputManager);
+
+            //todo: the state should be synced
+            //if (isLocalPlayer) //?
+            //    player.StateMachine.SetState(PlayerState.Walk);
         }
     }
 }

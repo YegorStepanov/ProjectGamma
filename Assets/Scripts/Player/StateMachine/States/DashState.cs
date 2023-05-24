@@ -18,12 +18,17 @@ public sealed class DashState : IPlayerState
     public void Enter()
     {
         _remainingDistance = _player.Settings.DashDistance;
+        Debug.Log("enter Dash");
     }
 
-    public void Exit() { }
+    public void Exit()
+    {
+        Debug.Log("exit Dash");
+    }
 
     public void Update()
     {
+        // Debug.Log($"{_remainingDistance:f8}");
         if (_remainingDistance <= ZeroPrecision)
         {
             MoveRemaining();

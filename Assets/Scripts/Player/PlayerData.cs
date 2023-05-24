@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 
-public sealed class PlayerData : NetworkBehaviour
+public sealed class PlayerData : NetworkBehaviour//, IPlayerData
 {
     public event Action<Player> Changed;
 
@@ -57,11 +57,13 @@ public sealed class PlayerData : NetworkBehaviour
 
     private void RaiseChanged(string _, string __)
     {
+        Debug.Log($"Changed Name {__}");
         RaiseChanged();
     }
 
     private void RaiseChanged(uint _, uint __)
     {
+        Debug.Log($"Changed Score {__}");
         RaiseChanged();
     }
 

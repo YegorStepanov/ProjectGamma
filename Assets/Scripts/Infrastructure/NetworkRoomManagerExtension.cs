@@ -13,7 +13,7 @@ namespace Infrastructure
 
         private Player PlayerPrefab => playerPrefab.GetComponent<Player>();
 
-        // On the client _serverRoomManager is null and vice versa
+        // on the client _serverRoomManager is null and vice versa
         private bool IsServerOnly => _serverRoomManager == null
             ? _clientRoomManager.isServerOnly
             : _serverRoomManager.isServerOnly; //or isServer?
@@ -36,6 +36,7 @@ namespace Infrastructure
 
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
         {
+            Debug.Log("OnRoomServerSceneLoadedForPlayer");
             int playerIndex = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
 
             _serverRoomManager.ReplaceAndConstructPlayer(conn, gamePlayer, playerIndex);
@@ -44,7 +45,7 @@ namespace Infrastructure
 
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
-            foreach (NetworkIdentity id in conn.owned)
+            foreach (NetworkIdentity id in conn.clientOwnedObjects)
             {
                 if (id.TryGetComponent(out Player player))
                 {
